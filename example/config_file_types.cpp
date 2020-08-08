@@ -8,12 +8,12 @@
 
 #include "program_options.h"
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <sstream>
 
 const double FLOAT_SEPERATION = 0.00000000001;
-bool         check_float(double test, double expected)
+auto         check_float(double test, double expected) -> bool
 {
    double seperation = expected * (1 + FLOAT_SEPERATION) / expected;
    if((test < expected + seperation) && (test > expected - seperation))
@@ -23,7 +23,7 @@ bool         check_float(double test, double expected)
    return false;
 }
 
-std::stringstream make_file()
+auto make_file() -> std::stringstream
 {
    std::stringstream ss;
    ss << "# This file checks parsing of various types of config values\n";

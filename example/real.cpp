@@ -25,7 +25,7 @@ void option_dependency(const variables_map &vm, const char *for_what, const char
          throw std::logic_error(std::string("Option '") + for_what + "' requires option '" + required_option + "'.");
 }
 
-int main(int argc, char *argv[])
+auto main(int argc, char *argv[]) -> int
 {
    try
    {

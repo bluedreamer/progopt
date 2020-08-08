@@ -64,8 +64,8 @@ public:
    }
 
    // Below is the interface to access the data, once ParseOptions has been run
-   std::string              Path() { return results["path"].as<std::string>(); }
-   std::string              Verbosity() { return results["verbosity"].as<std::string>(); }
+   auto              Path() -> std::string { return results["path"].as<std::string>(); }
+   auto              Verbosity() -> std::string { return results["verbosity"].as<std::string>(); }
    std::vector<std::string> IncludePath()
    {
       if(results.count("include-path"))
@@ -74,7 +74,7 @@ public:
       }
       return std::vector<std::string>();
    }
-   std::string MasterFile()
+   auto MasterFile() -> std::string
    {
       if(results.count("master-file"))
       {
@@ -90,7 +90,7 @@ public:
       }
       return std::vector<std::string>();
    }
-   bool GUI()
+   auto GUI() -> bool
    {
       if(results["run-gui"].as<bool>())
       {
@@ -98,14 +98,14 @@ public:
       }
       return false;
    }
-   GuiOpts GuiValues()
+   auto GuiValues() -> GuiOpts
    {
       GuiOpts opts;
       opts.width  = results["gui.width"].as<unsigned int>();
       opts.height = results["gui.height"].as<unsigned int>();
       return opts;
    }
-   NetworkOpts NetworkValues()
+   auto NetworkValues() -> NetworkOpts
    {
       NetworkOpts opts;
       opts.address = results["network.ip"].as<std::string>();
@@ -199,7 +199,7 @@ private:
             results);
       notify(results);
    }
-   std::string EnvironmentMapper(std::string env_var)
+   auto EnvironmentMapper(std::string env_var) -> std::string
    {
       // ensure the env_var is all caps
       std::transform(env_var.begin(), env_var.end(), env_var.begin(), ::toupper);
@@ -288,7 +288,7 @@ void PrintOptions(OptionsHeirarchy options)
    std::cout << "Network Port: " << network_values.port << std::endl;
 }
 
-int main(int ac, char *av[])
+auto main(int ac, char *av[]) -> int
 {
    OptionsHeirarchy options;
    try

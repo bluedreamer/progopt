@@ -63,7 +63,7 @@ void validate(std::any &v, const std::vector<std::string> &values, magic_number 
    }
 }
 
-int main(int ac, char *av[])
+auto main(int ac, char *av[]) -> int
 {
    try
    {

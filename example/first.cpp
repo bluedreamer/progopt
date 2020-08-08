@@ -11,7 +11,7 @@
 #include <iostream>
 #include <iterator>
 
-int main(int ac, char *av[])
+auto main(int ac, char *av[]) -> int
 {
    try
    {

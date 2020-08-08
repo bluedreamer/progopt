@@ -25,7 +25,7 @@
 // Additional command line parser which interprets '@something' as a
 // option "config-file" with the value "something"
 
-std::pair<std::string, std::string> at_option_parser(std::string const &s)
+auto at_option_parser(std::string const &s) -> std::pair<std::string, std::string>
 {
    if('@' == s[0])
       return std::make_pair(std::string("response-file"), s.substr(1));
@@ -33,7 +33,7 @@ std::pair<std::string, std::string> at_option_parser(std::string const &s)
       return std::pair<std::string, std::string>();
 }
 
-int main(int ac, char *av[])
+auto main(int ac, char *av[]) -> int
 {
    try
    {

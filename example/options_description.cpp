@@ -17,7 +17,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &v)
    return os;
 }
 
-int main(int ac, char *av[])
+auto main(int ac, char *av[]) -> int
 {
    try
    {

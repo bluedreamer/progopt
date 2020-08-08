@@ -7,7 +7,7 @@
 #include <program_options.h>
 #include <string>
 
-std::string mapper(std::string env_var)
+auto mapper(std::string env_var) -> std::string
 {
    // ensure the env_var is all caps
    std::transform(env_var.begin(), env_var.end(), env_var.begin(), ::toupper);
@@ -38,7 +38,7 @@ void get_env_options()
    std::cout << "Verbosity: " << vm["verbosity"].as<std::string>() << std::endl;
 }
 
-int main(int ac, char *av[])
+auto main(int ac, char *av[]) -> int
 {
    get_env_options();
 

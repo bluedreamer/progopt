@@ -19,7 +19,7 @@
 /*  This custom option parse function recognize gcc-style
     option "-fbar" / "-fno-bar".
 */
-std::pair<std::string, std::string> reg_foo(const std::string &s)
+auto reg_foo(const std::string &s) -> std::pair<std::string, std::string>
 {
    if(s.find("-f") == 0)
    {
@@ -34,7 +34,7 @@ std::pair<std::string, std::string> reg_foo(const std::string &s)
    }
 }
 
-int main(int ac, char *av[])
+auto main(int ac, char *av[]) -> int
 {
    try
    {

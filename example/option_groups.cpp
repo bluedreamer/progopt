@@ -26,7 +26,7 @@
 #include <fstream>
 #include <iostream>
 
-int main(int ac, char *av[])
+auto main(int ac, char *av[]) -> int
 {
    try
    {
