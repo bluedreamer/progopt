@@ -14,26 +14,26 @@
 
 /** Converts from local 8 bit encoding into wchar_t string using
     the specified locale facet. */
-std::wstring from_8_bit(const std::string &s, const std::codecvt<wchar_t, char, std::mbstate_t> &cvt);
+auto from_8_bit(const std::string &s, const std::codecvt<wchar_t, char, std::mbstate_t> &cvt) -> std::wstring;
 
 /** Converts from wchar_t string into local 8 bit encoding into using
     the specified locale facet. */
-std::string to_8_bit(const std::wstring &s, const std::codecvt<wchar_t, char, std::mbstate_t> &cvt);
+auto to_8_bit(const std::wstring &s, const std::codecvt<wchar_t, char, std::mbstate_t> &cvt) -> std::string;
 
 /** Converts 's', which is assumed to be in UTF8 encoding, into wide
     string. */
-std::wstring from_utf8(const std::string &s);
+auto from_utf8(const std::string &s) -> std::wstring;
 
 /** Converts wide string 's' into string in UTF8 encoding. */
-std::string to_utf8(const std::wstring &s);
+auto to_utf8(const std::wstring &s) -> std::string;
 
 /** Converts wide string 's' into local 8 bit encoding determined by
     the current locale. */
-std::string to_local_8_bit(const std::wstring &s);
+auto to_local_8_bit(const std::wstring &s) -> std::string;
 
 /** Converts 's', which is assumed to be in local 8 bit encoding, into wide
     string. */
-std::wstring from_local_8_bit(const std::string &s);
+auto from_local_8_bit(const std::string &s) -> std::wstring;
 
 namespace program_options
 {
@@ -41,12 +41,12 @@ namespace program_options
     program_options. Presence of this function allows to avoid
     specializing all methods which access input on wchar_t.
 */
-std::string to_internal(const std::string &);
+auto to_internal(const std::string &) -> std::string;
 /** @overload */
-std::string to_internal(const std::wstring &);
+auto to_internal(const std::wstring &) -> std::string;
 
 template<class T>
-std::vector<std::string> to_internal(const std::vector<T> &s)
+auto to_internal(const std::vector<T> &s) -> std::vector<std::string>
 {
    std::vector<std::string> result;
    for(unsigned i = 0; i < s.size(); ++i)
@@ -58,10 +58,10 @@ std::vector<std::string> to_internal(const std::vector<T> &s)
 
 #include <string>
 #include <vector>
-std::string to_internal(const std::string &);
+auto to_internal(const std::string &) -> std::string;
 
 template<class T>
-std::vector<std::string> to_internal(const std::vector<T> &s)
+auto to_internal(const std::vector<T> &s) -> std::vector<std::string>
 {
    std::vector<std::string> result;
    for(unsigned i = 0; i < s.size(); ++i)

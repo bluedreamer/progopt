@@ -57,7 +57,7 @@ auto woption_from_option(const option &opt) -> woption
    std::transform(opt.value.begin(), opt.value.end(), back_inserter(result.value), std::bind(from_utf8, std::placeholders::_1));
 
    std::transform(opt.original_tokens.begin(), opt.original_tokens.end(), back_inserter(result.original_tokens),
-                  std::bind(from_utf8, std::placeholders::_1));
+            std::bind(from_utf8, std::placeholders::_1));
    return result;
 }
 
@@ -66,8 +66,8 @@ basic_parsed_options<wchar_t>::basic_parsed_options(const parsed_options &po)
    , utf8_encoded_options(po)
    , m_options_prefix(po.m_options_prefix)
 {
-   for(unsigned i = 0; i < po.options.size(); ++i)
-      options.push_back(woption_from_option(po.options[i]));
+   for(const auto & option : po.options)
+      options.push_back(woption_from_option(option));
 }
 
 template<class charT>
@@ -77,9 +77,9 @@ auto parse_config_file(std::basic_istream<charT> &is, const options_description 
    std::set<std::string> allowed_options;
 
    const std::vector<std::shared_ptr<option_description>> &options = desc.options();
-   for(unsigned i = 0; i < options.size(); ++i)
+   for(const auto & option : options)
    {
-      const option_description &d = *options[i];
+      const option_description &d = *option;
 
       if(d.long_name().empty())
          boost::throw_exception(error("abbreviated option names are not permitted in options configuration files"));

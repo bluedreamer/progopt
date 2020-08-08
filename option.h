@@ -6,6 +6,7 @@
 #pragma once
 
 #include <string>
+#include <utility>
 #include <vector>
 
 /** Option found in input source.
@@ -20,13 +21,11 @@ class basic_option
 {
 public:
    basic_option()
-      : position_key(-1)
-      , unregistered(false)
-      , case_insensitive(false)
+       
    {
    }
-   basic_option(const std::string &xstring_key, const std::vector<std::string> &xvalue)
-      : string_key(xstring_key)
+   basic_option(std::string xstring_key, const std::vector<std::string> &xvalue)
+      : string_key(std::move(xstring_key))
       , position_key(-1)
       , value(xvalue)
       , unregistered(false)
@@ -43,7 +42,7 @@ public:
        position_key and string_key is specified, in case name is implicitly
        added.
     */
-   int position_key;
+   int position_key{-1};
    /** Option's value */
    std::vector<std::basic_string<charT>> value;
    /** The original unchanged tokens this option was
@@ -54,11 +53,11 @@ public:
        syntactic parsing of source. The original tokens can be
        recovered from the "original_tokens" member.
    */
-   bool unregistered;
+   bool unregistered{false};
    /** True if string_key has to be handled
        case insensitive.
    */
-   bool case_insensitive;
+   bool case_insensitive{false};
 };
-typedef basic_option<char>    option;
-typedef basic_option<wchar_t> woption;
+using option = basic_option<char>;
+using woption = basic_option<wchar_t>;

@@ -43,14 +43,14 @@ class eof_iterator // TODO find out what this did : public iterator_facade<Deriv
 {
 public:
    eof_iterator()
-      : m_at_eof(false)
+       
    {
    }
 
 protected: // interface for derived
    /** Returns the reference which should be used by derived
        class to store the next value. */
-   ValueType &value() { return m_value; }
+   auto value() -> ValueType & { return m_value; }
 
    /** Should be called by derived class to indicate that it can't
        produce next element. */
@@ -65,7 +65,7 @@ private: // iterator core operations
 
    void increment() { static_cast<Derived &>(*this).get(); }
 
-   bool equal(const eof_iterator &other) const
+   auto equal(const eof_iterator &other) const -> bool
    {
       if(m_at_eof && other.m_at_eof)
          return true;
@@ -73,8 +73,8 @@ private: // iterator core operations
          return false;
    }
 
-   const ValueType &dereference() const { return m_value; }
+   auto dereference() const -> const ValueType & { return m_value; }
 
-   bool      m_at_eof;
+   bool      m_at_eof{false};
    ValueType m_value;
 };

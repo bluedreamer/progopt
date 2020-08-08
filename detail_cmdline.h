@@ -48,7 +48,7 @@ public:
 
    typedef std::function<std::pair<std::string, std::string>(const std::string &)> additional_parser;
 
-   typedef std::function<std::vector<option>(std::vector<std::string> &)> style_parser;
+   using style_parser = std::function<std::vector<option> (std::vector<std::string> &)>;
 
    /** Constructs a command line parser for (argc, argv) pair. Uses
        style options passed in 'style', which should be binary or'ed values
@@ -73,21 +73,21 @@ public:
     *
     *      This is mainly used for the diagnostic messages in exceptions
     */
-   int get_canonical_option_prefix();
+   auto get_canonical_option_prefix() -> int;
 
    void allow_unregistered();
 
    void set_options_description(const options_description &desc);
    void set_positional_options(const positional_options_description &m_positional);
 
-   std::vector<option> run();
+   auto run() -> std::vector<option>;
 
-   std::vector<option> parse_long_option(std::vector<std::string> &args);
-   std::vector<option> parse_short_option(std::vector<std::string> &args);
-   std::vector<option> parse_dos_option(std::vector<std::string> &args);
-   std::vector<option> parse_disguised_long_option(std::vector<std::string> &args);
-   std::vector<option> parse_terminator(std::vector<std::string> &args);
-   std::vector<option> handle_additional_parser(std::vector<std::string> &args);
+   auto parse_long_option(std::vector<std::string> &args) -> std::vector<option>;
+   auto parse_short_option(std::vector<std::string> &args) -> std::vector<option>;
+   auto parse_dos_option(std::vector<std::string> &args) -> std::vector<option>;
+   auto parse_disguised_long_option(std::vector<std::string> &args) -> std::vector<option>;
+   auto parse_terminator(std::vector<std::string> &args) -> std::vector<option>;
+   auto handle_additional_parser(std::vector<std::string> &args) -> std::vector<option>;
 
    /** Set additional parser. This will be called for each token
        of command line. If first string in pair is not empty,
@@ -103,7 +103,7 @@ public:
 
    void check_style(int style) const;
 
-   bool is_style_active(style_t style) const;
+   [[nodiscard]] auto is_style_active(style_t style) const -> bool;
 
    void init(const std::vector<std::string> &args);
 

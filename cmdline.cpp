@@ -23,7 +23,7 @@
 
 #include <iostream>
 
-std::string invalid_syntax::get_template(kind_t kind)
+auto invalid_syntax::get_template(kind_t kind) -> std::string
 {
    // Initially, store the message in 'const char*' variable,
    // to avoid conversion to string in all cases.
@@ -177,7 +177,7 @@ auto detail_cmdline::get_canonical_option_prefix() -> int
    return 0;
 }
 
-std::vector<option> detail_cmdline::run()
+auto detail_cmdline::run() -> std::vector<option>
 {
    // The parsing is done by having a set of 'style parsers'
    // and trying then in order. Each parser is passed a vector
@@ -199,21 +199,21 @@ std::vector<option> detail_cmdline::run()
       style_parsers.push_back(m_style_parser);
 
    if(m_additional_parser)
-      style_parsers.push_back(std::bind(&detail_cmdline::handle_additional_parser, this, std::placeholders::_1));
+      style_parsers.emplace_back(std::bind(&detail_cmdline::handle_additional_parser, this, std::placeholders::_1));
 
    if(m_style & allow_long)
-      style_parsers.push_back(std::bind(&detail_cmdline::parse_long_option, this, std::placeholders::_1));
+      style_parsers.emplace_back(std::bind(&detail_cmdline::parse_long_option, this, std::placeholders::_1));
 
    if((m_style & allow_long_disguise))
-      style_parsers.push_back(std::bind(&detail_cmdline::parse_disguised_long_option, this, std::placeholders::_1));
+      style_parsers.emplace_back(std::bind(&detail_cmdline::parse_disguised_long_option, this, std::placeholders::_1));
 
    if((m_style & allow_short) && (m_style & allow_dash_for_short))
-      style_parsers.push_back(std::bind(&detail_cmdline::parse_short_option, this, std::placeholders::_1));
+      style_parsers.emplace_back(std::bind(&detail_cmdline::parse_short_option, this, std::placeholders::_1));
 
    if((m_style & allow_short) && (m_style & allow_slash_for_short))
-      style_parsers.push_back(std::bind(&detail_cmdline::parse_dos_option, this, std::placeholders::_1));
+      style_parsers.emplace_back(std::bind(&detail_cmdline::parse_dos_option, this, std::placeholders::_1));
 
-   style_parsers.push_back(std::bind(&detail_cmdline::parse_terminator, this, std::placeholders::_1));
+   style_parsers.emplace_back(std::bind(&detail_cmdline::parse_terminator, this, std::placeholders::_1));
 
    std::vector<option>       result;
    std::vector<std::string> &args = m_args;
@@ -222,7 +222,7 @@ std::vector<option> detail_cmdline::run()
       bool ok = false;
       for(unsigned i = 0; i < style_parsers.size(); ++i)
       {
-         unsigned            current_size = static_cast<unsigned>(args.size());
+         auto            current_size = static_cast<unsigned>(args.size());
          std::vector<option> next         = style_parsers[i](args);
 
          // Check that option names
@@ -238,8 +238,8 @@ std::vector<option> detail_cmdline::run()
             // so that they can be added to next.back()'s values
             // if appropriate.
             finish_option(next.back(), args, style_parsers);
-            for(unsigned j = 0; j < next.size(); ++j)
-               result.push_back(next[j]);
+            for(const auto & j : next)
+               result.push_back(j);
          }
 
          if(args.size() != current_size)
@@ -326,18 +326,17 @@ std::vector<option> detail_cmdline::run()
 
    // Assign position keys to positional options.
    int position_key = 0;
-   for(unsigned i = 0; i < result.size(); ++i)
+   for(auto & i : result)
    {
-      if(result[i].string_key.empty())
-         result[i].position_key = position_key++;
+      if(i.string_key.empty())
+         i.position_key = position_key++;
    }
 
    if(m_positional)
    {
       unsigned position = 0;
-      for(unsigned i = 0; i < result.size(); ++i)
+      for(auto & opt : result)
       {
-         option &opt = result[i];
          if(opt.position_key != -1)
          {
             if(position >= m_positional->max_total_count())
@@ -351,17 +350,17 @@ std::vector<option> detail_cmdline::run()
    }
 
    // set case sensitive flag
-   for(unsigned i = 0; i < result.size(); ++i)
+   for(auto & i : result)
    {
-      if(result[i].string_key.size() > 2 || (result[i].string_key.size() > 1 && result[i].string_key[0] != '-'))
+      if(i.string_key.size() > 2 || (i.string_key.size() > 1 && i.string_key[0] != '-'))
       {
          // it is a long option
-         result[i].case_insensitive = is_style_active(long_case_insensitive);
+         i.case_insensitive = is_style_active(long_case_insensitive);
       }
       else
       {
          // it is a short option
-         result[i].case_insensitive = is_style_active(short_case_insensitive);
+         i.case_insensitive = is_style_active(short_case_insensitive);
       }
    }
 
@@ -411,7 +410,7 @@ void detail_cmdline::finish_option(option &opt, std::vector<std::string> &other_
       unsigned min_tokens = d.semantic()->min_tokens();
       unsigned max_tokens = d.semantic()->max_tokens();
 
-      unsigned present_tokens = static_cast<unsigned>(opt.value.size() + other_tokens.size());
+      auto present_tokens = static_cast<unsigned>(opt.value.size() + other_tokens.size());
 
       if(present_tokens >= min_tokens)
       {
@@ -472,7 +471,7 @@ void detail_cmdline::finish_option(option &opt, std::vector<std::string> &other_
    }
 }
 
-std::vector<option> detail_cmdline::parse_long_option(std::vector<std::string> &args)
+auto detail_cmdline::parse_long_option(std::vector<std::string> &args) -> std::vector<option>
 {
    std::vector<option> result;
    const std::string & tok = args[0];
@@ -504,7 +503,7 @@ std::vector<option> detail_cmdline::parse_long_option(std::vector<std::string> &
    return result;
 }
 
-std::vector<option> detail_cmdline::parse_short_option(std::vector<std::string> &args)
+auto detail_cmdline::parse_short_option(std::vector<std::string> &args) -> std::vector<option>
 {
    const std::string &tok = args[0];
    if(tok.size() >= 2 && tok[0] == '-' && tok[1] != '-')
@@ -568,7 +567,7 @@ std::vector<option> detail_cmdline::parse_short_option(std::vector<std::string> 
    return std::vector<option>();
 }
 
-std::vector<option> detail_cmdline::parse_dos_option(std::vector<std::string> &args)
+auto detail_cmdline::parse_dos_option(std::vector<std::string> &args) -> std::vector<option>
 {
    std::vector<option> result;
    const std::string & tok = args[0];
@@ -588,7 +587,7 @@ std::vector<option> detail_cmdline::parse_dos_option(std::vector<std::string> &a
    return result;
 }
 
-std::vector<option> detail_cmdline::parse_disguised_long_option(std::vector<std::string> &args)
+auto detail_cmdline::parse_disguised_long_option(std::vector<std::string> &args) -> std::vector<option>
 {
    const std::string &tok = args[0];
    if(tok.size() >= 2 && ((tok[0] == '-' && tok[1] != '-') || ((m_style & allow_slash_for_short) && tok[0] == '/')))
@@ -614,7 +613,7 @@ std::vector<option> detail_cmdline::parse_disguised_long_option(std::vector<std:
    return std::vector<option>();
 }
 
-std::vector<option> detail_cmdline::parse_terminator(std::vector<std::string> &args)
+auto detail_cmdline::parse_terminator(std::vector<std::string> &args) -> std::vector<option>
 {
    std::vector<option> result;
    const std::string & tok = args[0];
@@ -633,7 +632,7 @@ std::vector<option> detail_cmdline::parse_terminator(std::vector<std::string> &a
    return result;
 }
 
-std::vector<option> detail_cmdline::handle_additional_parser(std::vector<std::string> &args)
+auto detail_cmdline::handle_additional_parser(std::vector<std::string> &args) -> std::vector<option>
 {
    std::vector<option>                 result;
    std::pair<std::string, std::string> r = m_additional_parser(args[0]);

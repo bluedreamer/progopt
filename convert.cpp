@@ -25,7 +25,7 @@
    Experiments show that the performance loss is less than 10%.
 */
 template<class ToChar, class FromChar, class Fun>
-std::basic_string<ToChar> convert(const std::basic_string<FromChar> &s, Fun fun)
+auto convert(const std::basic_string<FromChar> &s, Fun fun) -> std::basic_string<ToChar>
 
 {
    std::basic_string<ToChar> result;

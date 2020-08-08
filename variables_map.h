@@ -8,6 +8,8 @@
 #include <map>
 #include <set>
 #include <string>
+#include <any>
+#include <utility>
 
 template<class charT>
 class basic_parsed_options;
@@ -40,11 +42,10 @@ class variable_value
 {
 public:
    variable_value()
-      : m_defaulted(false)
-   {
-   }
-   variable_value(const std::any &xv, bool xdefaulted)
-      : v(xv)
+       
+   = default;
+   variable_value(std::any xv, bool xdefaulted)
+      : v(std::move(xv))
       , m_defaulted(xdefaulted)
    {
    }
@@ -52,31 +53,31 @@ public:
    /** If stored value if of type T, returns that value. Otherwise,
        throws boost::bad_any_cast exception. */
    template<class T>
-   const T &as() const
+   auto as() const -> const T &
    {
       return std::any_cast<const T &>(v);
    }
    /** @overload */
    template<class T>
-   T &as()
+   auto as() -> T &
    {
       return std::any_cast<T &>(v);
    }
 
    /// Returns true if no value is stored.
-   bool empty() const;
+   [[nodiscard]] auto empty() const -> bool;
    /** Returns true if the value was not explicitly
        given, but has default value. */
-   bool defaulted() const;
+   [[nodiscard]] auto defaulted() const -> bool;
    /** Returns the contained value. */
-   const std::any &value() const;
+   [[nodiscard]] auto value() const -> const std::any &;
 
    /** Returns the contained value. */
-   std::any &value();
+   auto value() -> std::any &;
 
 private:
    std::any v;
-   bool     m_defaulted;
+   bool     m_defaulted{false};
    // Internal reference to value semantic. We need to run
    // notifications when *final* values of options are known, and
    // they are known only after all sources are stored. By that
@@ -97,7 +98,7 @@ public:
    abstract_variables_map();
    abstract_variables_map(const abstract_variables_map *next);
 
-   virtual ~abstract_variables_map() {}
+   virtual ~abstract_variables_map() = default;
 
    /** Obtains the value of variable 'name', from *this and
        possibly from the chain of variable maps.
@@ -113,7 +114,7 @@ public:
 
        - if there's a non-defaulted value, returns it.
    */
-   const variable_value &operator[](const std::string &name) const;
+   auto operator[](const std::string &name) const -> const variable_value &;
 
    /** Sets next variable map, which will be used to find
       variables not found in *this. */
@@ -122,7 +123,7 @@ public:
 private:
    /** Returns value of variable 'name' stored in *this, or
        empty value otherwise. */
-   virtual const variable_value &get(const std::string &name) const = 0;
+   [[nodiscard]] virtual auto get(const std::string &name) const -> const variable_value & = 0;
 
    const abstract_variables_map *m_next;
 };
@@ -139,7 +140,7 @@ public:
    variables_map(const abstract_variables_map *next);
 
    // Resolve conflict between inherited operators.
-   const variable_value &operator[](const std::string &name) const { return abstract_variables_map::operator[](name); }
+   auto operator[](const std::string &name) const -> const variable_value & { return abstract_variables_map::operator[](name); }
 
    // Override to clear some extra fields.
    void clear();
@@ -149,7 +150,7 @@ public:
 private:
    /** Implementation of abstract_variables_map::get
        which does 'find' in *this. */
-   const variable_value &get(const std::string &name) const;
+   [[nodiscard]] auto get(const std::string &name) const -> const variable_value &;
 
    /** Names of option with 'final' values \-- which should not
        be changed by subsequence assignments. */
@@ -168,22 +169,22 @@ private:
  * Templates/inlines
  */
 
-inline bool variable_value::empty() const
+inline auto variable_value::empty() const -> bool
 {
    return !v.has_value();
 }
 
-inline bool variable_value::defaulted() const
+inline auto variable_value::defaulted() const -> bool
 {
    return m_defaulted;
 }
 
-inline const std::any &variable_value::value() const
+inline auto variable_value::value() const -> const std::any &
 {
    return v;
 }
 
-inline std::any &variable_value::value()
+inline auto variable_value::value() -> std::any &
 {
    return v;
 }

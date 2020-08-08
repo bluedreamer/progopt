@@ -80,8 +80,8 @@ public:
    int m_options_prefix;
 };
 
-typedef basic_parsed_options<char>    parsed_options;
-typedef basic_parsed_options<wchar_t> wparsed_options;
+using parsed_options = basic_parsed_options<char>;
+using wparsed_options = basic_parsed_options<wchar_t>;
 
 /** Augments basic_parsed_options<wchar_t> with conversion from
     'parsed_options' */
@@ -116,19 +116,19 @@ public:
    basic_command_line_parser(int argc, const charT *const argv[]);
 
    /** Sets options descriptions to use. */
-   basic_command_line_parser &options(const options_description &desc);
+   auto options(const options_description &desc) -> basic_command_line_parser &;
    /** Sets positional options description to use. */
-   basic_command_line_parser &positional(const positional_options_description &desc);
+   auto positional(const positional_options_description &desc) -> basic_command_line_parser &;
 
    /** Sets the command line style. */
-   basic_command_line_parser &style(int);
+   auto style(int) -> basic_command_line_parser &;
    /** Sets the extra parsers. */
-   basic_command_line_parser &extra_parser(ext_parser);
+   auto extra_parser(ext_parser) -> basic_command_line_parser &;
 
    /** Parses the options and returns the result of parsing.
        Throws on error.
    */
-   basic_parsed_options<charT> run();
+   auto run() -> basic_parsed_options<charT>;
 
    /** Specifies that unregistered options are allowed and should
        be passed though. For each command like token that looks
@@ -138,32 +138,32 @@ public:
        collect all unrecognized options with the 'collect_unrecognized'
        funciton.
    */
-   basic_command_line_parser &allow_unregistered();
+   auto allow_unregistered() -> basic_command_line_parser &;
 
    using detail_cmdline::style_parser;
 
-   basic_command_line_parser &extra_style_parser(style_parser s);
+   auto extra_style_parser(style_parser s) -> basic_command_line_parser &;
 
 private:
    const options_description *m_desc;
 };
 
-typedef basic_command_line_parser<char>    command_line_parser;
-typedef basic_command_line_parser<wchar_t> wcommand_line_parser;
+using command_line_parser = basic_command_line_parser<char>;
+using wcommand_line_parser = basic_command_line_parser<wchar_t>;
 
 /** Creates instance of 'command_line_parser', passes parameters to it,
     and returns the result of calling the 'run' method.
  */
 template<class charT>
-basic_parsed_options<charT> parse_command_line(int argc, const charT *const argv[], const options_description &, int style = 0,
-                                               std::function<std::pair<std::string, std::string>(const std::string &)> ext = ext_parser());
+auto parse_command_line(int argc, const charT *const argv[], const options_description &, int style = 0,
+                                               std::function<std::pair<std::string, std::string>(const std::string &)> ext = ext_parser()) -> basic_parsed_options<charT>;
 
 /** Parse a config file.
 
     Read from given stream.
 */
 template<class charT>
-basic_parsed_options<charT> parse_config_file(std::basic_istream<charT> &, const options_description &, bool allow_unregistered = false);
+auto parse_config_file(std::basic_istream<charT> &, const options_description &, bool allow_unregistered = false) -> basic_parsed_options<charT>;
 
 /** Parse a config file.
 
@@ -171,7 +171,7 @@ basic_parsed_options<charT> parse_config_file(std::basic_istream<charT> &, const
     passed to the file stream.
 */
 template<class charT = char>
-basic_parsed_options<charT> parse_config_file(const char *filename, const options_description &, bool allow_unregistered = false);
+auto parse_config_file(const char *filename, const options_description &, bool allow_unregistered = false) -> basic_parsed_options<charT>;
 
 /** Controls if the 'collect_unregistered' function should
     include positional options, or not. */
@@ -188,8 +188,8 @@ enum collect_unrecognized_mode
     options.
 */
 template<class charT>
-std::vector<std::basic_string<charT>> collect_unrecognized(const std::vector<basic_option<charT>> &options,
-                                                           enum collect_unrecognized_mode          mode);
+auto collect_unrecognized(const std::vector<basic_option<charT>> &options,
+                                                           enum collect_unrecognized_mode          mode) -> std::vector<std::basic_string<charT>>;
 
 /** Parse environment.
 
@@ -200,7 +200,7 @@ std::vector<std::basic_string<charT>> collect_unrecognized(const std::vector<bas
     This is done since naming of environment variables is typically
     different from the naming of command line options.
 */
-parsed_options parse_environment(const options_description &, const std::function<std::string(std::string)> &name_mapper);
+auto parse_environment(const options_description &, const std::function<std::string(std::string)> &name_mapper) -> parsed_options;
 
 /** Parse environment.
 
@@ -208,14 +208,14 @@ parsed_options parse_environment(const options_description &, const std::functio
     name is obtained from variable name by removing the prefix and
     converting the remaining string into lower case.
 */
-parsed_options parse_environment(const options_description &, const std::string &prefix);
+auto parse_environment(const options_description &, const std::string &prefix) -> parsed_options;
 
 /** @overload
     This function exists to resolve ambiguity between the two above
     functions when second argument is of 'char*' type. There's implicit
     conversion to both function1 and string.
 */
-parsed_options parse_environment(const options_description &, const char *prefix);
+auto parse_environment(const options_description &, const char *prefix) -> parsed_options;
 
 /** Splits a given string to a collection of single strings which
     can be passed to command_line_parser. The second parameter is
@@ -224,12 +224,12 @@ parsed_options parse_environment(const options_description &, const char *prefix
     Splitting is done in a unix style way, with respect to quotes '"'
     and escape characters '\'
 */
-std::vector<std::string> split_unix(const std::string &cmdline, const std::string &seperator = " \t", const std::string &quote = "'\"",
-                                    const std::string &escape = "\\");
+auto split_unix(const std::string &cmdline, const std::string &seperator = " \t", const std::string &quote = "'\"",
+                                    const std::string &escape = "\\") -> std::vector<std::string>;
 
 /** @overload */
-std::vector<std::wstring> split_unix(const std::wstring &cmdline, const std::wstring &seperator = L" \t",
-                                     const std::wstring &quote = L"'\"", const std::wstring &escape = L"\\");
+auto split_unix(const std::wstring &cmdline, const std::wstring &seperator = L" \t",
+                                     const std::wstring &quote = L"'\"", const std::wstring &escape = L"\\") -> std::vector<std::wstring>;
 
 #ifdef _WIN32
 /** Parses the char* string which is passed to WinMain function on

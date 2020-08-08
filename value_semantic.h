@@ -25,26 +25,26 @@ public:
    /** Returns the name of the option. The name is only meaningful
        for automatic help message.
     */
-   virtual std::string name() const = 0;
+   [[nodiscard]] virtual auto name() const -> std::string = 0;
 
    /** The minimum number of tokens for this option that
        should be present on the command line. */
-   virtual unsigned min_tokens() const = 0;
+   [[nodiscard]] virtual auto min_tokens() const -> unsigned = 0;
 
    /** The maximum number of tokens for this option that
        should be present on the command line. */
-   virtual unsigned max_tokens() const = 0;
+   [[nodiscard]] virtual auto max_tokens() const -> unsigned = 0;
 
    /** Returns true if values from different sources should be composed.
        Otherwise, value from the first source is used and values from
        other sources are discarded.
    */
-   virtual bool is_composing() const = 0;
+   [[nodiscard]] virtual auto is_composing() const -> bool = 0;
 
    /** Returns true if value must be given. Non-optional value
 
    */
-   virtual bool is_required() const = 0;
+   [[nodiscard]] virtual auto is_required() const -> bool = 0;
 
    /** Parses a group of tokens that specify a value of option.
        Stores the result in 'value_store', using whatever representation
@@ -56,13 +56,13 @@ public:
    /** Called to assign default value to 'value_store'. Returns
        true if default value is assigned, and false if no default
        value exists. */
-   virtual bool apply_default(std::any &value_store) const = 0;
+   virtual auto apply_default(std::any &value_store) const -> bool = 0;
 
    /** Called when final value of an option is determined.
     */
    virtual void notify(const std::any &value_store) const = 0;
 
-   virtual ~value_semantic() {}
+   virtual ~value_semantic() = default;
 };
 
 /** Helper class which perform necessary character conversions in the
@@ -85,7 +85,7 @@ template<>
 class value_semantic_codecvt_helper<char> : public value_semantic
 {
 private: // base overrides
-   void parse(std::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const;
+   void parse(std::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const override;
 
 protected: // interface for derived classes.
    virtual void xparse(std::any &value_store, const std::vector<std::string> &new_tokens) const = 0;
@@ -102,7 +102,7 @@ template<>
 class value_semantic_codecvt_helper<wchar_t> : public value_semantic
 {
 private: // base overrides
-   void parse(std::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const;
+   void parse(std::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const override;
 
 protected: // interface for derived classes.
    virtual void xparse(std::any &value_store, const std::vector<std::wstring> &new_tokens) const = 0;
@@ -118,27 +118,27 @@ public:
    {
    }
 
-   std::string name() const;
+   [[nodiscard]] auto name() const -> std::string;
 
-   unsigned min_tokens() const;
-   unsigned max_tokens() const;
+   [[nodiscard]] auto min_tokens() const -> unsigned;
+   [[nodiscard]] auto max_tokens() const -> unsigned;
 
-   bool is_composing() const { return false; }
+   [[nodiscard]] auto is_composing() const -> bool { return false; }
 
-   bool is_required() const { return false; }
+   [[nodiscard]] auto is_required() const -> bool { return false; }
 
    /** If 'value_store' is already initialized, or new_tokens
        has more than one elements, throws. Otherwise, assigns
        the first string from 'new_tokens' to 'value_store', without
        any modifications.
     */
-   void xparse(std::any &value_store, const std::vector<std::string> &new_tokens) const;
+   void xparse(std::any &value_store, const std::vector<std::string> &new_tokens) const override;
 
    /** Does nothing. */
-   bool apply_default(std::any &) const { return false; }
+   auto apply_default(std::any &) const -> bool { return false; }
 
    /** Does nothing. */
-   void notify(const std::any &) const {}
+   void notify(const std::any &) const override {}
 
 private:
    bool m_zero_tokens;
@@ -156,10 +156,10 @@ class typed_value_base
 public:
    // Returns the type of the value described by this
    // object.
-   virtual const std::type_info &value_type() const = 0;
+   [[nodiscard]] virtual auto value_type() const -> const std::type_info & = 0;
    // Not really needed, since deletion from this
    // class is silly, but just in case.
-   virtual ~typed_value_base() {}
+   virtual ~typed_value_base() = default;
 };
 #endif
 
@@ -188,7 +188,7 @@ public:
        if none is explicitly specified. The type 'T' should
        provide operator<< for ostream.
    */
-   typed_value *default_value(const T &v)
+   auto default_value(const T &v) -> typed_value *
    {
       m_default_value         = std::any(v);
       m_default_value_as_text = boost::lexical_cast<std::string>(v);
@@ -201,7 +201,7 @@ public:
        but textual representation of default value must be provided
        by the user.
    */
-   typed_value *default_value(const T &v, const std::string &textual)
+   auto default_value(const T &v, const std::string &textual) -> typed_value *
    {
       m_default_value         = std::any(v);
       m_default_value_as_text = textual;
@@ -212,7 +212,7 @@ public:
        if the option is given, but without an adjacent value.
        Using this implies that an explicit value is optional,
    */
-   typed_value *implicit_value(const T &v)
+   auto implicit_value(const T &v) -> typed_value *
    {
       m_implicit_value         = std::any(v);
       m_implicit_value_as_text = boost::lexical_cast<std::string>(v);
@@ -220,7 +220,7 @@ public:
    }
 
    /** Specifies the name used to to the value in help message.  */
-   typed_value *value_name(const std::string &name)
+   auto value_name(const std::string &name) -> typed_value *
    {
       m_value_name = name;
       return this;
@@ -236,7 +236,7 @@ public:
        operator<< for ostream, but textual representation of default
        value must be provided by the user.
    */
-   typed_value *implicit_value(const T &v, const std::string &textual)
+   auto implicit_value(const T &v, const std::string &textual) -> typed_value *
    {
       m_implicit_value         = std::any(v);
       m_implicit_value_as_text = textual;
@@ -245,7 +245,7 @@ public:
 
    /** Specifies a function to be called when the final value
        is determined. */
-   typed_value *notifier(std::function<void(const T &)> f)
+   auto notifier(std::function<void(const T &)> f) -> typed_value *
    {
       m_notifier = f;
       return this;
@@ -254,7 +254,7 @@ public:
    /** Specifies that the value is composing. See the 'is_composing'
        method for explanation.
    */
-   typed_value *composing()
+   auto composing() -> typed_value *
    {
       m_composing = true;
       return this;
@@ -262,7 +262,7 @@ public:
 
    /** Specifies that the value can span multiple tokens.
     */
-   typed_value *multitoken()
+   auto multitoken() -> typed_value *
    {
       m_multitoken = true;
       return this;
@@ -275,25 +275,25 @@ public:
        'implicit_value' method should be also used. In most
        cases, you can use the 'bool_switch' function instead of
        using this method. */
-   typed_value *zero_tokens()
+   auto zero_tokens() -> typed_value *
    {
       m_zero_tokens = true;
       return this;
    }
 
    /** Specifies that the value must occur. */
-   typed_value *required()
+   auto required() -> typed_value *
    {
       m_required = true;
       return this;
    }
 
 public: // value semantic overrides
-   std::string name() const;
+   [[nodiscard]] auto name() const -> std::string;
 
-   bool is_composing() const { return m_composing; }
+   [[nodiscard]] auto is_composing() const -> bool { return m_composing; }
 
-   unsigned min_tokens() const
+   [[nodiscard]] auto min_tokens() const -> unsigned
    {
       if(m_zero_tokens || m_implicit_value.has_value())
       {
@@ -305,7 +305,7 @@ public: // value semantic overrides
       }
    }
 
-   unsigned max_tokens() const
+   [[nodiscard]] auto max_tokens() const -> unsigned
    {
       if(m_multitoken)
       {
@@ -321,7 +321,7 @@ public: // value semantic overrides
       }
    }
 
-   bool is_required() const { return m_required; }
+   [[nodiscard]] auto is_required() const -> bool { return m_required; }
 
    /** Creates an instance of the 'validator' class and calls
        its operator() to perform the actual conversion. */
@@ -331,7 +331,7 @@ public: // value semantic overrides
        'default_value', stores that value into 'value_store'.
        Returns true if default value was stored.
    */
-   virtual bool apply_default(std::any &value_store) const
+   virtual auto apply_default(std::any &value_store) const -> bool
    {
       if(!m_default_value.has_value())
       {
@@ -350,9 +350,7 @@ public: // value semantic overrides
    void notify(const std::any &value_store) const;
 
 public: // typed_value_base overrides
-#ifndef BOOST_NO_RTTI
-   const std::type_info &value_type() const { return typeid(T); }
-#endif
+   [[nodiscard]] auto value_type() const -> const std::type_info & { return typeid(T); }
 
 private:
    T *m_store_to;
@@ -375,33 +373,33 @@ private:
     value of option into program variable.
 */
 template<class T>
-typed_value<T> *value();
+auto value() -> typed_value<T> *;
 
 /** @overload
  */
 template<class T>
-typed_value<T> *value(T *v);
+auto value(T *v) -> typed_value<T> *;
 
 /** Creates a typed_value<T> instance. This function is the primary
     method to create value_semantic instance for a specific type, which
     can later be passed to 'option_description' constructor.
 */
 template<class T>
-typed_value<T, wchar_t> *wvalue();
+auto wvalue() -> typed_value<T, wchar_t> *;
 
 /** @overload
  */
 template<class T>
-typed_value<T, wchar_t> *wvalue(T *v);
+auto wvalue(T *v) -> typed_value<T, wchar_t> *;
 
 /** Works the same way as the 'value<bool>' function, but the created
     value_semantic won't accept any explicit value. So, if the option
     is present on the command line, the value will be 'true'.
 */
-typed_value<bool> *bool_switch();
+auto bool_switch() -> typed_value<bool> *;
 
 /** @overload
  */
-typed_value<bool> *bool_switch(bool *v);
+auto bool_switch(bool *v) -> typed_value<bool> *;
 
 #include "detail_value_semantic.h"

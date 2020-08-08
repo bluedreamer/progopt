@@ -8,9 +8,10 @@
 #include <map>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
-inline std::string strip_prefixes(const std::string &text)
+inline auto strip_prefixes(const std::string &text) -> std::string
 {
    // "--foo-bar" -> "foo-bar"
    std::string::size_type i = text.find_first_not_of("-/");
@@ -116,7 +117,7 @@ public:
    /** gcc says that throw specification on dtor is loosened
     *  without this line
     *  */
-   ~error_with_option_name() throw() {}
+   ~error_with_option_name() noexcept override = default;
 
    // void dump() const
    //{
@@ -160,13 +161,13 @@ public:
    /** Overridden in error_with_no_option_name */
    virtual void set_option_name(const std::string &option_name) { set_substitute("option", option_name); }
 
-   std::string get_option_name() const { return get_canonical_option_name(); }
+   auto get_option_name() const -> std::string { return get_canonical_option_name(); }
 
    void set_original_token(const std::string &original_token) { set_substitute("original_token", original_token); }
 
    /** Creates the error_message on the fly
     *      Currently a thin wrapper for substitute_placeholders() */
-   virtual const char *what() const throw();
+   auto what() const noexcept -> const char *;
 
 protected:
    /** Used to hold the error text returned by what() */
@@ -180,8 +181,8 @@ protected:
 
    /** Construct option name in accordance with the appropriate
     *  prefix style: i.e. long dash or short slash etc */
-   std::string get_canonical_option_name() const;
-   std::string get_canonical_option_prefix() const;
+   auto get_canonical_option_name() const -> std::string;
+   auto get_canonical_option_prefix() const -> std::string;
 };
 
 /** Class thrown when there are several option values, but
@@ -194,7 +195,7 @@ public:
    {
    }
 
-   ~multiple_values() throw() {}
+   ~multiple_values() noexcept override = default;
 };
 
 /** Class thrown when there are several occurrences of an
@@ -208,7 +209,7 @@ public:
    {
    }
 
-   ~multiple_occurrences() throw() {}
+   ~multiple_occurrences() noexcept override = default;
 };
 
 /** Class thrown when a required/mandatory option is missing */
@@ -221,7 +222,7 @@ public:
    {
    }
 
-   ~required_option() throw() {}
+   ~required_option() noexcept override = default;
 };
 
 /** Base class of unparsable options,
@@ -244,9 +245,9 @@ public:
    }
 
    /** Does NOT set option name, because no option name makes sense */
-   virtual void set_option_name(const std::string &) {}
+   void set_option_name(const std::string &) override {}
 
-   ~error_with_no_option_name() throw() {}
+   ~error_with_no_option_name() noexcept override = default;
 };
 
 /** Class thrown when option name is not recognized. */
@@ -258,26 +259,26 @@ public:
    {
    }
 
-   ~unknown_option() throw() {}
+   ~unknown_option() noexcept override = default;
 };
 
 /** Class thrown when there's ambiguity amoung several possible options. */
 class ambiguous_option : public error_with_no_option_name
 {
 public:
-   ambiguous_option(const std::vector<std::string> &xalternatives)
+   ambiguous_option(std::vector<std::string> xalternatives)
       : error_with_no_option_name("option '%canonical_option%' is ambiguous")
-      , m_alternatives(xalternatives)
+      , m_alternatives(std::move(xalternatives))
    {
    }
 
-   ~ambiguous_option() throw() {}
+   ~ambiguous_option() noexcept override = default;
 
-   const std::vector<std::string> &alternatives() const throw() { return m_alternatives; }
+   auto alternatives() const noexcept -> const std::vector<std::string> & { return m_alternatives; }
 
 protected:
    /** Makes all substitutions using the template */
-   virtual void substitute_placeholders(const std::string &error_template) const;
+   void substitute_placeholders(const std::string &error_template) const override;
 
 private:
    // TODO: copy ctor might throw
@@ -307,16 +308,16 @@ public:
    {
    }
 
-   ~invalid_syntax() throw() {}
+   ~invalid_syntax() noexcept override = default;
 
-   kind_t kind() const { return m_kind; }
+   auto kind() const -> kind_t { return m_kind; }
 
    /** Convenience functions for backwards compatibility */
-   virtual std::string tokens() const { return get_option_name(); }
+   virtual auto tokens() const -> std::string { return get_option_name(); }
 
 protected:
    /** Used to convert kind_t to a related error text */
-   std::string get_template(kind_t kind);
+   auto get_template(kind_t kind) -> std::string;
    kind_t      m_kind;
 };
 
@@ -329,10 +330,10 @@ public:
       m_substitutions["invalid_line"] = invalid_line;
    }
 
-   ~invalid_config_file_syntax() throw() {}
+   ~invalid_config_file_syntax() noexcept override = default;
 
    /** Convenience functions for backwards compatibility */
-   virtual std::string tokens() const { return m_substitutions.find("invalid_line")->second; }
+   auto tokens() const -> std::string { return m_substitutions.find("invalid_line")->second; }
 };
 
 /** Class thrown when there are syntax errors in given command line */
@@ -344,7 +345,7 @@ public:
       : invalid_syntax(kind, option_name, original_token, option_style)
    {
    }
-   ~invalid_command_line_syntax() throw() {}
+   ~invalid_command_line_syntax() noexcept override = default;
 };
 
 /** Class thrown when value of option is incorrect. */
@@ -367,13 +368,13 @@ public:
    {
    }
 
-   ~validation_error() throw() {}
+   ~validation_error() noexcept override = default;
 
-   kind_t kind() const { return m_kind; }
+   auto kind() const -> kind_t { return m_kind; }
 
 protected:
    /** Used to convert kind_t to a related error text */
-   std::string get_template(kind_t kind);
+   auto get_template(kind_t kind) -> std::string;
    kind_t      m_kind;
 };
 

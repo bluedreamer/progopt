@@ -197,7 +197,7 @@ void variables_map::clear()
 auto variables_map::get(const std::string &name) const -> const variable_value &
 {
    static variable_value empty;
-   const_iterator        i = this->find(name);
+   auto        i = this->find(name);
    if(i == this->end())
       return empty;
    else
@@ -207,11 +207,11 @@ auto variables_map::get(const std::string &name) const -> const variable_value &
 void variables_map::notify()
 {
    // This checks if all required options occur
-   for(std::map<std::string, std::string>::const_iterator r = m_required.begin(); r != m_required.end(); ++r)
+   for(auto r = m_required.begin(); r != m_required.end(); ++r)
    {
       const std::string &                                   opt         = r->first;
       const std::string &                                   display_opt = r->second;
-      std::map<std::string, variable_value>::const_iterator iter        = find(opt);
+      auto iter        = find(opt);
       if(iter == end() || iter->second.empty())
       {
          boost::throw_exception(required_option(display_opt));
@@ -219,7 +219,7 @@ void variables_map::notify()
    }
 
    // Lastly, run notify actions.
-   for(std::map<std::string, variable_value>::iterator k = begin(); k != end(); ++k)
+   for(auto & k : *this)
    {
       /* Users might wish to use variables_map to store their own values
          that are not parsed, and therefore will not have value_semantics
@@ -229,7 +229,7 @@ void variables_map::notify()
          not NULL. See:
              https://svn.boost.org/trac/boost/ticket/2782
       */
-      if(k->second.m_value_semantic)
-         k->second.m_value_semantic->notify(k->second.value());
+      if(k.second.m_value_semantic)
+         k.second.m_value_semantic->notify(k.second.value());
    }
 }

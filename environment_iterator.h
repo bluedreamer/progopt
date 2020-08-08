@@ -24,7 +24,7 @@ public:
 
    void get()
    {
-      if(*m_environment == 0)
+      if(*m_environment == nullptr)
          found_eof();
       else
       {

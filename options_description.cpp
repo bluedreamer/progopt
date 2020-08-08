@@ -18,7 +18,7 @@
 #include <utility>
 
 template<class charT>
-std::basic_string<charT> tolower_(const std::basic_string<charT> &str)
+auto tolower_(const std::basic_string<charT> &str) -> std::basic_string<charT>
 {
    std::basic_string<charT> result;
    for(typename std::basic_string<charT>::size_type i = 0; i < str.size(); ++i)
@@ -49,9 +49,9 @@ auto option_description::match(const std::string &option, bool approx, bool long
    match_result result       = no_match;
    std::string  local_option = (long_ignore_case ? tolower_(option) : option);
 
-   for(std::vector<std::string>::const_iterator it(m_long_names.begin()); it != m_long_names.end(); it++)
+   for(const auto & m_long_name : m_long_names)
    {
-      std::string local_long_name((long_ignore_case ? tolower_(*it) : *it));
+      std::string local_long_name((long_ignore_case ? tolower_(m_long_name) : m_long_name));
 
       if(!local_long_name.empty())
       {
@@ -272,9 +272,9 @@ auto options_description::add(const options_description &desc) -> options_descri
    std::shared_ptr<options_description> d(new options_description(desc));
    groups.push_back(d);
 
-   for(size_t i = 0; i < desc.m_options.size(); ++i)
+   for(const auto & m_option : desc.m_options)
    {
-      add(desc.m_options[i]);
+      add(m_option);
       belong_to_group.back() = true;
    }
 
@@ -297,7 +297,7 @@ auto options_description::find(const std::string &name, bool approx, bool long_i
    return *d;
 }
 
-const std::vector<std::shared_ptr<option_description>> &options_description::options() const
+auto options_description::options() const -> const std::vector<std::shared_ptr<option_description>> &
 {
    return m_options;
 }
@@ -313,26 +313,26 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
    // We use linear search because matching specified option
    // name with the declared option name need to take care about
    // case sensitivity and trailing '*' and so we can't use simple map.
-   for(unsigned i = 0; i < m_options.size(); ++i)
+   for(const auto & m_option : m_options)
    {
-      option_description::match_result r = m_options[i]->match(name, approx, long_ignore_case, short_ignore_case);
+      option_description::match_result r = m_option->match(name, approx, long_ignore_case, short_ignore_case);
 
       if(r == option_description::no_match)
          continue;
 
       if(r == option_description::full_match)
       {
-         full_matches.push_back(m_options[i]->key(name));
-         found          = m_options[i];
+         full_matches.push_back(m_option->key(name));
+         found          = m_option;
          had_full_match = true;
       }
       else
       {
          // FIXME: the use of 'key' here might not
          // be the best approach.
-         approximate_matches.push_back(m_options[i]->key(name));
+         approximate_matches.push_back(m_option->key(name));
          if(!had_full_match)
-            found = m_options[i];
+            found = m_option;
       }
    }
    if(full_matches.size() > 1)
@@ -433,7 +433,7 @@ void format_paragraph(std::ostream &os, std::string par, unsigned indent, unsign
          // Take care to never increment the iterator past
          // the end, since MSVC 8.0 (brokenly), assumes that
          // doing that, even if no access happens, is a bug.
-         unsigned                    remaining = static_cast<unsigned>(std::distance(line_begin, par_end));
+         auto                    remaining = static_cast<unsigned>(std::distance(line_begin, par_end));
          std::string::const_iterator line_end  = line_begin + ((remaining < line_length) ? remaining : line_length);
 
          // prevent chopped words
@@ -575,8 +575,8 @@ auto options_description::get_option_column_width() const -> unsigned
    }
 
    /* Get width of groups as well*/
-   for(unsigned j = 0; j < groups.size(); ++j)
-      width = std::max(width, groups[j]->get_option_column_width());
+   for(const auto & group : groups)
+      width = std::max(width, group->get_option_column_width());
 
    /* this is the column were description should start, if first
       column is longer, we go to a new line */
@@ -612,9 +612,9 @@ void options_description::print(std::ostream &os, unsigned width) const
       os << "\n";
    }
 
-   for(unsigned j = 0; j < groups.size(); ++j)
+   for(const auto & group : groups)
    {
       os << "\n";
-      groups[j]->print(os, width);
+      group->print(os, width);
    }
 }

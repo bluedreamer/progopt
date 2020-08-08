@@ -44,7 +44,7 @@ public:
    /** Given 'option', specified in the input source,
        returns 'true' if 'option' specifies *this.
    */
-   match_result match(const std::string &option, bool approx, bool long_ignore_case, bool short_ignore_case) const;
+   [[nodiscard]] auto match(const std::string &option, bool approx, bool long_ignore_case, bool short_ignore_case) const -> match_result;
 
    /** Returns the key that should identify the option, in
        particular in the variables_map class.
@@ -54,7 +54,7 @@ public:
        If long name was specified, it's the long name, otherwise
        it's a short name with prepended '-'.
    */
-   const std::string &key(const std::string &option) const;
+   [[nodiscard]] auto key(const std::string &option) const -> const std::string &;
 
    /** Returns the canonical name for the option description to enable the user to
        recognised a matching option.
@@ -63,27 +63,27 @@ public:
        3) All other cases, returns the first long name (if present) or the short
           name, unprefixed.
    */
-   std::string canonical_display_name(int canonical_option_style = 0) const;
+   [[nodiscard]] auto canonical_display_name(int canonical_option_style = 0) const -> std::string;
 
-   const std::string &long_name() const;
+   [[nodiscard]] auto long_name() const -> const std::string &;
 
-   const std::pair<const std::string *, std::size_t> long_names() const;
+   [[nodiscard]] auto long_names() const -> const std::pair<const std::string *, std::size_t>;
 
    /// Explanation of this option
-   const std::string &description() const;
+   [[nodiscard]] auto description() const -> const std::string &;
 
    /// Semantic of option's value
-   std::shared_ptr<const value_semantic> semantic() const;
+   [[nodiscard]] auto semantic() const -> std::shared_ptr<const value_semantic>;
 
    /// Returns the option name, formatted suitably for usage message.
-   std::string format_name() const;
+   [[nodiscard]] auto format_name() const -> std::string;
 
    /** Returns the parameter name and properties, formatted suitably for
        usage message. */
-   std::string format_parameter() const;
+   [[nodiscard]] auto format_parameter() const -> std::string;
 
 private:
-   option_description &set_names(const char *name);
+   auto set_names(const char *name) -> option_description &;
 
    /**
     * a one-character "switch" name - with its prefix,
@@ -114,9 +114,9 @@ class options_description_easy_init
 {
 public:
    options_description_easy_init(options_description *owner);
-   options_description_easy_init &operator()(const char *name, const char *description);
-   options_description_easy_init &operator()(const char *name, const value_semantic *s);
-   options_description_easy_init &operator()(const char *name, const value_semantic *s, const char *description);
+   auto operator()(const char *name, const char *description) -> options_description_easy_init &;
+   auto operator()(const char *name, const value_semantic *s) -> options_description_easy_init &;
+   auto operator()(const char *name, const value_semantic *s, const char *description) -> options_description_easy_init &;
 private:
    options_description *owner;
 };
@@ -154,11 +154,11 @@ public:
        a separate group.
        Returns *this.
    */
-   options_description &add(const options_description &desc);
+   auto add(const options_description &desc) -> options_description &;
 
    /** Find the maximum width of the option column, including options
        in groups. */
-   unsigned get_option_column_width() const;
+   [[nodiscard]] auto get_option_column_width() const -> unsigned;
 
 public:
    /** Returns an object of implementation-defined type suitable for adding
@@ -167,20 +167,20 @@ public:
        'option_description' constructors. Calling the operator will create
        new option_description instance and add it.
    */
-   options_description_easy_init add_options();
+   auto add_options() -> options_description_easy_init;
 
-   const option_description &find(const std::string &name, bool approx, bool long_ignore_case = false,
-                                  bool short_ignore_case = false) const;
+   [[nodiscard]] auto find(const std::string &name, bool approx, bool long_ignore_case = false,
+                                  bool short_ignore_case = false) const -> const option_description &;
 
-   const option_description *find_nothrow(const std::string &name, bool approx, bool long_ignore_case = false,
-                                          bool short_ignore_case = false) const;
+   [[nodiscard]] auto find_nothrow(const std::string &name, bool approx, bool long_ignore_case = false,
+                                          bool short_ignore_case = false) const -> const option_description *;
 
-   const std::vector<std::shared_ptr<option_description>> &options() const;
+   [[nodiscard]] auto options() const -> const std::vector<std::shared_ptr<option_description>> &;
 
    /** Produces a human readable output of 'desc', listing options,
        their descriptions and allowed parameters. Other options_description
        instances previously passed to add will be output separately. */
-   friend std::ostream &operator<<(std::ostream &os, const options_description &desc);
+   friend auto operator<<(std::ostream &os, const options_description &desc) -> std::ostream &;
 
    /** Outputs 'desc' to the specified stream, calling 'f' to output each
        option_description element. */

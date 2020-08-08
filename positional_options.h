@@ -33,18 +33,18 @@ public:
        No calls to 'add' can be made after call with 'max_value' equal to
        '-1'.
    */
-   positional_options_description &add(const char *name, int max_count);
+   auto add(const char *name, int max_count) -> positional_options_description &;
 
    /** Returns the maximum number of positional options that can
        be present. Can return (numeric_limits<unsigned>::max)() to
        indicate unlimited number. */
-   unsigned max_total_count() const;
+   [[nodiscard]] auto max_total_count() const -> unsigned;
 
    /** Returns the name that should be associated with positional
        options at 'position'.
        Precondition: position < max_total_count()
    */
-   const std::string &name_for_position(unsigned position) const;
+   [[nodiscard]] auto name_for_position(unsigned position) const -> const std::string &;
 
 private:
    // List of names corresponding to the positions. If the number of

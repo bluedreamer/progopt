@@ -14,9 +14,9 @@ common_config_file_iterator::common_config_file_iterator(const std::set<std::str
    : allowed_options(allowed_options)
    , m_allow_unregistered(allow_unregistered)
 {
-   for(std::set<std::string>::const_iterator i = allowed_options.begin(); i != allowed_options.end(); ++i)
+   for(const auto & allowed_option : allowed_options)
    {
-      add_option(i->c_str());
+      add_option(allowed_option.c_str());
    }
 }
 
@@ -32,7 +32,7 @@ void common_config_file_iterator::add_option(const char *name)
       // lower_bound will return that element.
       // If some element is prefix of 's', then lower_bound will
       // return the next element.
-      std::set<std::string>::iterator i = allowed_prefixes.lower_bound(s);
+      auto i = allowed_prefixes.lower_bound(s);
       if(i != allowed_prefixes.end())
       {
          if(i->find(s) == 0)
@@ -123,7 +123,7 @@ void common_config_file_iterator::get()
 
 auto common_config_file_iterator::allowed_option(const std::string &s) const -> bool
 {
-   std::set<std::string>::const_iterator i = allowed_options.find(s);
+   auto i = allowed_options.find(s);
    if(i != allowed_options.end())
       return true;
    // If s is "pa" where "p" is allowed prefix then
