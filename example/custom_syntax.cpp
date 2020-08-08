@@ -23,11 +23,13 @@ auto reg_foo(const std::string &s) -> std::pair<std::string, std::string>
 {
    if(s.find("-f") == 0)
    {
-      if(s.substr(2, 3) == "no-") {
+      if(s.substr(2, 3) == "no-")
+      {
          return std::make_pair(s.substr(5), std::string("false"));
-      }  {
+      }
+      {
          return std::make_pair(s.substr(2), std::string("true"));
-}
+      }
    }
    else
    {

@@ -64,9 +64,9 @@ public:
    }
 
    // Below is the interface to access the data, once ParseOptions has been run
-   auto              Path() -> std::string { return results["path"].as<std::string>(); }
-   auto              Verbosity() -> std::string { return results["verbosity"].as<std::string>(); }
-   std::vector<std::string> IncludePath()
+   auto Path() -> std::string { return results["path"].as<std::string>(); }
+   auto Verbosity() -> std::string { return results["verbosity"].as<std::string>(); }
+   auto IncludePath() -> std::vector<std::string>
    {
       if(results.count("include-path") != 0u)
       {
@@ -82,7 +82,7 @@ public:
       }
       return "";
    }
-   std::vector<std::string> Files()
+   auto Files() -> std::vector<std::string>
    {
       if(results.count("file") != 0u)
       {
@@ -90,10 +90,7 @@ public:
       }
       return std::vector<std::string>();
    }
-   auto GUI() -> bool
-   {
-      return results["run-gui"].as<bool>();
-   }
+   auto GUI() -> bool { return results["run-gui"].as<bool>(); }
    auto GuiValues() -> GuiOpts
    {
       GuiOpts opts;
@@ -140,7 +137,7 @@ private:
          "network.ip", value<std::string>()->default_value("127.0.0.1"))("network.port", value<unsigned short>()->default_value(12345));
       // Run a parser here (with no command line options) to add these defaults into
       // results, this way they will be enabled even if no config files are parsed.
-      store(command_line_parser(0, 0).options(config_only_options).run(), results);
+      store(command_line_parser(0, nullptr).options(config_only_options).run(), results);
       notify(results);
    }
    void SetEnvMapping()
@@ -187,12 +184,12 @@ private:
    }
    void ParseEnvironment()
    {
-      store(parse_environment(
-               common_options,
-               // The next two lines are the crazy syntax to use EnvironmentMapper as
-               // the lookup function for env->config name conversions
-               std::function<std::string(std::string)>(std::bind1st(std::mem_fun(&OptionsHeirarchy::EnvironmentMapper), this))),
-            results);
+      store(
+         parse_environment(common_options,
+                           // The next two lines are the crazy syntax to use EnvironmentMapper as
+                           // the lookup function for env->config name conversions
+                           std::function<std::string(std::string)>(std::bind1st(std::mem_fun(&OptionsHeirarchy::EnvironmentMapper), this))),
+         results);
       notify(results);
    }
    auto EnvironmentMapper(std::string env_var) -> std::string
@@ -212,9 +209,9 @@ private:
       if(results.count("config") != 0u)
       {
          auto files = results["config"].as<std::vector<std::string>>();
-         for(auto file = files.begin(); file != files.end(); file++)
+         for(auto &file : files)
          {
-            LoadAConfigFile(*file);
+            LoadAConfigFile(file);
          }
       }
    }
@@ -259,16 +256,16 @@ void PrintOptions(OptionsHeirarchy options)
    std::cout << "Verbosity: " << options.Verbosity() << std::endl;
    std::cout << "Include Path:\n";
    auto includePaths = options.IncludePath();
-   for(auto path = includePaths.begin(); path != includePaths.end(); path++)
+   for(auto &includePath : includePaths)
    {
-      std::cout << "   " << *path << std::endl;
+      std::cout << "   " << includePath << std::endl;
    }
    std::cout << "Master-File: " << options.MasterFile() << std::endl;
    std::cout << "Additional Files:\n";
    auto files = options.Files();
-   for(auto file = files.begin(); file != files.end(); file++)
+   for(auto &file : files)
    {
-      std::cout << "   " << *file << std::endl;
+      std::cout << "   " << file << std::endl;
    }
 
    std::cout << "GUI Enabled: " << std::boolalpha << options.GUI() << std::endl;

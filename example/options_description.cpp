@@ -11,7 +11,7 @@
 
 // A helper function to simplify the main part.
 template<class T>
-std::ostream &operator<<(std::ostream &os, const std::vector<T> &v)
+auto operator<<(std::ostream &os, const std::vector<T> &v) -> std::ostream &
 {
    std::copy(v.begin(), v.end(), std::ostream_iterator<T>(os, " "));
    return os;

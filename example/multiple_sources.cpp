@@ -65,11 +65,9 @@ auto main(int ac, char *av[]) -> int
          std::cout << "can not open config file: " << config_file << "\n";
          return 0;
       }
-      
-      
-         store(parse_config_file(ifs, config_file_options), vm);
-         notify(vm);
-      
+
+      store(parse_config_file(ifs, config_file_options), vm);
+      notify(vm);
 
       if(vm.count("help") != 0u)
       {

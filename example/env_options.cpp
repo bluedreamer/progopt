@@ -12,12 +12,14 @@ auto mapper(std::string env_var) -> std::string
    // ensure the env_var is all caps
    std::transform(env_var.begin(), env_var.end(), env_var.begin(), ::toupper);
 
-   if(env_var == "PATH") {
+   if(env_var == "PATH")
+   {
       return "path";
-}
-   if(env_var == "EXAMPLE_VERBOSE") {
+   }
+   if(env_var == "EXAMPLE_VERBOSE")
+   {
       return "verbosity";
-}
+   }
    return "";
 }
 
@@ -28,7 +30,7 @@ void get_env_options()
                                                       "set verbosity: DEBUG, INFO, WARN, ERROR, FATAL");
 
    variables_map vm;
-   store(parse_environment(config, std::function<std::string(std::string)> (mapper)), vm);
+   store(parse_environment(config, std::function<std::string(std::string)>(mapper)), vm);
    notify(vm);
 
    if(vm.count("path") != 0u)

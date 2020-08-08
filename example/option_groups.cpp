@@ -61,7 +61,7 @@ auto main(int ac, char *av[]) -> int
       }
       if(vm.count("help-module") != 0u)
       {
-         const std::string &s = vm["help-module"].as<std::string>();
+         const auto &s = vm["help-module"].as<std::string>();
          if(s == "gui")
          {
             std::cout << gui;

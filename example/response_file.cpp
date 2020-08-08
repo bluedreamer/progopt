@@ -27,11 +27,13 @@
 
 auto at_option_parser(std::string const &s) -> std::pair<std::string, std::string>
 {
-   if('@' == s[0]) {
+   if('@' == s[0])
+   {
       return std::make_pair(std::string("response-file"), s.substr(1));
-   }  {
+   }
+   {
       return std::pair<std::string, std::string>();
-}
+   }
 }
 
 auto main(int ac, char *av[]) -> int
@@ -39,8 +41,9 @@ auto main(int ac, char *av[]) -> int
    try
    {
       options_description desc("Allowed options");
-      desc.add_options()("help", "produce a help message")("include-path,I", value<std::vector<std::string>>()->composing(), "include path")(
-         "magic", value<int>(), "magic value")("response-file", value<std::string>(), "can be specified with '@name', too");
+      desc.add_options()("help", "produce a help message")("include-path,I", value<std::vector<std::string>>()->composing(),
+                                                           "include path")("magic", value<int>(), "magic value")(
+         "response-file", value<std::string>(), "can be specified with '@name', too");
 
       variables_map vm;
       store(command_line_parser(ac, av).options(desc).extra_parser(at_option_parser).run(), vm);
@@ -62,18 +65,18 @@ auto main(int ac, char *av[]) -> int
          std::stringstream ss;
          ss << ifs.rdbuf();
          // Split the file content
-//         char_separator<char>            sep(" \n\r");
-//         std::string                     sstr = ss.str();
-//         tokenizer<char_separator<char>> tok(sstr, sep);
-//         std::vector<std::string>        args;
-//         std::copy(tok.begin(), tok.end(), back_inserter(args));
-//         // Parse the file and store the options
-//         store(command_line_parser(args).options(desc).run(), vm);
+         //         char_separator<char>            sep(" \n\r");
+         //         std::string                     sstr = ss.str();
+         //         tokenizer<char_separator<char>> tok(sstr, sep);
+         //         std::vector<std::string>        args;
+         //         std::copy(tok.begin(), tok.end(), back_inserter(args));
+         //         // Parse the file and store the options
+         //         store(command_line_parser(args).options(desc).run(), vm);
       }
 
       if(vm.count("include-path") != 0u)
       {
-         const std::vector<std::string> &s = vm["include-path"].as<std::vector<std::string>>();
+         const auto &s = vm["include-path"].as<std::vector<std::string>>();
          std::cout << "Include paths: ";
          std::copy(s.begin(), s.end(), std::ostream_iterator<std::string>(std::cout, " "));
          std::cout << "\n";

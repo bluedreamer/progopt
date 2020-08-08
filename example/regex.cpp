@@ -42,7 +42,7 @@ public:
 */
 void validate(std::any &v, const std::vector<std::string> &values, magic_number * /*unused*/, int /*unused*/)
 {
-   static std::regex r("\\d\\d\\d-(\\d\\d\\d)");
+   static std::regex r(R"(\d\d\d-(\d\d\d))");
 
    // Make sure no previous assignment to 'a' was made.
    validators::check_first_occurrence(v);

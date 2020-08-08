@@ -72,7 +72,7 @@ auto make_file() -> std::stringstream
    return ss;
 }
 
-options_description set_options()
+auto set_options() -> options_description
 {
    options_description opts;
    opts.add_options()("global_string", value<std::string>())
@@ -109,7 +109,7 @@ options_description set_options()
    return opts;
 }
 
-std::vector<std::string> parse_file(std::stringstream &file, options_description &opts, variables_map &vm)
+auto parse_file(std::stringstream &file, options_description &opts, variables_map &vm) -> std::vector<std::string>
 {
    const bool ALLOW_UNREGISTERED = true;
    std::cout << file.str() << std::endl;
@@ -204,7 +204,7 @@ void check_results(variables_map &vm, std::vector<std::string> unregistered)
    // assert(vm["booleans.present_no_equal_true"].as<bool>() == expected_present_no_equal_true);
 }
 
-int main(int ac, char *av[])
+auto main(int ac, char *av[]) -> int
 {
    auto          file = make_file();
    auto          opts = set_options();
