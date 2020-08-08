@@ -23,10 +23,11 @@ auto reg_foo(const std::string &s) -> std::pair<std::string, std::string>
 {
    if(s.find("-f") == 0)
    {
-      if(s.substr(2, 3) == "no-")
+      if(s.substr(2, 3) == "no-") {
          return std::make_pair(s.substr(5), std::string("false"));
-      else
+      }  {
          return std::make_pair(s.substr(2), std::string("true"));
+}
    }
    else
    {
@@ -44,12 +45,12 @@ auto main(int ac, char *av[]) -> int
       variables_map vm;
       store(command_line_parser(ac, av).options(desc).extra_parser(reg_foo).run(), vm);
 
-      if(vm.count("help"))
+      if(vm.count("help") != 0u)
       {
          std::cout << desc;
          std::cout << "\nIn addition -ffoo and -fno-foo syntax are recognized.\n";
       }
-      if(vm.count("foo"))
+      if(vm.count("foo") != 0u)
       {
          std::cout << "foo value with the value of " << vm["foo"].as<std::string>() << "\n";
       }

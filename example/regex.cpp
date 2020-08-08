@@ -40,7 +40,7 @@ public:
    This has no practical meaning, meant only to show how
    regex can be used to validate values.
 */
-void validate(std::any &v, const std::vector<std::string> &values, magic_number *, int)
+void validate(std::any &v, const std::vector<std::string> &values, magic_number * /*unused*/, int /*unused*/)
 {
    static std::regex r("\\d\\d\\d-(\\d\\d\\d)");
 
@@ -74,18 +74,18 @@ auto main(int ac, char *av[]) -> int
       variables_map vm;
       store(parse_command_line(ac, av, desc), vm);
 
-      if(vm.count("help"))
+      if(vm.count("help") != 0u)
       {
          std::cout << "Usage: regex [options]\n";
          std::cout << desc;
          return 0;
       }
-      if(vm.count("version"))
+      if(vm.count("version") != 0u)
       {
          std::cout << "Version 1.\n";
          return 0;
       }
-      if(vm.count("magic"))
+      if(vm.count("magic") != 0u)
       {
          std::cout << "The magic is \"" << vm["magic"].as<magic_number>().n << "\"\n";
       }

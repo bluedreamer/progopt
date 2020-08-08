@@ -54,12 +54,12 @@ auto main(int ac, char *av[]) -> int
       variables_map vm;
       store(parse_command_line(ac, av, all), vm);
 
-      if(vm.count("help"))
+      if(vm.count("help") != 0u)
       {
          std::cout << visible;
          return 0;
       }
-      if(vm.count("help-module"))
+      if(vm.count("help-module") != 0u)
       {
          const std::string &s = vm["help-module"].as<std::string>();
          if(s == "gui")
@@ -77,7 +77,7 @@ auto main(int ac, char *av[]) -> int
          }
          return 0;
       }
-      if(vm.count("num-threads"))
+      if(vm.count("num-threads") != 0u)
       {
          std::cout << "The 'num-threads' options was set to " << vm["num-threads"].as<int>() << "\n";
       }

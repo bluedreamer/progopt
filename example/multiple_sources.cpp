@@ -65,30 +65,30 @@ auto main(int ac, char *av[]) -> int
          std::cout << "can not open config file: " << config_file << "\n";
          return 0;
       }
-      else
-      {
+      
+      
          store(parse_config_file(ifs, config_file_options), vm);
          notify(vm);
-      }
+      
 
-      if(vm.count("help"))
+      if(vm.count("help") != 0u)
       {
          std::cout << visible << "\n";
          return 0;
       }
 
-      if(vm.count("version"))
+      if(vm.count("version") != 0u)
       {
          std::cout << "Multiple sources example, version 1.0\n";
          return 0;
       }
 
-      if(vm.count("include-path"))
+      if(vm.count("include-path") != 0u)
       {
          std::cout << "Include paths are: " << vm["include-path"].as<std::vector<std::string>>() << "\n";
       }
 
-      if(vm.count("input-file"))
+      if(vm.count("input-file") != 0u)
       {
          std::cout << "Input files are: " << vm["input-file"].as<std::vector<std::string>>() << "\n";
       }

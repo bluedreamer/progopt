@@ -22,13 +22,13 @@ auto main(int ac, char *av[]) -> int
       store(parse_command_line(ac, av, desc), vm);
       notify(vm);
 
-      if(vm.count("help"))
+      if(vm.count("help") != 0u)
       {
          std::cout << desc << "\n";
          return 0;
       }
 
-      if(vm.count("compression"))
+      if(vm.count("compression") != 0u)
       {
          std::cout << "Compression level was set to " << vm["compression"].as<double>() << ".\n";
       }

@@ -12,10 +12,12 @@ auto mapper(std::string env_var) -> std::string
    // ensure the env_var is all caps
    std::transform(env_var.begin(), env_var.end(), env_var.begin(), ::toupper);
 
-   if(env_var == "PATH")
+   if(env_var == "PATH") {
       return "path";
-   if(env_var == "EXAMPLE_VERBOSE")
+}
+   if(env_var == "EXAMPLE_VERBOSE") {
       return "verbosity";
+}
    return "";
 }
 
@@ -29,7 +31,7 @@ void get_env_options()
    store(parse_environment(config, std::function<std::string(std::string)> (mapper)), vm);
    notify(vm);
 
-   if(vm.count("path"))
+   if(vm.count("path") != 0u)
    {
       std::cout << "First 75 chars of the system path: \n";
       std::cout << vm["path"].as<std::string>().substr(0, 75) << std::endl;

@@ -68,7 +68,7 @@ public:
    auto              Verbosity() -> std::string { return results["verbosity"].as<std::string>(); }
    std::vector<std::string> IncludePath()
    {
-      if(results.count("include-path"))
+      if(results.count("include-path") != 0u)
       {
          return results["include-path"].as<std::vector<std::string>>();
       }
@@ -76,7 +76,7 @@ public:
    }
    auto MasterFile() -> std::string
    {
-      if(results.count("master-file"))
+      if(results.count("master-file") != 0u)
       {
          return results["master-file"].as<std::string>();
       }
@@ -84,7 +84,7 @@ public:
    }
    std::vector<std::string> Files()
    {
-      if(results.count("file"))
+      if(results.count("file") != 0u)
       {
          return results["file"].as<std::vector<std::string>>();
       }
@@ -92,11 +92,7 @@ public:
    }
    auto GUI() -> bool
    {
-      if(results["run-gui"].as<bool>())
-      {
-         return true;
-      }
-      return false;
+      return results["run-gui"].as<bool>();
    }
    auto GuiValues() -> GuiOpts
    {
@@ -162,7 +158,7 @@ private:
    }
    void CheckForHelp()
    {
-      if(results.count("help"))
+      if(results.count("help") != 0u)
       {
          PrintHelp();
       }
@@ -179,12 +175,12 @@ private:
    }
    void CheckForVersion()
    {
-      if(results.count("version"))
+      if(results.count("version") != 0u)
       {
          PrintVersion();
       }
    }
-   void PrintVersion()
+   static void PrintVersion()
    {
       std::cout << "Program Options Example " << version << std::endl;
       throw OptionsExitsProgram();
@@ -213,7 +209,7 @@ private:
    }
    void ParseConfigFiles()
    {
-      if(results.count("config"))
+      if(results.count("config") != 0u)
       {
          auto files = results["config"].as<std::vector<std::string>>();
          for(auto file = files.begin(); file != files.end(); file++)
@@ -254,7 +250,7 @@ void get_env_options()
 void PrintOptions(OptionsHeirarchy options)
 {
    auto path = options.Path();
-   if(path.length())
+   if(path.length() != 0u)
    {
       std::cout << "First 75 chars of the system path: \n";
       std::cout << options.Path().substr(0, 75) << std::endl;

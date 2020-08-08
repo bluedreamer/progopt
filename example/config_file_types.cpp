@@ -16,11 +16,7 @@ const double FLOAT_SEPERATION = 0.00000000001;
 auto         check_float(double test, double expected) -> bool
 {
    double seperation = expected * (1 + FLOAT_SEPERATION) / expected;
-   if((test < expected + seperation) && (test > expected - seperation))
-   {
-      return true;
-   }
-   return false;
+   return (test < expected + seperation) && (test > expected - seperation);
 }
 
 auto make_file() -> std::stringstream
@@ -144,18 +140,18 @@ void check_results(variables_map &vm, std::vector<std::string> unregistered)
    int expected_int_oct       = 044;
    int expected_int_bin       = 0b101010;
 
-   float  expected_float_positive                  = 51.1f;
-   float  expected_float_negative                  = -52.1f;
+   float  expected_float_positive                  = 51.1F;
+   float  expected_float_negative                  = -52.1F;
    double expected_float_double                    = 53.1234567890;
-   float  expected_float_int                       = 54.0f;
-   float  expected_float_int_dot                   = 55.0f;
-   float  expected_float_dot                       = .56f;
-   float  expected_float_exp_lower                 = 57.1e5f;
-   float  expected_float_exp_upper                 = 58.1E5f;
-   float  expected_float_exp_decimal               = .591e5f;
-   float  expected_float_exp_negative              = 60.1e-5f;
-   float  expected_float_exp_negative_val          = -61.1e5f;
-   float  expected_float_exp_negative_negative_val = -62.1e-5f;
+   float  expected_float_int                       = 54.0F;
+   float  expected_float_int_dot                   = 55.0F;
+   float  expected_float_dot                       = .56F;
+   float  expected_float_exp_lower                 = 57.1e5F;
+   float  expected_float_exp_upper                 = 58.1E5F;
+   float  expected_float_exp_decimal               = .591e5F;
+   float  expected_float_exp_negative              = 60.1e-5F;
+   float  expected_float_exp_negative_val          = -61.1e5F;
+   float  expected_float_exp_negative_negative_val = -62.1e-5F;
 
    bool expected_number_true           = true;
    bool expected_number_false          = false;

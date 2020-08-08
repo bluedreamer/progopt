@@ -37,24 +37,24 @@ auto main(int ac, char *av[]) -> int
       store(command_line_parser(ac, av).options(desc).positional(p).run(), vm);
       notify(vm);
 
-      if(vm.count("help"))
+      if(vm.count("help") != 0u)
       {
          std::cout << "Usage: options_description [options]\n";
          std::cout << desc;
          return 0;
       }
 
-      if(vm.count("include-path"))
+      if(vm.count("include-path") != 0u)
       {
          std::cout << "Include paths are: " << vm["include-path"].as<std::vector<std::string>>() << "\n";
       }
 
-      if(vm.count("input-file"))
+      if(vm.count("input-file") != 0u)
       {
          std::cout << "Input files are: " << vm["input-file"].as<std::vector<std::string>>() << "\n";
       }
 
-      if(vm.count("verbose"))
+      if(vm.count("verbose") != 0u)
       {
          std::cout << "Verbosity enabled.  Level is " << vm["verbose"].as<int>() << "\n";
       }

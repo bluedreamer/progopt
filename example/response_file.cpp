@@ -27,10 +27,11 @@
 
 auto at_option_parser(std::string const &s) -> std::pair<std::string, std::string>
 {
-   if('@' == s[0])
+   if('@' == s[0]) {
       return std::make_pair(std::string("response-file"), s.substr(1));
-   else
+   }  {
       return std::pair<std::string, std::string>();
+}
 }
 
 auto main(int ac, char *av[]) -> int
@@ -44,11 +45,11 @@ auto main(int ac, char *av[]) -> int
       variables_map vm;
       store(command_line_parser(ac, av).options(desc).extra_parser(at_option_parser).run(), vm);
 
-      if(vm.count("help"))
+      if(vm.count("help") != 0u)
       {
          std::cout << desc;
       }
-      if(vm.count("response-file"))
+      if(vm.count("response-file") != 0u)
       {
          // Load the file and tokenize it
          std::ifstream ifs(vm["response-file"].as<std::string>().c_str());
@@ -70,14 +71,14 @@ auto main(int ac, char *av[]) -> int
 //         store(command_line_parser(args).options(desc).run(), vm);
       }
 
-      if(vm.count("include-path"))
+      if(vm.count("include-path") != 0u)
       {
          const std::vector<std::string> &s = vm["include-path"].as<std::vector<std::string>>();
          std::cout << "Include paths: ";
          std::copy(s.begin(), s.end(), std::ostream_iterator<std::string>(std::cout, " "));
          std::cout << "\n";
       }
-      if(vm.count("magic"))
+      if(vm.count("magic") != 0u)
       {
          std::cout << "Magic value: " << vm["magic"].as<int>() << "\n";
       }
