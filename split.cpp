@@ -9,8 +9,8 @@
 #include <vector>
 
 template<class charT>
-auto split_unix(const std::basic_string<charT> &cmdline, const std::basic_string<charT> &seperator,
-                                                 const std::basic_string<charT> &quote, const std::basic_string<charT> &escape) -> std::vector<std::basic_string<charT>>
+auto split_unix(const std::basic_string<charT> &cmdline, const std::basic_string<charT> &seperator, const std::basic_string<charT> &quote,
+                const std::basic_string<charT> &escape) -> std::vector<std::basic_string<charT>>
 {
    // TODO replace boost tokenizer
 #if 0
@@ -33,15 +33,15 @@ auto split_unix(const std::basic_string<charT> &cmdline, const std::basic_string
 
 // Take a command line string and splits in into tokens, according
 // to the given collection of seperators chars.
-auto split_unix(const std::string &cmdline, const std::string &seperator, const std::string &quote,
-                                    const std::string &escape) -> std::vector<std::string>
+auto split_unix(const std::string &cmdline, const std::string &seperator, const std::string &quote, const std::string &escape)
+   -> std::vector<std::string>
 {
    // return detail::split_unix<char>(cmdline, seperator, quote, escape);
    return {};
 }
 
-auto split_unix(const std::wstring &cmdline, const std::wstring &seperator, const std::wstring &quote,
-                                     const std::wstring &escape) -> std::vector<std::wstring>
+auto split_unix(const std::wstring &cmdline, const std::wstring &seperator, const std::wstring &quote, const std::wstring &escape)
+   -> std::vector<std::wstring>
 {
    //   return detail::split_unix<wchar_t>(cmdline, seperator, quote, escape);
    return {};

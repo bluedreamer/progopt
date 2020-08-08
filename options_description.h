@@ -29,7 +29,7 @@
 class option_description
 {
 public:
-   option_description()=default;
+   option_description() = default;
    option_description(const char *name, const value_semantic *s);
    option_description(const char *name, const value_semantic *s, const char *description);
    virtual ~option_description();
@@ -63,7 +63,7 @@ public:
        3) All other cases, returns the first long name (if present) or the short
           name, unprefixed.
    */
-   [[nodiscard]] auto canonical_display_name(int canonical_option_style = 0) const -> std::string;
+   [[nodiscard]] auto canonical_display_name(int prefix_style = 0) const -> std::string;
 
    [[nodiscard]] auto long_name() const -> const std::string &;
 
@@ -83,7 +83,7 @@ public:
    [[nodiscard]] auto format_parameter() const -> std::string;
 
 private:
-   auto set_names(const char *name) -> option_description &;
+   auto set_names(const char *_names) -> option_description &;
 
    /**
     * a one-character "switch" name - with its prefix,
@@ -117,6 +117,7 @@ public:
    auto operator()(const char *name, const char *description) -> options_description_easy_init &;
    auto operator()(const char *name, const value_semantic *s) -> options_description_easy_init &;
    auto operator()(const char *name, const value_semantic *s, const char *description) -> options_description_easy_init &;
+
 private:
    options_description *owner;
 };
@@ -169,11 +170,11 @@ public:
    */
    auto add_options() -> options_description_easy_init;
 
-   [[nodiscard]] auto find(const std::string &name, bool approx, bool long_ignore_case = false,
-                                  bool short_ignore_case = false) const -> const option_description &;
+   [[nodiscard]] auto find(const std::string &name, bool approx, bool long_ignore_case = false, bool short_ignore_case = false) const
+      -> const option_description &;
 
    [[nodiscard]] auto find_nothrow(const std::string &name, bool approx, bool long_ignore_case = false,
-                                          bool short_ignore_case = false) const -> const option_description *;
+                                   bool short_ignore_case = false) const -> const option_description *;
 
    [[nodiscard]] auto options() const -> const std::vector<std::shared_ptr<option_description>> &;
 

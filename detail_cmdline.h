@@ -48,7 +48,7 @@ public:
 
    typedef std::function<std::pair<std::string, std::string>(const std::string &)> additional_parser;
 
-   using style_parser = std::function<std::vector<option> (std::vector<std::string> &)>;
+   using style_parser = std::function<std::vector<option>(std::vector<std::string> &)>;
 
    /** Constructs a command line parser for (argc, argv) pair. Uses
        style options passed in 'style', which should be binary or'ed values
@@ -101,7 +101,7 @@ public:
 
    void extra_style_parser(style_parser s);
 
-   void check_style(int style) const;
+   void check_style(int style);
 
    [[nodiscard]] auto is_style_active(style_t style) const -> bool;
 

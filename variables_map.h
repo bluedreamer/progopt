@@ -5,12 +5,12 @@
 
 #pragma once
 
+#include <any>
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
-#include <any>
 #include <utility>
-#include <memory>
 
 template<class charT>
 class basic_parsed_options;
@@ -43,8 +43,8 @@ class variable_value
 {
 public:
    variable_value()
-       
-   = default;
+
+      = default;
    variable_value(std::any xv, bool xdefaulted)
       : v(std::move(xv))
       , m_defaulted(xdefaulted)

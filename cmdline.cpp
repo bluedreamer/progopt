@@ -65,13 +65,7 @@ detail_cmdline::detail_cmdline(const std::vector<std::string> &args)
 
 detail_cmdline::detail_cmdline(int argc, const char *const *argv)
 {
-#if defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
-   vector<string> args;
-   copy(argv + 1, argv + argc + !argc, inserter(args, args.end()));
-   init(args);
-#else
    init(std::vector<std::string>(argv + 1, argv + argc + !argc));
-#endif
 }
 
 void detail_cmdline::init(const std::vector<std::string> &args)
@@ -99,12 +93,12 @@ void detail_cmdline::allow_unregistered()
    this->m_allow_unregistered = true;
 }
 
-void detail_cmdline::check_style(int style) const
+void detail_cmdline::check_style(int style)
 {
-   bool allow_some_long = (style & allow_long) || (style & allow_long_disguise);
+   bool allow_some_long = ((style & allow_long) != 0) || ((style & allow_long_disguise) != 0);
 
    const char *error = nullptr;
-   if(allow_some_long && !(style & long_allow_adjacent) && !(style & long_allow_next))
+   if(allow_some_long && ((style & long_allow_adjacent) == 0) && ((style & long_allow_next) == 0))
    {
       error = "boost::program_options misconfiguration: "
               "choose one or other of 'command_line_style::long_allow_next' "
@@ -113,7 +107,7 @@ void detail_cmdline::check_style(int style) const
               "long options.";
    }
 
-   if(!error && (style & allow_short) && !(style & short_allow_adjacent) && !(style & short_allow_next))
+   if((error == nullptr) && ((style & allow_short) != 0) && ((style & short_allow_adjacent) == 0) && ((style & short_allow_next) == 0))
    {
       error = "boost::program_options misconfiguration: "
               "choose one or other of 'command_line_style::short_allow_next' "
@@ -122,7 +116,7 @@ void detail_cmdline::check_style(int style) const
               "short options.";
    }
 
-   if(!error && (style & allow_short) && !(style & allow_dash_for_short) && !(style & allow_slash_for_short))
+   if((error == nullptr) && ((style & allow_short) != 0) && ((style & allow_dash_for_short) == 0) && ((style & allow_slash_for_short) == 0))
    {
       error = "boost::program_options misconfiguration: "
               "choose one or other of 'command_line_style::allow_slash_for_short' "
@@ -130,8 +124,10 @@ void detail_cmdline::check_style(int style) const
               "short options.";
    }
 
-   if(error)
+   if(error != nullptr)
+   {
       boost::throw_exception(invalid_command_line_style(error));
+   }
 
    // Need to check that if guessing and long disguise are enabled
    // -f will mean the same as -foo
@@ -139,7 +135,7 @@ void detail_cmdline::check_style(int style) const
 
 auto detail_cmdline::is_style_active(style_t style) const -> bool
 {
-   return ((m_style & style) ? true : false);
+   return ((m_style & style) != 0 ? true : false);
 }
 
 void detail_cmdline::set_options_description(const options_description &desc)
@@ -154,22 +150,22 @@ void detail_cmdline::set_positional_options(const positional_options_description
 
 auto detail_cmdline::get_canonical_option_prefix() -> int
 {
-   if(m_style & allow_long)
+   if((m_style & allow_long) != 0)
    {
       return allow_long;
    }
 
-   if(m_style & allow_long_disguise)
+   if((m_style & allow_long_disguise) != 0)
    {
       return allow_long_disguise;
    }
 
-   if((m_style & allow_short) && (m_style & allow_dash_for_short))
+   if(((m_style & allow_short) != 0) && ((m_style & allow_dash_for_short) != 0))
    {
       return allow_dash_for_short;
    }
 
-   if((m_style & allow_short) && (m_style & allow_slash_for_short))
+   if(((m_style & allow_short) != 0) && ((m_style & allow_slash_for_short) != 0))
    {
       return allow_slash_for_short;
    }
@@ -196,22 +192,34 @@ auto detail_cmdline::run() -> std::vector<option>
    std::vector<style_parser> style_parsers;
 
    if(m_style_parser)
+   {
       style_parsers.push_back(m_style_parser);
+   }
 
    if(m_additional_parser)
+   {
       style_parsers.emplace_back(std::bind(&detail_cmdline::handle_additional_parser, this, std::placeholders::_1));
+   }
 
-   if(m_style & allow_long)
+   if((m_style & allow_long) != 0)
+   {
       style_parsers.emplace_back(std::bind(&detail_cmdline::parse_long_option, this, std::placeholders::_1));
+   }
 
-   if((m_style & allow_long_disguise))
+   if((m_style & allow_long_disguise) != 0)
+   {
       style_parsers.emplace_back(std::bind(&detail_cmdline::parse_disguised_long_option, this, std::placeholders::_1));
+   }
 
-   if((m_style & allow_short) && (m_style & allow_dash_for_short))
+   if(((m_style & allow_short) != 0) && ((m_style & allow_dash_for_short) != 0))
+   {
       style_parsers.emplace_back(std::bind(&detail_cmdline::parse_short_option, this, std::placeholders::_1));
+   }
 
-   if((m_style & allow_short) && (m_style & allow_slash_for_short))
+   if(((m_style & allow_short) != 0) && ((m_style & allow_slash_for_short) != 0))
+   {
       style_parsers.emplace_back(std::bind(&detail_cmdline::parse_dos_option, this, std::placeholders::_1));
+   }
 
    style_parsers.emplace_back(std::bind(&detail_cmdline::parse_terminator, this, std::placeholders::_1));
 
@@ -222,7 +230,7 @@ auto detail_cmdline::run() -> std::vector<option>
       bool ok = false;
       for(unsigned i = 0; i < style_parsers.size(); ++i)
       {
-         auto            current_size = static_cast<unsigned>(args.size());
+         auto                current_size = static_cast<unsigned>(args.size());
          std::vector<option> next         = style_parsers[i](args);
 
          // Check that option names
@@ -238,8 +246,10 @@ auto detail_cmdline::run() -> std::vector<option>
             // so that they can be added to next.back()'s values
             // if appropriate.
             finish_option(next.back(), args, style_parsers);
-            for(const auto & j : next)
+            for(const auto &j : next)
+            {
                result.push_back(j);
+            }
          }
 
          if(args.size() != current_size)
@@ -269,7 +279,9 @@ auto detail_cmdline::run() -> std::vector<option>
       option &opt = result2.back();
 
       if(opt.string_key.empty())
+      {
          continue;
+      }
 
       const option_description *xd;
       try
@@ -284,8 +296,10 @@ auto detail_cmdline::run() -> std::vector<option>
          throw;
       }
 
-      if(!xd)
+      if(xd == nullptr)
+      {
          continue;
+      }
 
       unsigned min_tokens = xd->semantic()->min_tokens();
       unsigned max_tokens = xd->semantic()->max_tokens();
@@ -297,11 +311,13 @@ auto detail_cmdline::run() -> std::vector<option>
 
          int      can_take_more = max_tokens - static_cast<int>(opt.value.size());
          unsigned j             = i + 1;
-         for(; can_take_more && j < result.size(); --can_take_more, ++j)
+         for(; (can_take_more != 0) && j < result.size(); --can_take_more, ++j)
          {
             option &opt2 = result[j];
             if(!opt2.string_key.empty())
+            {
                break;
+            }
 
             if(opt2.position_key == INT_MAX)
             {
@@ -326,16 +342,18 @@ auto detail_cmdline::run() -> std::vector<option>
 
    // Assign position keys to positional options.
    int position_key = 0;
-   for(auto & i : result)
+   for(auto &i : result)
    {
       if(i.string_key.empty())
+      {
          i.position_key = position_key++;
+      }
    }
 
-   if(m_positional)
+   if(m_positional != nullptr)
    {
       unsigned position = 0;
-      for(auto & opt : result)
+      for(auto &opt : result)
       {
          if(opt.position_key != -1)
          {
@@ -350,7 +368,7 @@ auto detail_cmdline::run() -> std::vector<option>
    }
 
    // set case sensitive flag
-   for(auto & i : result)
+   for(auto &i : result)
    {
       if(i.string_key.size() > 2 || (i.string_key.size() > 1 && i.string_key[0] != '-'))
       {
@@ -370,14 +388,18 @@ auto detail_cmdline::run() -> std::vector<option>
 void detail_cmdline::finish_option(option &opt, std::vector<std::string> &other_tokens, const std::vector<style_parser> &style_parsers)
 {
    if(opt.string_key.empty())
+   {
       return;
+   }
 
    //
    // Be defensive:
    // will have no original token if option created by handle_additional_parser()
    std::string original_token_for_exceptions = opt.string_key;
-   if(opt.original_tokens.size())
+   if(!opt.original_tokens.empty() != 0u)
+   {
       original_token_for_exceptions = opt.original_tokens[0];
+   }
 
    try
    {
@@ -385,17 +407,15 @@ void detail_cmdline::finish_option(option &opt, std::vector<std::string> &other_
       const option_description *xd = m_desc->find_nothrow(opt.string_key, is_style_active(allow_guessing),
                                                           is_style_active(long_case_insensitive), is_style_active(short_case_insensitive));
 
-      if(!xd)
+      if(xd == nullptr)
       {
          if(m_allow_unregistered)
          {
             opt.unregistered = true;
             return;
          }
-         else
-         {
-            boost::throw_exception(unknown_option());
-         }
+
+         boost::throw_exception(unknown_option());
       }
       const option_description &d = *xd;
 
@@ -431,7 +451,7 @@ void detail_cmdline::finish_option(option &opt, std::vector<std::string> &other_
          }
 
          // Everything's OK, move the values to the result.
-         for(; !other_tokens.empty() && min_tokens--;)
+         for(; !other_tokens.empty() && ((min_tokens--) != 0u);)
          {
             // check if extra parameter looks like a known option
             // we use style parsers to check if it is syntactically an option,
@@ -448,8 +468,10 @@ void detail_cmdline::finish_option(option &opt, std::vector<std::string> &other_
                const option_description *od =
                   m_desc->find_nothrow(other_tokens[0], is_style_active(allow_guessing), is_style_active(long_case_insensitive),
                                        is_style_active(short_case_insensitive));
-               if(od)
+               if(od != nullptr)
+               {
                   boost::throw_exception(invalid_command_line_syntax(invalid_command_line_syntax::missing_parameter));
+               }
             }
             opt.value.push_back(other_tokens[0]);
             opt.original_tokens.push_back(other_tokens[0]);
@@ -477,16 +499,19 @@ auto detail_cmdline::parse_long_option(std::vector<std::string> &args) -> std::v
    const std::string & tok = args[0];
    if(tok.size() >= 3 && tok[0] == '-' && tok[1] == '-')
    {
-      std::string name, adjacent;
+      std::string name;
+      std::string adjacent;
 
       std::string::size_type p = tok.find('=');
-      if(p != tok.npos)
+      if(p != std::string::npos)
       {
          name     = tok.substr(2, p - 2);
          adjacent = tok.substr(p + 1);
          if(adjacent.empty())
+         {
             boost::throw_exception(invalid_command_line_syntax(invalid_command_line_syntax::empty_adjacent_parameter, name, name,
                                                                get_canonical_option_prefix()));
+         }
       }
       else
       {
@@ -495,7 +520,9 @@ auto detail_cmdline::parse_long_option(std::vector<std::string> &args) -> std::v
       option opt;
       opt.string_key = name;
       if(!adjacent.empty())
+      {
          opt.value.push_back(adjacent);
+      }
       opt.original_tokens.push_back(tok);
       result.push_back(opt);
       args.erase(args.begin());
@@ -534,7 +561,7 @@ auto detail_cmdline::parse_short_option(std::vector<std::string> &args) -> std::
          }
 
          // FIXME: check for 'allow_sticky'.
-         if(d && (m_style & allow_sticky) && d->semantic()->max_tokens() == 0 && !adjacent.empty())
+         if((d != nullptr) && ((m_style & allow_sticky) != 0) && d->semantic()->max_tokens() == 0 && !adjacent.empty())
          {
             // 'adjacent' is in fact further option.
             option opt;
@@ -556,7 +583,9 @@ auto detail_cmdline::parse_short_option(std::vector<std::string> &args) -> std::
             opt.string_key = name;
             opt.original_tokens.push_back(tok);
             if(!adjacent.empty())
+            {
                opt.value.push_back(adjacent);
+            }
             result.push_back(opt);
             args.erase(args.begin());
             break;
@@ -579,7 +608,9 @@ auto detail_cmdline::parse_dos_option(std::vector<std::string> &args) -> std::ve
       option opt;
       opt.string_key = name;
       if(!adjacent.empty())
+      {
          opt.value.push_back(adjacent);
+      }
       opt.original_tokens.push_back(tok);
       result.push_back(opt);
       args.erase(args.begin());
@@ -590,16 +621,18 @@ auto detail_cmdline::parse_dos_option(std::vector<std::string> &args) -> std::ve
 auto detail_cmdline::parse_disguised_long_option(std::vector<std::string> &args) -> std::vector<option>
 {
    const std::string &tok = args[0];
-   if(tok.size() >= 2 && ((tok[0] == '-' && tok[1] != '-') || ((m_style & allow_slash_for_short) && tok[0] == '/')))
+   if(tok.size() >= 2 && ((tok[0] == '-' && tok[1] != '-') || (((m_style & allow_slash_for_short) != 0) && tok[0] == '/')))
    {
       try
       {
          if(m_desc->find_nothrow(tok.substr(1, tok.find('=') - 1), is_style_active(allow_guessing), is_style_active(long_case_insensitive),
-                                 is_style_active(short_case_insensitive)))
+                                 is_style_active(short_case_insensitive)) != nullptr)
          {
             args[0].insert(0, "-");
             if(args[0][1] == '/')
+            {
                args[0][1] = '-';
+            }
             return parse_long_option(args);
          }
       }
@@ -641,7 +674,9 @@ auto detail_cmdline::handle_additional_parser(std::vector<std::string> &args) ->
       option next;
       next.string_key = r.first;
       if(!r.second.empty())
+      {
          next.value.push_back(r.second);
+      }
       result.push_back(next);
       args.erase(args.begin());
    }

@@ -12,13 +12,13 @@ auto main(int argc, char *argv[]) -> int
       store(parse_command_line(argc, argv, desc), vm);
       notify(vm);
 
-      if(vm.count("help"))
+      if(vm.count("help") != 0u)
       {
          std::cout << desc << "\n";
          return 0;
       }
 
-      if(vm.count("compression"))
+      if(vm.count("compression") != 0u)
       {
          std::cout << "Compression level was set to " << vm["compression"].as<double>() << ".\n";
       }
@@ -36,7 +36,6 @@ auto main(int argc, char *argv[]) -> int
    {
       std::cerr << "Exception of unknown type!\n";
    }
-
 
    return 0;
 }

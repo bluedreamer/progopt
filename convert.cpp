@@ -49,14 +49,18 @@ auto convert(const std::basic_string<FromChar> &s, Fun fun) -> std::basic_string
       std::codecvt_base::result r      = fun(state, from, from_end, from, buffer, to_end, to_next);
 
       if(r == std::codecvt_base::error)
+      {
          throw std::logic_error("character conversion failed");
+      }
       // 'partial' is not an error, it just means not all source
       // characters were converted. However, we need to check that at
       // least one new target character was produced. If not, it means
       // the source data is incomplete, and since we don't have extra
       // data to add to source, it's error.
       if(to_next == buffer)
+      {
          throw std::logic_error("character conversion failed");
+      }
 
       // Add converted characters
       result.append(buffer, to_next);
@@ -97,14 +101,14 @@ auto to_utf8(const std::wstring &s) -> std::string
 auto from_local_8_bit(const std::string &s) -> std::wstring
 {
    typedef std::codecvt<wchar_t, char, mbstate_t> facet_type;
-//   return from_8_bit(s, BOOST_USE_FACET(facet_type, std::locale()));
+   //   return from_8_bit(s, BOOST_USE_FACET(facet_type, std::locale()));
    return {};
 }
 
 auto to_local_8_bit(const std::wstring &s) -> std::string
 {
    using facet_type = std::codecvt<wchar_t, char, mbstate_t>;
-//   return to_8_bit(s, BOOST_USE_FACET(facet_type, std::locale()));
+   //   return to_8_bit(s, BOOST_USE_FACET(facet_type, std::locale()));
    return {};
 }
 auto to_internal(const std::string &s) -> std::string

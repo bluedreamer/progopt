@@ -19,10 +19,8 @@ inline auto strip_prefixes(const std::string &text) -> std::string
    {
       return text;
    }
-   
-   
-      return text.substr(i);
-   
+
+   return text.substr(i);
 }
 
 /** Base class for all errors in the library. */
@@ -317,7 +315,7 @@ public:
 
 protected:
    /** Used to convert kind_t to a related error text */
-   auto get_template(kind_t kind) -> std::string;
+   static auto get_template(kind_t kind) -> std::string;
    kind_t      m_kind;
 };
 
@@ -374,7 +372,7 @@ public:
 
 protected:
    /** Used to convert kind_t to a related error text */
-   auto get_template(kind_t kind) -> std::string;
+   static auto get_template(kind_t kind) -> std::string;
    kind_t      m_kind;
 };
 

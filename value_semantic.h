@@ -299,10 +299,8 @@ public: // value semantic overrides
       {
          return 0;
       }
-      
-      
-         return 1;
-      
+
+      return 1;
    }
 
    [[nodiscard]] auto max_tokens() const -> unsigned
@@ -315,10 +313,8 @@ public: // value semantic overrides
       {
          return 0;
       }
-      
-      
-         return 1;
-      
+
+      return 1;
    }
 
    [[nodiscard]] auto is_required() const -> bool { return m_required; }
@@ -337,11 +333,9 @@ public: // value semantic overrides
       {
          return false;
       }
-      
-      
-         value_store = m_default_value;
-         return true;
-      
+
+      value_store = m_default_value;
+      return true;
    }
 
    /** If an address of variable to store value was specified

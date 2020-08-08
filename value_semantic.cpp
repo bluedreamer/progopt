@@ -31,7 +31,7 @@ void value_semantic_codecvt_helper<char>::parse(std::any &value_store, const std
 #ifndef BOOST_NO_STD_WSTRING
       // Need to convert to local encoding.
       std::vector<std::string> local_tokens;
-      for(const auto & new_token : new_tokens)
+      for(const auto &new_token : new_tokens)
       {
          std::wstring w = from_utf8(new_token);
          local_tokens.push_back(to_local_8_bit(w));
@@ -55,7 +55,7 @@ void value_semantic_codecvt_helper<wchar_t>::parse(std::any &value_store, const 
    if(utf8)
    {
       // Convert from utf8
-      for(const auto & new_token : new_tokens)
+      for(const auto &new_token : new_tokens)
       {
          tokens.push_back(from_utf8(new_token));
       }
@@ -63,7 +63,7 @@ void value_semantic_codecvt_helper<wchar_t>::parse(std::any &value_store, const 
    else
    {
       // Convert from local encoding
-      for(const auto & new_token : new_tokens)
+      for(const auto &new_token : new_tokens)
       {
          tokens.push_back(from_local_8_bit(new_token));
       }
@@ -86,10 +86,8 @@ auto untyped_value::min_tokens() const -> unsigned
    {
       return 0;
    }
-   else
-   {
-      return 1;
-   }
+
+   return 1;
 }
 
 auto untyped_value::max_tokens() const -> unsigned
@@ -98,18 +96,20 @@ auto untyped_value::max_tokens() const -> unsigned
    {
       return 0;
    }
-   else
-   {
-      return 1;
-   }
+
+   return 1;
 }
 
 void untyped_value::xparse(std::any &value_store, const std::vector<std::string> &new_tokens) const
 {
    if(value_store.has_value())
+   {
       boost::throw_exception(multiple_occurrences());
+   }
    if(new_tokens.size() > 1)
+   {
       boost::throw_exception(multiple_values());
+   }
    value_store = new_tokens.empty() ? std::string("") : new_tokens.front();
 }
 
@@ -133,20 +133,28 @@ auto bool_switch(bool *v) -> typed_value<bool> *
     Case is ignored. The 'xs' vector can either be empty, in which
     case the value is 'true', or can contain explicit value.
 */
-void validate(std::any &v, const std::vector<std::string> &xs, bool *, int)
+void validate(std::any &v, const std::vector<std::string> &xs, bool * /*unused*/, int /*unused*/)
 {
    check_first_occurrence(v);
    std::string s(get_single_string(xs, true));
 
-   for(char & i : s)
+   for(char &i : s)
+   {
       i = char(tolower(i));
+   }
 
    if(s.empty() || s == "on" || s == "yes" || s == "1" || s == "true")
+   {
       v = std::any(true);
+   }
    else if(s == "off" || s == "no" || s == "0" || s == "false")
+   {
       v = std::any(false);
+   }
    else
+   {
       boost::throw_exception(invalid_bool_value(s));
+   }
 }
 
 // This is blatant copy-paste. However, templating this will cause a problem,
@@ -154,31 +162,39 @@ void validate(std::any &v, const std::vector<std::string> &xs, bool *, int)
 // create auxiliary 'widen' routine to convert from char* into
 // needed string type, and that's more work.
 #if !defined(BOOST_NO_STD_WSTRING)
-void validate(std::any &v, const std::vector<std::wstring> &xs, bool *, int)
+void validate(std::any &v, const std::vector<std::wstring> &xs, bool * /*unused*/, int /*unused*/)
 {
    check_first_occurrence(v);
    std::wstring s(get_single_string(xs, true));
 
-   for(wchar_t & i : s)
+   for(wchar_t &i : s)
+   {
       i = wchar_t(tolower(i));
+   }
 
    if(s.empty() || s == L"on" || s == L"yes" || s == L"1" || s == L"true")
+   {
       v = std::any(true);
+   }
    else if(s == L"off" || s == L"no" || s == L"0" || s == L"false")
+   {
       v = std::any(false);
+   }
    else
+   {
       boost::throw_exception(invalid_bool_value(convert_value(s)));
+   }
 }
 #endif
 
-void validate(std::any &v, const std::vector<std::string> &xs, std::string *, int)
+void validate(std::any &v, const std::vector<std::string> &xs, std::string * /*unused*/, int /*unused*/)
 {
    check_first_occurrence(v);
    v = std::any(get_single_string(xs));
 }
 
 #if !defined(BOOST_NO_STD_WSTRING)
-void validate(std::any &v, const std::vector<std::wstring> &xs, std::string *, int)
+void validate(std::any &v, const std::vector<std::wstring> &xs, std::string * /*unused*/, int /*unused*/)
 {
    check_first_occurrence(v);
    v = std::any(get_single_string(xs));
@@ -190,7 +206,9 @@ namespace validators
 void check_first_occurrence(const std::any &value)
 {
    if(value.has_value())
+   {
       throw multiple_occurrences();
+   }
 }
 } // namespace validators
 
@@ -242,7 +260,9 @@ void error_with_option_name::replace_token(const std::string &from, const std::s
       std::size_t pos = m_message.find(from.c_str(), 0, from.length());
       // not found: all replaced
       if(pos == std::string::npos)
+      {
          return;
+      }
       m_message.replace(pos, from.length(), to);
    }
 }
@@ -269,19 +289,25 @@ auto error_with_option_name::get_canonical_option_prefix() const -> std::string
 
 auto error_with_option_name::get_canonical_option_name() const -> std::string
 {
-   if(!m_substitutions.find("option")->second.length())
+   if(m_substitutions.find("option")->second.length() == 0u)
+   {
       return m_substitutions.find("original_token")->second;
+   }
 
    std::string original_token = strip_prefixes(m_substitutions.find("original_token")->second);
    std::string option_name    = strip_prefixes(m_substitutions.find("option")->second);
 
    //  For long options, use option name
    if(m_option_style == style_t::allow_long || m_option_style == style_t::allow_long_disguise)
+   {
       return get_canonical_option_prefix() + option_name;
+   }
 
    //  For short options use first letter of original_token
-   if(m_option_style && original_token.length())
+   if((m_option_style != 0) && (original_token.length() != 0u))
+   {
       return get_canonical_option_prefix() + original_token[0];
+   }
 
    // no prefix
    return option_name;
@@ -297,19 +323,23 @@ void error_with_option_name::substitute_placeholders(const std::string &error_te
    //
    //  replace placeholder with defaults if values are missing
    //
-   for(const auto & m_substitution_default : m_substitution_defaults)
+   for(const auto &m_substitution_default : m_substitution_defaults)
    {
       // missing parameter: use default
       if(substitutions.count(m_substitution_default.first) == 0 || substitutions[m_substitution_default.first].length() == 0)
+      {
          replace_token(m_substitution_default.second.first, m_substitution_default.second.second);
+      }
    }
 
    //
    //  replace placeholder with values
    //  placeholder are denoted by surrounding '%'
    //
-   for(auto & substitution : substitutions)
+   for(auto &substitution : substitutions)
+   {
       replace_token('%' + substitution.first + '%', substitution.second);
+   }
 }
 
 void ambiguous_option::substitute_placeholders(const std::string &original_error_template) const
@@ -333,13 +363,17 @@ void ambiguous_option::substitute_placeholders(const std::string &original_error
    if(alternatives_vec.size() > 1)
    {
       for(unsigned i = 0; i < alternatives_vec.size() - 1; ++i)
+      {
          error_template += "'%prefix%" + alternatives_vec[i] + "', ";
+      }
       error_template += "and ";
    }
 
    // there is a programming error if multiple options have the same name...
    if(m_alternatives.size() > 1 && alternatives_vec.size() == 1)
+   {
       error_template += "different versions of ";
+   }
 
    error_template += "'%prefix%" + alternatives_vec.back() + "'";
 

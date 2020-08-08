@@ -24,9 +24,11 @@ public:
 
    void get()
    {
-      if(*m_environment == nullptr) {
+      if(*m_environment == nullptr)
+      {
          found_eof();
-      } else
+      }
+      else
       {
          std::string            s(*m_environment);
          std::string::size_type n = s.find('=');

@@ -80,7 +80,7 @@ public:
    int m_options_prefix;
 };
 
-using parsed_options = basic_parsed_options<char>;
+using parsed_options  = basic_parsed_options<char>;
 using wparsed_options = basic_parsed_options<wchar_t>;
 
 /** Augments basic_parsed_options<wchar_t> with conversion from
@@ -148,7 +148,7 @@ private:
    const options_description *m_desc;
 };
 
-using command_line_parser = basic_command_line_parser<char>;
+using command_line_parser  = basic_command_line_parser<char>;
 using wcommand_line_parser = basic_command_line_parser<wchar_t>;
 
 /** Creates instance of 'command_line_parser', passes parameters to it,
@@ -156,14 +156,16 @@ using wcommand_line_parser = basic_command_line_parser<wchar_t>;
  */
 template<class charT>
 auto parse_command_line(int argc, const charT *const argv[], const options_description & /*desc*/, int style = 0,
-                                               std::function<std::pair<std::string, std::string>(const std::string &)> ext = ext_parser()) -> basic_parsed_options<charT>;
+                        std::function<std::pair<std::string, std::string>(const std::string &)> ext = ext_parser())
+   -> basic_parsed_options<charT>;
 
 /** Parse a config file.
 
     Read from given stream.
 */
 template<class charT>
-auto parse_config_file(std::basic_istream<charT> &, const options_description &, bool allow_unregistered = false) -> basic_parsed_options<charT>;
+auto parse_config_file(std::basic_istream<charT> &, const options_description &, bool allow_unregistered = false)
+   -> basic_parsed_options<charT>;
 
 /** Parse a config file.
 
@@ -188,8 +190,8 @@ enum collect_unrecognized_mode
     options.
 */
 template<class charT>
-auto collect_unrecognized(const std::vector<basic_option<charT>> &options,
-                                                           enum collect_unrecognized_mode          mode) -> std::vector<std::basic_string<charT>>;
+auto collect_unrecognized(const std::vector<basic_option<charT>> &options, enum collect_unrecognized_mode mode)
+   -> std::vector<std::basic_string<charT>>;
 
 /** Parse environment.
 
@@ -225,11 +227,11 @@ auto parse_environment(const options_description &, const char *prefix) -> parse
     and escape characters '\'
 */
 auto split_unix(const std::string &cmdline, const std::string &seperator = " \t", const std::string &quote = "'\"",
-                                    const std::string &escape = "\\") -> std::vector<std::string>;
+                const std::string &escape = "\\") -> std::vector<std::string>;
 
 /** @overload */
-auto split_unix(const std::wstring &cmdline, const std::wstring &seperator = L" \t",
-                                     const std::wstring &quote = L"'\"", const std::wstring &escape = L"\\") -> std::vector<std::wstring>;
+auto split_unix(const std::wstring &cmdline, const std::wstring &seperator = L" \t", const std::wstring &quote = L"'\"",
+                const std::wstring &escape = L"\\") -> std::vector<std::wstring>;
 
 #ifdef _WIN32
 /** Parses the char* string which is passed to WinMain function on

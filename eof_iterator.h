@@ -42,10 +42,7 @@ template<class Derived, class ValueType>
 class eof_iterator // TODO find out what this did : public iterator_facade<Derived, const ValueType, forward_traversal_tag>
 {
 public:
-   eof_iterator()
-       
-   {
-   }
+   eof_iterator() {}
 
 protected: // interface for derived
    /** Returns the reference which should be used by derived
@@ -65,10 +62,7 @@ private: // iterator core operations
 
    void increment() { static_cast<Derived &>(*this).get(); }
 
-   auto equal(const eof_iterator &other) const -> bool
-   {
-      return static_cast<bool>(m_at_eof && other.m_at_eof);
-   }
+   auto equal(const eof_iterator &other) const -> bool { return static_cast<bool>(m_at_eof && other.m_at_eof); }
 
    auto dereference() const -> const ValueType & { return m_value; }
 

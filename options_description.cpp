@@ -49,7 +49,7 @@ auto option_description::match(const std::string &option, bool approx, bool long
    match_result result       = no_match;
    std::string  local_option = (long_ignore_case ? tolower_(option) : option);
 
-   for(const auto & m_long_name : m_long_names)
+   for(const auto &m_long_name : m_long_names)
    {
       std::string local_long_name((long_ignore_case ? tolower_(m_long_name) : m_long_name));
 
@@ -60,7 +60,9 @@ auto option_description::match(const std::string &option, bool approx, bool long
             // The name ends with '*'. Any specified name with the given
             // prefix is OK.
             if(local_option.find(local_long_name.substr(0, local_long_name.length() - 1)) == 0)
+            {
                result = approximate_match;
+            }
          }
 
          if(local_long_name == local_option)
@@ -68,7 +70,7 @@ auto option_description::match(const std::string &option, bool approx, bool long
             result = full_match;
             break;
          }
-         else if(approx)
+         if(approx)
          {
             if(local_long_name.find(local_option) == 0)
             {
@@ -99,17 +101,22 @@ auto option_description::key(const std::string &option) const -> const std::stri
    {
       const std::string &first_long_name = *m_long_names.begin();
       if(first_long_name.find('*') != std::string::npos)
+      {
          // The '*' character means we're long_name
          // matches only part of the input. So, returning
          // long name will remove some of the information,
          // and we have to return the option as specified
          // in the source.
          return option;
-      else
+      }
+      {
          return first_long_name;
+      }
    }
    else
+   {
       return m_short_name;
+   }
 }
 
 auto option_description::canonical_display_name(int prefix_style) const -> std::string
@@ -118,27 +125,38 @@ auto option_description::canonical_display_name(int prefix_style) const -> std::
    if(!m_long_names.empty())
    {
       if(prefix_style == style_t::allow_long)
+      {
          return "--" + *m_long_names.begin();
+      }
       if(prefix_style == style_t::allow_long_disguise)
+      {
          return "-" + *m_long_names.begin();
+      }
    }
    // sanity check: m_short_name[0] should be '-' or '/'
    if(m_short_name.length() == 2)
    {
       if(prefix_style == style_t::allow_slash_for_short)
+      {
          return std::string("/") + m_short_name[1];
+      }
       if(prefix_style == style_t::allow_dash_for_short)
+      {
          return std::string("-") + m_short_name[1];
+      }
    }
    if(!m_long_names.empty())
+   {
       return *m_long_names.begin();
-   else
+   }
+   {
       return m_short_name;
+   }
 }
 
 auto option_description::long_name() const -> const std::string &
 {
-   static std::string empty_string("");
+   static std::string empty_string;
    return m_long_names.empty() ? empty_string : *m_long_names.begin();
 }
 
@@ -205,9 +223,12 @@ auto option_description::format_name() const -> std::string
 auto option_description::format_parameter() const -> std::string
 {
    if(m_value_semantic->max_tokens() != 0)
+   {
       return m_value_semantic->name();
-   else
+   }
+   {
       return "";
+   }
 }
 
 options_description_easy_init::options_description_easy_init(options_description *owner)
@@ -272,7 +293,7 @@ auto options_description::add(const options_description &desc) -> options_descri
    std::shared_ptr<options_description> d(new options_description(desc));
    groups.push_back(d);
 
-   for(const auto & m_option : desc.m_options)
+   for(const auto &m_option : desc.m_options)
    {
       add(m_option);
       belong_to_group.back() = true;
@@ -290,7 +311,7 @@ auto options_description::find(const std::string &name, bool approx, bool long_i
    -> const option_description &
 {
    const option_description *d = find_nothrow(name, approx, long_ignore_case, short_ignore_case);
-   if(!d)
+   if(d == nullptr)
    {
       boost::throw_exception(unknown_option());
    }
@@ -313,12 +334,14 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
    // We use linear search because matching specified option
    // name with the declared option name need to take care about
    // case sensitivity and trailing '*' and so we can't use simple map.
-   for(const auto & m_option : m_options)
+   for(const auto &m_option : m_options)
    {
       option_description::match_result r = m_option->match(name, approx, long_ignore_case, short_ignore_case);
 
       if(r == option_description::no_match)
+      {
          continue;
+      }
 
       if(r == option_description::full_match)
       {
@@ -332,11 +355,15 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
          // be the best approach.
          approximate_matches.push_back(m_option->key(name));
          if(!had_full_match)
+         {
             found = m_option;
+         }
       }
    }
    if(full_matches.size() > 1)
+   {
       boost::throw_exception(ambiguous_option(full_matches));
+   }
 
    // If we have a full match, and an approximate match,
    // ignore approximate match instead of reporting error.
@@ -344,7 +371,9 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
    // "--all" on the command line should select the first one,
    // without ambiguity.
    if(full_matches.empty() && approximate_matches.size() > 1)
+   {
       boost::throw_exception(ambiguous_option(approximate_matches));
+   }
 
    return found.get();
 }
@@ -433,7 +462,7 @@ void format_paragraph(std::ostream &os, std::string par, unsigned indent, unsign
          // Take care to never increment the iterator past
          // the end, since MSVC 8.0 (brokenly), assumes that
          // doing that, even if no access happens, is a bug.
-         auto                    remaining = static_cast<unsigned>(std::distance(line_begin, par_end));
+         auto                        remaining = static_cast<unsigned>(std::distance(line_begin, par_end));
          std::string::const_iterator line_end  = line_begin + ((remaining < line_length) ? remaining : line_length);
 
          // prevent chopped words
@@ -575,8 +604,10 @@ auto options_description::get_option_column_width() const -> unsigned
    }
 
    /* Get width of groups as well*/
-   for(const auto & group : groups)
+   for(const auto &group : groups)
+   {
       width = std::max(width, group->get_option_column_width());
+   }
 
    /* this is the column were description should start, if first
       column is longer, we go to a new line */
@@ -592,9 +623,11 @@ auto options_description::get_option_column_width() const -> unsigned
 void options_description::print(std::ostream &os, unsigned width) const
 {
    if(!m_caption.empty())
+   {
       os << m_caption << ":\n";
+   }
 
-   if(!width)
+   if(width == 0u)
    {
       width = get_option_column_width();
    }
@@ -603,7 +636,9 @@ void options_description::print(std::ostream &os, unsigned width) const
    for(unsigned i = 0; i < m_options.size(); ++i)
    {
       if(belong_to_group[i])
+      {
          continue;
+      }
 
       const option_description &opt = *m_options[i];
 
@@ -612,7 +647,7 @@ void options_description::print(std::ostream &os, unsigned width) const
       os << "\n";
    }
 
-   for(const auto & group : groups)
+   for(const auto &group : groups)
    {
       os << "\n";
       group->print(os, width);

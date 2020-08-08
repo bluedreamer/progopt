@@ -49,9 +49,10 @@ template<class T>
 auto to_internal(const std::vector<T> &s) -> std::vector<std::string>
 {
    std::vector<std::string> result;
-   for(unsigned i = 0; i < s.size(); ++i) {
+   for(unsigned i = 0; i < s.size(); ++i)
+   {
       result.push_back(to_internal(s[i]));
-}
+   }
    return result;
 }
 
@@ -65,8 +66,9 @@ template<class T>
 auto to_internal(const std::vector<T> &s) -> std::vector<std::string>
 {
    std::vector<std::string> result;
-   for(unsigned i = 0; i < s.size(); ++i) {
+   for(unsigned i = 0; i < s.size(); ++i)
+   {
       result.push_back(to_internal(s[i]));
-}
+   }
    return result;
 }

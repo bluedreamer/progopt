@@ -44,7 +44,9 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
          option_name = options.options[i].string_key;
          // Skip positional options without name
          if(option_name.empty())
+         {
             continue;
+         }
 
          // Ignore unregistered option. The 'unregistered'
          // field can be true only if user has explicitly asked
@@ -52,13 +54,17 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
          // to variables map (lacking any information about paring),
          // so just ignore them.
          if(options.options[i].unregistered)
+         {
             continue;
+         }
 
          // If option has final value, skip this assignment
-         if(xm.m_final.count(option_name))
+         if(xm.m_final.count(option_name) != 0u)
+         {
             continue;
+         }
 
-         original_token              = options.options[i].original_tokens.size() ? options.options[i].original_tokens[0] : "";
+         original_token              = !options.options[i].original_tokens.empty() != 0u ? options.options[i].original_tokens[0] : "";
          const option_description &d = desc.find(option_name, false, false, false);
 
          variable_value &v = m[option_name];
@@ -78,7 +84,9 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
          // so that several assignment inside *this* 'store' call
          // are allowed.
          if(!d.semantic()->is_composing())
+         {
             new_final.insert(option_name);
+         }
       }
    }
 #ifndef BOOST_NO_EXCEPTIONS
@@ -125,7 +133,9 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
          //  Precedence is set conveniently by a single call to length()
          std::string canonical_name = d.canonical_display_name(options.m_options_prefix);
          if(canonical_name.length() > xm.m_required[key].length())
+         {
             xm.m_required[key] = canonical_name;
+         }
       }
    }
 }
@@ -153,21 +163,19 @@ abstract_variables_map::abstract_variables_map(const abstract_variables_map *nex
 auto abstract_variables_map::operator[](const std::string &name) const -> const variable_value &
 {
    const variable_value &v = get(name);
-   if(v.empty() && m_next)
+   if(v.empty() && (m_next != nullptr))
    {
       return (*m_next)[name];
    }
-   else if(v.defaulted() && m_next)
+   if(v.defaulted() && (m_next != nullptr))
    {
       const variable_value &v2 = (*m_next)[name];
       if(!v2.empty() && !v2.defaulted())
       {
          return v2;
       }
-      else
-      {
-         return v;
-      }
+
+      return v;
    }
    else
    {
@@ -197,11 +205,14 @@ void variables_map::clear()
 auto variables_map::get(const std::string &name) const -> const variable_value &
 {
    static variable_value empty;
-   auto        i = this->find(name);
+   auto                  i = this->find(name);
    if(i == this->end())
+   {
       return empty;
-   else
+   }
+   {
       return i->second;
+   }
 }
 
 void variables_map::notify()
@@ -209,9 +220,9 @@ void variables_map::notify()
    // This checks if all required options occur
    for(auto r = m_required.begin(); r != m_required.end(); ++r)
    {
-      const std::string &                                   opt         = r->first;
-      const std::string &                                   display_opt = r->second;
-      auto iter        = find(opt);
+      const std::string &opt         = r->first;
+      const std::string &display_opt = r->second;
+      auto               iter        = find(opt);
       if(iter == end() || iter->second.empty())
       {
          boost::throw_exception(required_option(display_opt));
@@ -219,7 +230,7 @@ void variables_map::notify()
    }
 
    // Lastly, run notify actions.
-   for(auto & k : *this)
+   for(auto &k : *this)
    {
       /* Users might wish to use variables_map to store their own values
          that are not parsed, and therefore will not have value_semantics
@@ -230,6 +241,8 @@ void variables_map::notify()
              https://svn.boost.org/trac/boost/ticket/2782
       */
       if(k.second.m_value_semantic)
+      {
          k.second.m_value_semantic->notify(k.second.value());
+      }
    }
 }

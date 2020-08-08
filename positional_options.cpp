@@ -37,8 +37,6 @@ auto positional_options_description::name_for_position(unsigned position) const 
    {
       return m_names[position];
    }
-   else
-   {
-      return m_trailing;
-   }
+
+   return m_trailing;
 }

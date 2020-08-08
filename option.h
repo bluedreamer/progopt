@@ -20,10 +20,7 @@ template<class charT>
 class basic_option
 {
 public:
-   basic_option()
-       
-   {
-   }
+   basic_option() {}
    basic_option(std::string xstring_key, const std::vector<std::string> &xvalue)
       : string_key(std::move(xstring_key))
       , position_key(-1)
@@ -59,5 +56,5 @@ public:
    */
    bool case_insensitive{false};
 };
-using option = basic_option<char>;
+using option  = basic_option<char>;
 using woption = basic_option<wchar_t>;

@@ -101,7 +101,7 @@ private: // internal data
    std::shared_ptr<std::basic_istream<charT>> is;
 };
 
-using config_file_iterator = basic_config_file_iterator<char>;
+using config_file_iterator  = basic_config_file_iterator<char>;
 using wconfig_file_iterator = basic_config_file_iterator<wchar_t>;
 
 struct null_deleter
@@ -131,8 +131,6 @@ auto basic_config_file_iterator<charT>::getline(std::string &s) -> bool
       s = to_internal(in);
       return true;
    }
-   
-   
-      return false;
-   
+
+   return false;
 }
