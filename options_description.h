@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <errors.h>
-#include <value_semantic.h>
+#include "errors.h"
+#include "value_semantic.h"
 
 #include <iosfwd>
 #include <map>
@@ -142,7 +142,7 @@ public:
        encroaches into this, then the description will start on the next
        line.
    */
-   options_description(const std::string &caption, unsigned line_length = m_default_line_length,
+   options_description(std::string caption, unsigned line_length = m_default_line_length,
                        unsigned min_description_length = m_default_line_length / 2);
    /** Adds new variable description. Throws duplicate_variable_error if
        either short or long name matches that of already present one.

@@ -15,6 +15,7 @@
 #include <cstring>
 #include <iterator>
 #include <sstream>
+#include <utility>
 
 template<class charT>
 std::basic_string<charT> tolower_(const std::basic_string<charT> &str)
@@ -251,8 +252,8 @@ options_description::options_description(unsigned line_length, unsigned min_desc
    assert(m_min_description_length < m_line_length - 1);
 }
 
-options_description::options_description(const std::string &caption, unsigned line_length, unsigned min_description_length)
-   : m_caption(caption)
+options_description::options_description(std::string caption, unsigned line_length, unsigned min_description_length)
+   : m_caption(std::move(caption))
    , m_line_length(line_length)
    , m_min_description_length(min_description_length)
 {
