@@ -3,15 +3,15 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <config.h>
-#include <convert.h>
+#include "config.h"
+#include "convert.h"
 #include <detail_cmdline.h>
 #include <set>
 #include <value_semantic.h>
 
 #include <cctype>
 
-std::string convert_value(const std::wstring &s)
+auto convert_value(const std::wstring &s) -> std::string
 {
    try
    {
@@ -76,12 +76,12 @@ void value_semantic_codecvt_helper<wchar_t>::parse(std::any &value_store, const 
 
 std::string arg("arg");
 
-std::string untyped_value::name() const
+auto untyped_value::name() const -> std::string
 {
    return arg;
 }
 
-unsigned untyped_value::min_tokens() const
+auto untyped_value::min_tokens() const -> unsigned
 {
    if(m_zero_tokens)
       return 0;
@@ -89,7 +89,7 @@ unsigned untyped_value::min_tokens() const
       return 1;
 }
 
-unsigned untyped_value::max_tokens() const
+auto untyped_value::max_tokens() const -> unsigned
 {
    if(m_zero_tokens)
       return 0;

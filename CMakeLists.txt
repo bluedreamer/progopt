@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.17)
 project(progopt)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 
 include_directories(".")
 add_executable(progopt
@@ -29,5 +30,7 @@ add_executable(progopt
         variables_map.cpp
         environment_iterator.h
         eof_iterator.h
+        utf8_codecvt_facet.h
+        utf8_codecvt_facet.cpp
 
         )

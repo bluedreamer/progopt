@@ -2,9 +2,9 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-#include <config.h>
+#include "config.h"
 
-#include <config_file.h>
+#include "config_file.h"
 #include <convert.h>
 #include <errors.h>
 
@@ -56,7 +56,7 @@ void common_config_file_iterator::add_option(const char *name)
 
 namespace
 {
-std::string trim_ws(const std::string &s)
+auto trim_ws(const std::string &s) -> std::string
 {
    std::string::size_type n, n2;
    n = s.find_first_not_of(" \t\r\n");
@@ -121,7 +121,7 @@ void common_config_file_iterator::get()
       found_eof();
 }
 
-bool common_config_file_iterator::allowed_option(const std::string &s) const
+auto common_config_file_iterator::allowed_option(const std::string &s) const -> bool
 {
    std::set<std::string>::const_iterator i = allowed_options.find(s);
    if(i != allowed_options.end())

@@ -3,8 +3,8 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <config.h>
-#include <options_description.h>
+#include "config.h"
+#include "options_description.h"
 #include <parsers.h>
 #include <value_semantic.h>
 #include <variables_map.h>
@@ -142,7 +142,7 @@ void notify(variables_map &vm)
 }
 
 abstract_variables_map::abstract_variables_map()
-   : m_next(0)
+   : m_next(nullptr)
 {
 }
 
@@ -151,7 +151,7 @@ abstract_variables_map::abstract_variables_map(const abstract_variables_map *nex
 {
 }
 
-const variable_value &abstract_variables_map::operator[](const std::string &name) const
+auto abstract_variables_map::operator[](const std::string &name) const -> const variable_value &
 {
    const variable_value &v = get(name);
    if(v.empty() && m_next)
@@ -176,8 +176,7 @@ void abstract_variables_map::next(abstract_variables_map *next)
 }
 
 variables_map::variables_map()
-{
-}
+= default;
 
 variables_map::variables_map(const abstract_variables_map *next)
    : abstract_variables_map(next)
@@ -191,7 +190,7 @@ void variables_map::clear()
    m_required.clear();
 }
 
-const variable_value &variables_map::get(const std::string &name) const
+auto variables_map::get(const std::string &name) const -> const variable_value &
 {
    static variable_value empty;
    const_iterator        i = this->find(name);

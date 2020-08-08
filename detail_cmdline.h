@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include <cmdline.h>
-#include <config.h>
+#include "cmdline.h"
+#include "config.h"
 #include <errors.h>
 #include <option.h>
 #include <options_description.h>

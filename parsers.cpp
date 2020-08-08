@@ -3,9 +3,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <cmdline.h>
-#include <config.h>
-#include <config_file.h>
+#include "cmdline.h"
+#include "config.h"
+#include "config_file.h"
 #include <convert.h>
 #include <environment_iterator.h>
 #include <options_description.h>
@@ -16,6 +16,7 @@
 #include <fstream>
 
 #include <iostream>
+#include <utility>
 #include <unistd.h>
 
 // The 'environ' should be declared in some cases. E.g. Linux man page says:
@@ -47,7 +48,7 @@ extern char **environ;
    #endif
 #endif
 
-woption woption_from_option(const option &opt)
+auto woption_from_option(const option &opt) -> woption
 {
    woption result;
    result.string_key   = opt.string_key;
@@ -71,7 +72,7 @@ basic_parsed_options<wchar_t>::basic_parsed_options(const parsed_options &po)
 }
 
 template<class charT>
-basic_parsed_options<charT> parse_config_file(std::basic_istream<charT> &is, const options_description &desc, bool allow_unregistered)
+auto parse_config_file(std::basic_istream<charT> &is, const options_description &desc, bool allow_unregistered) -> basic_parsed_options<charT>
 {
    std::set<std::string> allowed_options;
 
@@ -104,7 +105,7 @@ template basic_parsed_options<wchar_t> parse_config_file(std::basic_istream<wcha
 #endif
 
 template<class charT>
-basic_parsed_options<charT> parse_config_file(const char *filename, const options_description &desc, bool allow_unregistered)
+auto parse_config_file(const char *filename, const options_description &desc, bool allow_unregistered) -> basic_parsed_options<charT>
 {
    // Parser return char strings
    std::basic_ifstream<charT> strm(filename);
@@ -144,7 +145,7 @@ template basic_parsed_options<wchar_t> parse_config_file(const char *filename, c
     }
 #endif
 
-parsed_options parse_environment(const options_description &desc, const std::function<std::string(std::string)> &name_mapper)
+auto parse_environment(const options_description &desc, const std::function<std::string(std::string)> &name_mapper) -> parsed_options
 {
    parsed_options result(&desc);
 #if 0 // TODO fix the iterator shite
@@ -167,12 +168,12 @@ parsed_options parse_environment(const options_description &desc, const std::fun
 class prefix_name_mapper
 {
 public:
-   prefix_name_mapper(const std::string &prefix)
-      : prefix(prefix)
+   prefix_name_mapper(std::string prefix)
+      : prefix(std::move(prefix))
    {
    }
 
-   std::string operator()(const std::string &s)
+   auto operator()(const std::string &s) -> std::string
    {
       std::string result;
       if(s.find(prefix) == 0)
@@ -191,12 +192,12 @@ private:
    std::string prefix;
 };
 
-parsed_options parse_environment(const options_description &desc, const std::string &prefix)
+auto parse_environment(const options_description &desc, const std::string &prefix) -> parsed_options
 {
    return parse_environment(desc, prefix_name_mapper(prefix));
 }
 
-parsed_options parse_environment(const options_description &desc, const char *prefix)
+auto parse_environment(const options_description &desc, const char *prefix) -> parsed_options
 {
    return parse_environment(desc, std::string(prefix));
 }

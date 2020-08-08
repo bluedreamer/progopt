@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <config.h>
+#include "config.h"
 #include <errors.h>
 #include <value_semantic.h>
 

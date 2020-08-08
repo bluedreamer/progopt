@@ -9,11 +9,11 @@
 #include <set>
 #include <string>
 
-#include <config.h>
-#include <eof_iterator.h>
-#include <option.h>
+#include "config.h"
+#include "eof_iterator.h"
+#include "option.h"
 
-#include <convert.h>
+#include "convert.h"
 #include <memory>
 
 /** Standalone parser for config files in ini-line format.

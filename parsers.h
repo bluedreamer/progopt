@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include <config.h>
-#include <detail_cmdline.h>
+#include "config.h"
+#include "detail_cmdline.h"
 #include <option.h>
 
 #include <iosfwd>

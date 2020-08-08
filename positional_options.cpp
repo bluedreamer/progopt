@@ -3,17 +3,16 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <config.h>
+#include "config.h"
 
-#include <positional_options.h>
+#include "positional_options.h"
 
 #include <cassert>
 
 positional_options_description::positional_options_description()
-{
-}
+= default;
 
-positional_options_description &positional_options_description::add(const char *name, int max_count)
+auto positional_options_description::add(const char *name, int max_count) -> positional_options_description &
 {
    assert(max_count != -1 || m_trailing.empty());
 
@@ -26,12 +25,12 @@ positional_options_description &positional_options_description::add(const char *
    return *this;
 }
 
-unsigned positional_options_description::max_total_count() const
+auto positional_options_description::max_total_count() const -> unsigned
 {
    return m_trailing.empty() ? static_cast<unsigned>(m_names.size()) : (std::numeric_limits<unsigned>::max)();
 }
 
-const std::string &positional_options_description::name_for_position(unsigned position) const
+auto positional_options_description::name_for_position(unsigned position) const -> const std::string &
 {
    assert(position < max_total_count());
 

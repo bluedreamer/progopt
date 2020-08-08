@@ -3,10 +3,10 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <config.h>
+#include "config.h"
 
-#include <cmdline.h>
-#include <detail_cmdline.h>
+#include "cmdline.h"
+#include "detail_cmdline.h"
 #include <errors.h>
 #include <options_description.h>
 #include <positional_options.h>
@@ -80,8 +80,8 @@ void detail_cmdline::init(const std::vector<std::string> &args)
 {
    this->m_args         = args;
    m_style              = style_t::default_style;
-   m_desc               = 0;
-   m_positional         = 0;
+   m_desc               = nullptr;
+   m_positional         = nullptr;
    m_allow_unregistered = false;
 }
 
@@ -103,7 +103,7 @@ void detail_cmdline::check_style(int style) const
 {
    bool allow_some_long = (style & allow_long) || (style & allow_long_disguise);
 
-   const char *error = 0;
+   const char *error = nullptr;
    if(allow_some_long && !(style & long_allow_adjacent) && !(style & long_allow_next))
       error = "boost::program_options misconfiguration: "
               "choose one or other of 'command_line_style::long_allow_next' "
@@ -131,7 +131,7 @@ void detail_cmdline::check_style(int style) const
    // -f will mean the same as -foo
 }
 
-bool detail_cmdline::is_style_active(style_t style) const
+auto detail_cmdline::is_style_active(style_t style) const -> bool
 {
    return ((m_style & style) ? true : false);
 }
@@ -146,7 +146,7 @@ void detail_cmdline::set_positional_options(const positional_options_description
    m_positional = &positional;
 }
 
-int detail_cmdline::get_canonical_option_prefix()
+auto detail_cmdline::get_canonical_option_prefix() -> int
 {
    if(m_style & allow_long)
       return allow_long;

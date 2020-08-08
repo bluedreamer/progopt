@@ -4,8 +4,8 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <config.h>
-#include <options_description.h>
+#include "config.h"
+#include "options_description.h"
 // FIXME: this is only to get multiple_occurrences class
 // should move that to a separate headers.
 #include <parsers.h>
@@ -29,8 +29,7 @@ std::basic_string<charT> tolower_(const std::basic_string<charT> &str)
 }
 
 option_description::option_description()
-{
-}
+= default;
 
 option_description::option_description(const char *names, const value_semantic *s)
    : m_value_semantic(s)
@@ -46,11 +45,10 @@ option_description::option_description(const char *names, const value_semantic *
 }
 
 option_description::~option_description()
-{
-}
+= default;
 
-option_description::match_result option_description::match(const std::string &option, bool approx, bool long_ignore_case,
-                                                           bool short_ignore_case) const
+auto option_description::match(const std::string &option, bool approx, bool long_ignore_case,
+                                                           bool short_ignore_case) const -> option_description::match_result
 {
    match_result result       = no_match;
    std::string  local_option = (long_ignore_case ? tolower_(option) : option);
@@ -97,7 +95,7 @@ option_description::match_result option_description::match(const std::string &op
    return result;
 }
 
-const std::string &option_description::key(const std::string &option) const
+auto option_description::key(const std::string &option) const -> const std::string &
 {
    // We make the arbitrary choise of using the first long
    // name as the key, regardless of anything else
@@ -118,7 +116,7 @@ const std::string &option_description::key(const std::string &option) const
       return m_short_name;
 }
 
-std::string option_description::canonical_display_name(int prefix_style) const
+auto option_description::canonical_display_name(int prefix_style) const -> std::string
 {
    // We prefer the first long name over any others
    if(!m_long_names.empty())
@@ -142,20 +140,20 @@ std::string option_description::canonical_display_name(int prefix_style) const
       return m_short_name;
 }
 
-const std::string &option_description::long_name() const
+auto option_description::long_name() const -> const std::string &
 {
    static std::string empty_string("");
    return m_long_names.empty() ? empty_string : *m_long_names.begin();
 }
 
-const std::pair<const std::string *, std::size_t> option_description::long_names() const
+auto option_description::long_names() const -> const std::pair<const std::string *, std::size_t>
 {
    // reinterpret_cast is to please msvc 10.
    return (m_long_names.empty()) ? std::pair<const std::string *, size_t>(reinterpret_cast<const std::string *>(0), 0)
                                  : std::pair<const std::string *, size_t>(&(*m_long_names.begin()), m_long_names.size());
 }
 
-option_description &option_description::set_names(const char *_names)
+auto option_description::set_names(const char *_names) -> option_description &
 {
    m_long_names.clear();
    std::istringstream iss(_names);
@@ -189,17 +187,17 @@ option_description &option_description::set_names(const char *_names)
    return *this;
 }
 
-const std::string &option_description::description() const
+auto option_description::description() const -> const std::string &
 {
    return m_description;
 }
 
-std::shared_ptr<const value_semantic> option_description::semantic() const
+auto option_description::semantic() const -> std::shared_ptr<const value_semantic>
 {
    return m_value_semantic;
 }
 
-std::string option_description::format_name() const
+auto option_description::format_name() const -> std::string
 {
    if(!m_short_name.empty())
    {
@@ -208,7 +206,7 @@ std::string option_description::format_name() const
    return std::string("--").append(*m_long_names.begin());
 }
 
-std::string option_description::format_parameter() const
+auto option_description::format_parameter() const -> std::string
 {
    if(m_value_semantic->max_tokens() != 0)
       return m_value_semantic->name();
@@ -221,7 +219,7 @@ options_description_easy_init::options_description_easy_init(options_description
 {
 }
 
-options_description_easy_init &options_description_easy_init::operator()(const char *name, const char *description)
+auto options_description_easy_init::operator()(const char *name, const char *description) -> options_description_easy_init &
 {
    // Create untypes semantic which accepts zero tokens: i.e.
    // no value can be specified on command line.
@@ -232,14 +230,14 @@ options_description_easy_init &options_description_easy_init::operator()(const c
    return *this;
 }
 
-options_description_easy_init &options_description_easy_init::operator()(const char *name, const value_semantic *s)
+auto options_description_easy_init::operator()(const char *name, const value_semantic *s) -> options_description_easy_init &
 {
    std::shared_ptr<option_description> d(new option_description(name, s));
    owner->add(d);
    return *this;
 }
 
-options_description_easy_init &options_description_easy_init::operator()(const char *name, const value_semantic *s, const char *description)
+auto options_description_easy_init::operator()(const char *name, const value_semantic *s, const char *description) -> options_description_easy_init &
 {
    std::shared_ptr<option_description> d(new option_description(name, s, description));
 
@@ -272,7 +270,7 @@ void options_description::add(std::shared_ptr<option_description> desc)
    belong_to_group.push_back(false);
 }
 
-options_description &options_description::add(const options_description &desc)
+auto options_description::add(const options_description &desc) -> options_description &
 {
    std::shared_ptr<options_description> d(new options_description(desc));
    groups.push_back(d);
@@ -286,13 +284,13 @@ options_description &options_description::add(const options_description &desc)
    return *this;
 }
 
-options_description_easy_init options_description::add_options()
+auto options_description::add_options() -> options_description_easy_init
 {
-   return options_description_easy_init(this);
+   return {this};
 }
 
-const option_description &options_description::find(const std::string &name, bool approx, bool long_ignore_case,
-                                                    bool short_ignore_case) const
+auto options_description::find(const std::string &name, bool approx, bool long_ignore_case,
+                                                    bool short_ignore_case) const -> const option_description &
 {
    const option_description *d = find_nothrow(name, approx, long_ignore_case, short_ignore_case);
    if(!d)
@@ -305,8 +303,8 @@ const std::vector<std::shared_ptr<option_description>> &options_description::opt
    return m_options;
 }
 
-const option_description *options_description::find_nothrow(const std::string &name, bool approx, bool long_ignore_case,
-                                                            bool short_ignore_case) const
+auto options_description::find_nothrow(const std::string &name, bool approx, bool long_ignore_case,
+                                                            bool short_ignore_case) const -> const option_description *
 {
    std::shared_ptr<option_description> found;
    bool                                had_full_match = false;
@@ -352,7 +350,7 @@ const option_description *options_description::find_nothrow(const std::string &n
    return found.get();
 }
 
-std::ostream &operator<<(std::ostream &os, const options_description &desc)
+auto operator<<(std::ostream &os, const options_description &desc) -> std::ostream &
 {
    desc.print(os);
    return os;
@@ -564,7 +562,7 @@ void format_one(std::ostream &os, const option_description &opt, unsigned first_
 }
 } // namespace
 
-unsigned options_description::get_option_column_width() const
+auto options_description::get_option_column_width() const -> unsigned
 {
    /* Find the maximum width of the option column */
    unsigned width(23);

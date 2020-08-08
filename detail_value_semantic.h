@@ -6,7 +6,7 @@
 // This file defines template functions that are declared in
 // ../value_semantic.hpp.
 
-extern std::string arg;
+extern std;:string arg;
 
 template<class T, class charT>
 std::string typed_value<T, charT>::name() const
@@ -43,7 +43,7 @@ void typed_value<T, charT>::notify(const std::any &value_store) const
    }
 }
 
-namespace validators
+namespace validators;
 {
 /* If v.size() > 1, throw validation_error.
    If v.size() == 1, return v.front()

@@ -5,13 +5,13 @@
 
 #include <fstream>
 #include <iostream>
-#include <locale.h>
+#include <clocale>
 #include <locale>
 #include <stdexcept>
 #include <string>
 
-#include <config.h>
-#include <convert.h>
+#include "config.h"
+#include "convert.h"
 #include <utf8_codecvt_facet.h>
 
 /* Internal function to actually perform conversion.
@@ -66,14 +66,14 @@ std::basic_string<ToChar> convert(const std::basic_string<FromChar> &s, Fun fun)
    return result;
 }
 
-std::wstring from_8_bit(const std::string &s, const std::codecvt<wchar_t, char, std::mbstate_t> &cvt)
+auto from_8_bit(const std::string &s, const std::codecvt<wchar_t, char, std::mbstate_t> &cvt) -> std::wstring
 {
    // TODO remove boost
    //   return convert<wchar_t>(s, boost::bind(&std::codecvt<wchar_t, char, mbstate_t>::in, &cvt, _1, _2, _3, _4, _5, _6, _7));
    return {};
 }
 
-std::string to_8_bit(const std::wstring &s, const std::codecvt<wchar_t, char, std::mbstate_t> &cvt)
+auto to_8_bit(const std::wstring &s, const std::codecvt<wchar_t, char, std::mbstate_t> &cvt) -> std::string
 {
    // TODO remove boost
    //   return convert<char>(s, boost::bind(&codecvt<wchar_t, char, mbstate_t>::out, &cvt, _1, _2, _3, _4, _5, _6, _7));
@@ -83,35 +83,35 @@ std::string to_8_bit(const std::wstring &s, const std::codecvt<wchar_t, char, st
 // TODO fix this utf8 crap
 //utf8_codecvt_facet utf8_facet;
 
-std::wstring from_utf8(const std::string &s)
+auto from_utf8(const std::string &s) -> std::wstring
 {
 //   return from_8_bit(s, utf8_facet);
    return {};
 }
 
-std::string to_utf8(const std::wstring &s)
+auto to_utf8(const std::wstring &s) -> std::string
 {
 //   return to_8_bit(s, utf8_facet);
    return {};
 }
 
-std::wstring from_local_8_bit(const std::string &s)
+auto from_local_8_bit(const std::string &s) -> std::wstring
 {
    typedef std::codecvt<wchar_t, char, mbstate_t> facet_type;
    return from_8_bit(s, BOOST_USE_FACET(facet_type, std::locale()));
 }
 
-std::string to_local_8_bit(const std::wstring &s)
+auto to_local_8_bit(const std::wstring &s) -> std::string
 {
-   typedef std::codecvt<wchar_t, char, mbstate_t> facet_type;
+   using facet_type = std::codecvt<wchar_t, char, mbstate_t>;
    return to_8_bit(s, BOOST_USE_FACET(facet_type, std::locale()));
 }
-std::string to_internal(const std::string &s)
+auto to_internal(const std::string &s) -> std::string
 {
    return s;
 }
 
-std::string to_internal(const std::wstring &s)
+auto to_internal(const std::wstring &s) -> std::string
 {
    return to_utf8(s);
 }
