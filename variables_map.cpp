@@ -155,14 +155,20 @@ auto abstract_variables_map::operator[](const std::string &name) const -> const 
 {
    const variable_value &v = get(name);
    if(v.empty() && m_next)
+   {
       return (*m_next)[name];
+   }
    else if(v.defaulted() && m_next)
    {
       const variable_value &v2 = (*m_next)[name];
       if(!v2.empty() && !v2.defaulted())
+      {
          return v2;
+      }
       else
+      {
          return v;
+      }
    }
    else
    {
@@ -175,8 +181,7 @@ void abstract_variables_map::next(abstract_variables_map *next)
    m_next = next;
 }
 
-variables_map::variables_map()
-= default;
+variables_map::variables_map() = default;
 
 variables_map::variables_map(const abstract_variables_map *next)
    : abstract_variables_map(next)

@@ -9,15 +9,16 @@
 
 #include <cassert>
 
-positional_options_description::positional_options_description()
-= default;
+positional_options_description::positional_options_description() = default;
 
 auto positional_options_description::add(const char *name, int max_count) -> positional_options_description &
 {
    assert(max_count != -1 || m_trailing.empty());
 
    if(max_count == -1)
+   {
       m_trailing = name;
+   }
    else
    {
       m_names.resize(m_names.size() + max_count, name);
@@ -35,7 +36,11 @@ auto positional_options_description::name_for_position(unsigned position) const 
    assert(position < max_total_count());
 
    if(position < m_names.size())
+   {
       return m_names[position];
+   }
    else
+   {
       return m_trailing;
+   }
 }

@@ -3,9 +3,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <clocale>
 #include <fstream>
 #include <iostream>
-#include <clocale>
 #include <locale>
 #include <stdexcept>
 #include <string>
@@ -81,17 +81,17 @@ auto to_8_bit(const std::wstring &s, const std::codecvt<wchar_t, char, std::mbst
 }
 
 // TODO fix this utf8 crap
-//utf8_codecvt_facet utf8_facet;
+// utf8_codecvt_facet utf8_facet;
 
 auto from_utf8(const std::string &s) -> std::wstring
 {
-//   return from_8_bit(s, utf8_facet);
+   //   return from_8_bit(s, utf8_facet);
    return {};
 }
 
 auto to_utf8(const std::wstring &s) -> std::string
 {
-//   return to_8_bit(s, utf8_facet);
+   //   return to_8_bit(s, utf8_facet);
    return {};
 }
 

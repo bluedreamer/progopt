@@ -84,17 +84,25 @@ auto untyped_value::name() const -> std::string
 auto untyped_value::min_tokens() const -> unsigned
 {
    if(m_zero_tokens)
+   {
       return 0;
+   }
    else
+   {
       return 1;
+   }
 }
 
 auto untyped_value::max_tokens() const -> unsigned
 {
    if(m_zero_tokens)
+   {
       return 0;
+   }
    else
+   {
       return 1;
+   }
 }
 
 void untyped_value::xparse(std::any &value_store, const std::vector<std::string> &new_tokens) const

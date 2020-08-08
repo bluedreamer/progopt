@@ -88,7 +88,9 @@ void detail_cmdline::init(const std::vector<std::string> &args)
 void detail_cmdline::style(int style)
 {
    if(style == 0)
+   {
       style = default_style;
+   }
 
    check_style(style);
    this->m_style = style_t(style);
@@ -105,24 +107,30 @@ void detail_cmdline::check_style(int style) const
 
    const char *error = nullptr;
    if(allow_some_long && !(style & long_allow_adjacent) && !(style & long_allow_next))
+   {
       error = "boost::program_options misconfiguration: "
               "choose one or other of 'command_line_style::long_allow_next' "
               "(whitespace separated arguments) or "
               "'command_line_style::long_allow_adjacent' ('=' separated arguments) for "
               "long options.";
+   }
 
    if(!error && (style & allow_short) && !(style & short_allow_adjacent) && !(style & short_allow_next))
+   {
       error = "boost::program_options misconfiguration: "
               "choose one or other of 'command_line_style::short_allow_next' "
               "(whitespace separated arguments) or "
               "'command_line_style::short_allow_adjacent' ('=' separated arguments) for "
               "short options.";
+   }
 
    if(!error && (style & allow_short) && !(style & allow_dash_for_short) && !(style & allow_slash_for_short))
+   {
       error = "boost::program_options misconfiguration: "
               "choose one or other of 'command_line_style::allow_slash_for_short' "
               "(slashes) or 'command_line_style::allow_dash_for_short' (dashes) for "
               "short options.";
+   }
 
    if(error)
       boost::throw_exception(invalid_command_line_style(error));
@@ -149,16 +157,24 @@ void detail_cmdline::set_positional_options(const positional_options_description
 auto detail_cmdline::get_canonical_option_prefix() -> int
 {
    if(m_style & allow_long)
+   {
       return allow_long;
+   }
 
    if(m_style & allow_long_disguise)
+   {
       return allow_long_disguise;
+   }
 
    if((m_style & allow_short) && (m_style & allow_dash_for_short))
+   {
       return allow_dash_for_short;
+   }
 
    if((m_style & allow_short) && (m_style & allow_slash_for_short))
+   {
       return allow_slash_for_short;
+   }
 
    return 0;
 }

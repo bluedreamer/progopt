@@ -61,7 +61,9 @@ auto trim_ws(const std::string &s) -> std::string
    std::string::size_type n, n2;
    n = s.find_first_not_of(" \t\r\n");
    if(n == std::string::npos)
+   {
       return std::string();
+   }
    else
    {
       n2 = s.find_last_not_of(" \t\r\n");

@@ -4,8 +4,8 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "config.h"
 #include "options_description.h"
+#include "config.h"
 // FIXME: this is only to get multiple_occurrences class
 // should move that to a separate headers.
 #include <parsers.h>
@@ -28,8 +28,7 @@ std::basic_string<charT> tolower_(const std::basic_string<charT> &str)
    return result;
 }
 
-option_description::option_description()
-= default;
+option_description::option_description() = default;
 
 option_description::option_description(const char *names, const value_semantic *s)
    : m_value_semantic(s)
@@ -44,11 +43,10 @@ option_description::option_description(const char *names, const value_semantic *
    this->set_names(names);
 }
 
-option_description::~option_description()
-= default;
+option_description::~option_description() = default;
 
-auto option_description::match(const std::string &option, bool approx, bool long_ignore_case,
-                                                           bool short_ignore_case) const -> option_description::match_result
+auto option_description::match(const std::string &option, bool approx, bool long_ignore_case, bool short_ignore_case) const
+   -> option_description::match_result
 {
    match_result result       = no_match;
    std::string  local_option = (long_ignore_case ? tolower_(option) : option);
@@ -237,7 +235,8 @@ auto options_description_easy_init::operator()(const char *name, const value_sem
    return *this;
 }
 
-auto options_description_easy_init::operator()(const char *name, const value_semantic *s, const char *description) -> options_description_easy_init &
+auto options_description_easy_init::operator()(const char *name, const value_semantic *s, const char *description)
+   -> options_description_easy_init &
 {
    std::shared_ptr<option_description> d(new option_description(name, s, description));
 
@@ -289,12 +288,14 @@ auto options_description::add_options() -> options_description_easy_init
    return {this};
 }
 
-auto options_description::find(const std::string &name, bool approx, bool long_ignore_case,
-                                                    bool short_ignore_case) const -> const option_description &
+auto options_description::find(const std::string &name, bool approx, bool long_ignore_case, bool short_ignore_case) const
+   -> const option_description &
 {
    const option_description *d = find_nothrow(name, approx, long_ignore_case, short_ignore_case);
    if(!d)
+   {
       boost::throw_exception(unknown_option());
+   }
    return *d;
 }
 
@@ -303,8 +304,8 @@ const std::vector<std::shared_ptr<option_description>> &options_description::opt
    return m_options;
 }
 
-auto options_description::find_nothrow(const std::string &name, bool approx, bool long_ignore_case,
-                                                            bool short_ignore_case) const -> const option_description *
+auto options_description::find_nothrow(const std::string &name, bool approx, bool long_ignore_case, bool short_ignore_case) const
+   -> const option_description *
 {
    std::shared_ptr<option_description> found;
    bool                                had_full_match = false;
@@ -596,7 +597,9 @@ void options_description::print(std::ostream &os, unsigned width) const
       os << m_caption << ":\n";
 
    if(!width)
+   {
       width = get_option_column_width();
+   }
 
    /* The options formatting style is stolen from Subversion. */
    for(unsigned i = 0; i < m_options.size(); ++i)

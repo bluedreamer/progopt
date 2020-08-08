@@ -16,8 +16,8 @@
 #include <fstream>
 
 #include <iostream>
-#include <utility>
 #include <unistd.h>
+#include <utility>
 
 // The 'environ' should be declared in some cases. E.g. Linux man page says:
 // (This variable must be declared in the user program, but is declared in
@@ -72,7 +72,8 @@ basic_parsed_options<wchar_t>::basic_parsed_options(const parsed_options &po)
 }
 
 template<class charT>
-auto parse_config_file(std::basic_istream<charT> &is, const options_description &desc, bool allow_unregistered) -> basic_parsed_options<charT>
+auto parse_config_file(std::basic_istream<charT> &is, const options_description &desc, bool allow_unregistered)
+   -> basic_parsed_options<charT>
 {
    std::set<std::string> allowed_options;
 
@@ -89,9 +90,9 @@ auto parse_config_file(std::basic_istream<charT> &is, const options_description 
 
    // Parser return char strings
    parsed_options result(&desc);
-// TODO must put this back
-//   copy(basic_config_file_iterator<charT>(is, allowed_options, allow_unregistered), basic_config_file_iterator<charT>(),
-//        back_inserter(result.options));
+   // TODO must put this back
+   //   copy(basic_config_file_iterator<charT>(is, allowed_options, allow_unregistered), basic_config_file_iterator<charT>(),
+   //        back_inserter(result.options));
    // Convert char strings into desired type.
    return basic_parsed_options<charT>(result);
 }
