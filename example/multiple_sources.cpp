@@ -5,20 +5,16 @@
 
 /* Shows how to use both command line and config file. */
 
-#include <boost/program_options.hpp>
-namespace po = boost::program_options;
-
-
+#include <program_options.h>
 #include <iostream>
 #include <fstream>
 #include <iterator>
-using namespace std;
 
 // A helper function to simplify the main part.
 template<class T>
-ostream& operator<<(ostream& os, const vector<T>& v)
+std::ostream& operator<<(std::ostream& os, const std::vector<T>& v)
 {
-    copy(v.begin(), v.end(), ostream_iterator<T>(os, " ")); 
+   std::copy(v.begin(), v.end(), std::ostream_iterator<T>(os, " ")); 
     return os;
 }
 
@@ -27,59 +23,59 @@ int main(int ac, char* av[])
 {
     try {
         int opt;
-        string config_file;
+       std::string config_file;
     
         // Declare a group of options that will be 
         // allowed only on command line
-        po::options_description generic("Generic options");
+        options_description generic("Generic options");
         generic.add_options()
             ("version,v", "print version string")
             ("help", "produce help message")
-            ("config,c", po::value<string>(&config_file)->default_value("multiple_sources.cfg"),
+            ("config,c", value<std::string>(&config_file)->default_value("multiple_sources.cfg"),
                   "name of a file of a configuration.")
             ;
     
         // Declare a group of options that will be 
         // allowed both on command line and in
         // config file
-        po::options_description config("Configuration");
+        options_description config("Configuration");
         config.add_options()
-            ("optimization", po::value<int>(&opt)->default_value(10), 
+            ("optimization", value<int>(&opt)->default_value(10), 
                   "optimization level")
             ("include-path,I", 
-                 po::value< vector<string> >()->composing(), 
+                 value< std::vector<std::string> >()->composing(),
                  "include path")
             ;
 
         // Hidden options, will be allowed both on command line and
         // in config file, but will not be shown to the user.
-        po::options_description hidden("Hidden options");
+        options_description hidden("Hidden options");
         hidden.add_options()
-            ("input-file", po::value< vector<string> >(), "input file")
+            ("input-file", value< std::vector<std::string> >(), "input file")
             ;
 
         
-        po::options_description cmdline_options;
+        options_description cmdline_options;
         cmdline_options.add(generic).add(config).add(hidden);
 
-        po::options_description config_file_options;
+        options_description config_file_options;
         config_file_options.add(config).add(hidden);
 
-        po::options_description visible("Allowed options");
+        options_description visible("Allowed options");
         visible.add(generic).add(config);
         
-        po::positional_options_description p;
+        positional_options_description p;
         p.add("input-file", -1);
         
-        po::variables_map vm;
-        store(po::command_line_parser(ac, av).
+        variables_map vm;
+        store(command_line_parser(ac, av).
               options(cmdline_options).positional(p).run(), vm);
         notify(vm);
-        
-        ifstream ifs(config_file.c_str());
+
+       std::ifstream ifs(config_file.c_str());
         if (!ifs)
         {
-            cout << "can not open config file: " << config_file << "\n";
+           std::cout << "can not open config file: " << config_file << "\n";
             return 0;
         }
         else
@@ -89,32 +85,32 @@ int main(int ac, char* av[])
         }
     
         if (vm.count("help")) {
-            cout << visible << "\n";
+           std::cout << visible << "\n";
             return 0;
         }
 
         if (vm.count("version")) {
-            cout << "Multiple sources example, version 1.0\n";
+           std::cout << "Multiple sources example, version 1.0\n";
             return 0;
         }
 
         if (vm.count("include-path"))
         {
-            cout << "Include paths are: " 
-                 << vm["include-path"].as< vector<string> >() << "\n";
+           std::cout << "Include paths are: "
+                 << vm["include-path"].as< std::vector<std::string> >() << "\n";
         }
 
         if (vm.count("input-file"))
         {
-            cout << "Input files are: " 
-                 << vm["input-file"].as< vector<string> >() << "\n";
+           std::cout << "Input files are: "
+                 << vm["input-file"].as< std::vector<std::string> >() << "\n";
         }
 
-        cout << "Optimization level is " << opt << "\n";                
+       std::cout << "Optimization level is " << opt << "\n";
     }
-    catch(exception& e)
+    catch(std::exception& e)
     {
-        cout << e.what() << "\n";
+       std::cout << e.what() << "\n";
         return 1;
     }    
     return 0;

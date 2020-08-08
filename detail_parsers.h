@@ -3,27 +3,24 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_PARSERS_HPP_VP_2004_05_06
-#define BOOST_PARSERS_HPP_VP_2004_05_06
+#pragma  once
 
-#include <boost/program_options/detail/convert.hpp>
+#include <convert.h>
 
 #include <iterator>
-
-namespace boost { namespace program_options {
 
     template<class charT>
     basic_command_line_parser<charT>::
     basic_command_line_parser(const std::vector<
                               std::basic_string<charT> >& xargs)
-       : detail::cmdline(to_internal(xargs))
+       : detail_cmdline(to_internal(xargs))
     {}
 
 
     template<class charT>
     basic_command_line_parser<charT>::
     basic_command_line_parser(int argc, const charT* const argv[])
-    : detail::cmdline(
+    : detail_cmdline(
         to_internal(std::vector<std::basic_string<charT> >(argv+1, argv+argc))),
         m_desc()
     {}
@@ -33,7 +30,7 @@ namespace boost { namespace program_options {
     basic_command_line_parser<charT>& 
     basic_command_line_parser<charT>::options(const options_description& desc)
     {
-        detail::cmdline::set_options_description(desc);
+        detail_cmdline::set_options_description(desc);
         m_desc = &desc;
         return *this;
     }
@@ -43,7 +40,7 @@ namespace boost { namespace program_options {
     basic_command_line_parser<charT>::positional(
         const positional_options_description& desc)
     {
-        detail::cmdline::set_positional_options(desc);
+        detail_cmdline::set_positional_options(desc);
         return *this;
     }
 
@@ -51,7 +48,7 @@ namespace boost { namespace program_options {
     basic_command_line_parser<charT>& 
     basic_command_line_parser<charT>::style(int xstyle)
     {
-        detail::cmdline::style(xstyle);
+        detail_cmdline::style(xstyle);
         return *this;
     }
 
@@ -59,7 +56,7 @@ namespace boost { namespace program_options {
     basic_command_line_parser<charT>& 
     basic_command_line_parser<charT>::extra_parser(ext_parser ext)
     {
-        detail::cmdline::set_additional_parser(ext);
+        detail_cmdline::set_additional_parser(ext);
         return *this;
     }
 
@@ -67,7 +64,7 @@ namespace boost { namespace program_options {
     basic_command_line_parser<charT>& 
     basic_command_line_parser<charT>::allow_unregistered()
     {
-        detail::cmdline::allow_unregistered();
+        detail_cmdline::allow_unregistered();
         return *this;
     }
 
@@ -75,7 +72,7 @@ namespace boost { namespace program_options {
     basic_command_line_parser<charT>& 
     basic_command_line_parser<charT>::extra_style_parser(style_parser s)
     {
-        detail::cmdline::extra_style_parser(s);
+        detail_cmdline::extra_style_parser(s);
         return *this;
     }
 
@@ -89,8 +86,8 @@ namespace boost { namespace program_options {
         //    eventually inside the parsed results
         //    This will be handy to format recognisable options
         //    for diagnostic messages if everything blows up much later on
-        parsed_options result(m_desc, detail::cmdline::get_canonical_option_prefix());
-        result.options = detail::cmdline::run();
+        parsed_options result(m_desc, detail_cmdline::get_canonical_option_prefix());
+        result.options = detail_cmdline::run();
 
         // Presense of parsed_options -> wparsed_options conversion
         // does the trick.
@@ -103,8 +100,7 @@ namespace boost { namespace program_options {
     parse_command_line(int argc, const charT* const argv[],
                        const options_description& desc,
                        int style,
-                       function1<std::pair<std::string, std::string>, 
-                                 const std::string&> ext)
+                       std::function<std::pair<std::string,std::string>(const std::string&)> ext)
     {
         return basic_command_line_parser<charT>(argc, argv).options(desc).
             style(style).extra_parser(ext).run();
@@ -128,8 +124,3 @@ namespace boost { namespace program_options {
         }
         return result;
     }
-
-
-}}
-
-#endif

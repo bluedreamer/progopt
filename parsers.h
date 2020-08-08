@@ -247,4 +247,4 @@ BOOST_PROGRAM_OPTIONS_DECL std::vector<std::wstring> split_winmain(const std::ws
    #endif
 #endif
 
-#include "parsers.h"
+#include "detail_parsers.h"

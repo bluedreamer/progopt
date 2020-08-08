@@ -4,11 +4,8 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include <boost/program_options.hpp>
-using namespace boost::program_options;
-
+#include <program_options.h>
 #include <iostream>
-using namespace std;
 
 /* Auxiliary functions for checking input for validity. */
 
@@ -19,7 +16,7 @@ void conflicting_options(const variables_map& vm,
 {
     if (vm.count(opt1) && !vm[opt1].defaulted() 
         && vm.count(opt2) && !vm[opt2].defaulted())
-        throw logic_error(string("Conflicting options '") 
+        throw std::logic_error(std::string("Conflicting options '")
                           + opt1 + "' and '" + opt2 + "'.");
 }
 
@@ -30,21 +27,21 @@ void option_dependency(const variables_map& vm,
 {
     if (vm.count(for_what) && !vm[for_what].defaulted())
         if (vm.count(required_option) == 0 || vm[required_option].defaulted())
-            throw logic_error(string("Option '") + for_what 
+            throw std::logic_error(std::string("Option '") + for_what
                               + "' requires option '" + required_option + "'.");
 }
 
 int main(int argc, char* argv[])
 {
     try {
-        string ofile;
-        string macrofile, libmakfile;
+        std::string ofile;
+       std::string macrofile, libmakfile;
         bool t_given = false;
         bool b_given = false;
-        string mainpackage;
-        string depends = "deps_file";
-        string sources = "src_file";
-        string root = ".";
+       std::string mainpackage;
+       std::string depends = "deps_file";
+       std::string sources = "src_file";
+       std::string root = ".";
 
         options_description desc("Allowed options");
         desc.add_options()
@@ -69,8 +66,8 @@ int main(int argc, char* argv[])
         variables_map vm;
         store(parse_command_line(argc, argv, desc), vm);
 
-        if (vm.count("help")) {  
-            cout << desc << "\n";
+        if (vm.count("help")) {
+           std::cout << desc << "\n";
             return 0;
         }
 
@@ -88,9 +85,9 @@ int main(int argc, char* argv[])
         option_dependency(vm, "sources", "mainpackage");
         option_dependency(vm, "root", "mainpackage");
 
-        cout << "two = " << vm["two"].as<bool>() << "\n";
+       std::cout << "two = " << vm["two"].as<bool>() << "\n";
     }
-    catch(exception& e) {
-        cerr << e.what() << "\n";
+    catch(std::exception& e) {
+       std::cerr << e.what() << "\n";
     }
 }

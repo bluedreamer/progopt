@@ -11,27 +11,25 @@
 */
 
 
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/parsers.hpp>
-#include <boost/program_options/variables_map.hpp>
+#include <options_description.h>
+#include <parsers.h>
+#include <variables_map.h>
 
-using namespace boost::program_options;
 
 #include <iostream>
-using namespace std;
 
 /*  This custom option parse function recognize gcc-style 
     option "-fbar" / "-fno-bar".
 */
-pair<string, string> reg_foo(const string& s)
+std::pair<std::string, std::string> reg_foo(const std::string& s)
 {
     if (s.find("-f") == 0) {
         if (s.substr(2, 3) == "no-")
-            return make_pair(s.substr(5), string("false"));
+            return std::make_pair(s.substr(5), std::string("false"));
         else
-            return make_pair(s.substr(2), string("true"));
+            return std::make_pair(s.substr(2), std::string("true"));
     } else {
-        return make_pair(string(), string());
+        return std::make_pair(std::string(), std::string());
     }    
 }
 
@@ -41,7 +39,7 @@ int main(int ac, char* av[])
         options_description desc("Allowed options");
         desc.add_options()
         ("help", "produce a help message")
-        ("foo", value<string>(), "just an option")
+        ("foo", value<std::string>(), "just an option")
         ;
 
         variables_map vm;
@@ -49,15 +47,15 @@ int main(int ac, char* av[])
               .run(), vm);
 
         if (vm.count("help")) {
-            cout << desc;
-            cout << "\nIn addition -ffoo and -fno-foo syntax are recognized.\n";
+           std::cout << desc;
+           std::cout << "\nIn addition -ffoo and -fno-foo syntax are recognized.\n";
         }
         if (vm.count("foo")) {
-            cout << "foo value with the value of " 
-                 << vm["foo"].as<string>() << "\n";
+           std::cout << "foo value with the value of "
+                 << vm["foo"].as<std::string>() << "\n";
         }
     }
-    catch(exception& e) {
-        cout << e.what() << "\n";
+    catch(std::exception& e) {
+       std::cout << e.what() << "\n";
     }
 }

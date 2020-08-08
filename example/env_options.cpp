@@ -3,8 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/program_options.hpp>
-namespace po = boost::program_options;
+#include <program_options.h>
 #include <string>
 #include <iostream>
 
@@ -20,14 +19,14 @@ std::string mapper(std::string env_var)
 
 void get_env_options()
 {
-   po::options_description config("Configuration");
+   options_description config("Configuration");
    config.add_options()
       ("path", "the execution path")
-      ("verbosity", po::value<std::string>()->default_value("INFO"), "set verbosity: DEBUG, INFO, WARN, ERROR, FATAL")
+      ("verbosity", value<std::string>()->default_value("INFO"), "set verbosity: DEBUG, INFO, WARN, ERROR, FATAL")
       ;
 
-   po::variables_map vm;
-   store(po::parse_environment(config, boost::function1<std::string, std::string>(mapper)), vm);
+   variables_map vm;
+   store(parse_environment(config, std::function<std::string(std::string>(mapper))), vm);
    notify(vm);
 
    if (vm.count("path"))

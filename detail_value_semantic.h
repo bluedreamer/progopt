@@ -83,11 +83,11 @@ void validate(std::any &v, const std::vector<std::basic_string<charT>> &xs, T *,
    std::basic_string<charT> s(validators::get_single_string(xs));
    try
    {
-      v = any(lexical_cast<T>(s));
+      v = std::any(boost::lexical_cast<T>(s));
    }
    catch(const boost::bad_lexical_cast &)
    {
-      boost::throw_exception(invalid_option_value(s));
+      throw invalid_option_value(s);
    }
 }
 

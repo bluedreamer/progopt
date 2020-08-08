@@ -6,13 +6,11 @@
 // This example shows a config file (in ini format) being parsed by the
 // program_options library. It includes a numebr of different value types.
 
-#include <boost/program_options.hpp>
-namespace po = boost::program_options;
+#include "program_options.h"
 
 #include <assert.h>
 #include <iostream>
 #include <sstream>
-using namespace std;
 
 const double FLOAT_SEPERATION = 0.00000000001;
 bool check_float(double test, double expected)
@@ -25,9 +23,9 @@ bool check_float(double test, double expected)
    return false;
 }
 
-stringstream make_file()
+std::stringstream make_file()
 {
-   stringstream ss;
+   std::stringstream ss;
    ss << "# This file checks parsing of various types of config values\n";
    //FAILS: ss << "; a windows style comment\n";
 
@@ -74,38 +72,38 @@ stringstream make_file()
    //FAILS: Must be an = 
    //ss << "present_no_equal_true\n";
 
-   ss.seekp(ios_base::beg);
+   ss.seekp(std::ios_base::beg);
    return ss;
 }
 
-po::options_description set_options()
+options_description set_options()
 {
-   po::options_description opts;
+   options_description opts;
    opts.add_options()
-      ("global_string", po::value<string>())
+      ("global_string", value<std::string>())
 
-      ("strings.word", po::value<string>())
-      ("strings.phrase", po::value<string>())
-      ("strings.quoted", po::value<string>())
+      ("strings.word", value<std::string>())
+      ("strings.phrase", value<std::string>())
+      ("strings.quoted", value<std::string>())
 
-      ("ints.positive", po::value<int>())
-      ("ints.negative", po::value<int>())
-      ("ints.hex", po::value<int>())
-      ("ints.oct", po::value<int>())
-      ("ints.bin", po::value<int>())
+      ("ints.positive", value<int>())
+      ("ints.negative", value<int>())
+      ("ints.hex", value<int>())
+      ("ints.oct", value<int>())
+      ("ints.bin", value<int>())
 
-      ("floats.positive", po::value<float>())
-      ("floats.negative", po::value<float>())
-      ("floats.double", po::value<double>())
-      ("floats.int", po::value<float>())
-      ("floats.int_dot", po::value<float>())
-      ("floats.dot", po::value<float>())
-      ("floats.exp_lower", po::value<float>())
-      ("floats.exp_upper", po::value<float>())
-      ("floats.exp_decimal", po::value<float>())
-      ("floats.exp_negative", po::value<float>())
-      ("floats.exp_negative_val", po::value<float>())
-      ("floats.exp_negative_negative_val", po::value<float>())
+      ("floats.positive", value<float>())
+      ("floats.negative", value<float>())
+      ("floats.double", value<double>())
+      ("floats.int", value<float>())
+      ("floats.int_dot", value<float>())
+      ("floats.dot", value<float>())
+      ("floats.exp_lower", value<float>())
+      ("floats.exp_upper", value<float>())
+      ("floats.exp_decimal", value<float>())
+      ("floats.exp_negative", value<float>())
+      ("floats.exp_negative_val", value<float>())
+      ("floats.exp_negative_negative_val", value<float>())
 
       // Load booleans as value<bool>, so they will require a --option=value on the command line
       //("booleans.number_true", po::value<bool>())
@@ -121,44 +119,44 @@ po::options_description set_options()
 
       // Load booleans as bool_switch, so that a --option will set it true on the command line
       // The difference between these two types does not show up when parsing a file
-      ("booleans.number_true", po::bool_switch())
-      ("booleans.number_false", po::bool_switch())
-      ("booleans.yn_true", po::bool_switch())
-      ("booleans.yn_false", po::bool_switch())
-      ("booleans.tf_true", po::bool_switch())
-      ("booleans.tf_false", po::bool_switch())
-      ("booleans.onoff_true", po::bool_switch())
-      ("booleans.onoff_false", po::bool_switch())
-      ("booleans.present_equal_true", po::bool_switch())
-      ("booleans.present_no_equal_true", po::bool_switch())
+      ("booleans.number_true", bool_switch())
+      ("booleans.number_false", bool_switch())
+      ("booleans.yn_true", bool_switch())
+      ("booleans.yn_false", bool_switch())
+      ("booleans.tf_true", bool_switch())
+      ("booleans.tf_false", bool_switch())
+      ("booleans.onoff_true", bool_switch())
+      ("booleans.onoff_false", bool_switch())
+      ("booleans.present_equal_true", bool_switch())
+      ("booleans.present_no_equal_true", bool_switch())
       ;
    return opts;
 }
 
-vector<string> parse_file(stringstream &file, po::options_description &opts, po::variables_map &vm)
+std::vector<std::string> parse_file(std::stringstream &file, options_description &opts, variables_map &vm)
 {
    const bool ALLOW_UNREGISTERED = true;
-   cout << file.str() << endl;
+   std::cout << file.str() << std::endl;
 
-   po::parsed_options parsed = parse_config_file(file, opts, ALLOW_UNREGISTERED);
+   parsed_options parsed = parse_config_file(file, opts, ALLOW_UNREGISTERED);
    store(parsed, vm);
-   vector<string> unregistered = po::collect_unrecognized(parsed.options, po::exclude_positional);
+   std::vector<std::string> unregistered = collect_unrecognized(parsed.options, exclude_positional);
    notify(vm);
 
    return unregistered;
 }
 
-void check_results(po::variables_map &vm, vector<string> unregistered)
+void check_results(variables_map &vm, std::vector<std::string> unregistered)
 {
    // Check that we got the correct values back
-   string expected_global_string = "global value";
+   std::string expected_global_string = "global value";
 
-   string expected_unreg_option = "unregistered_entry";
-   string expected_unreg_value = "unregistered value";
+   std::string expected_unreg_option = "unregistered_entry";
+   std::string expected_unreg_value = "unregistered value";
 
-   string expected_strings_word = "word";
-   string expected_strings_phrase = "this is a phrase";
-   string expected_strings_quoted = "\"quotes are in result\"";
+   std::string expected_strings_word = "word";
+   std::string expected_strings_phrase = "this is a phrase";
+   std::string expected_strings_quoted = "\"quotes are in result\"";
 
    int expected_int_postitive = 41;
    int expected_int_negative = -42;
@@ -190,14 +188,14 @@ void check_results(po::variables_map &vm, vector<string> unregistered)
    bool expected_present_equal_true = true;
    bool expected_present_no_equal_true = true;
 
-   assert(vm["global_string"].as<string>() == expected_global_string);
+   assert(vm["global_string"].as<std::string>() == expected_global_string);
 
    assert(unregistered[0] == expected_unreg_option);
    assert(unregistered[1] == expected_unreg_value);
 
-   assert(vm["strings.word"].as<string>() == expected_strings_word);
-   assert(vm["strings.phrase"].as<string>() == expected_strings_phrase);
-   assert(vm["strings.quoted"].as<string>() == expected_strings_quoted);
+   assert(vm["strings.word"].as<std::string>() == expected_strings_word);
+   assert(vm["strings.phrase"].as<std::string>() == expected_strings_phrase);
+   assert(vm["strings.quoted"].as<std::string>() == expected_strings_quoted);
 
    assert(vm["ints.positive"].as<int>() == expected_int_postitive);
    assert(vm["ints.negative"].as<int>() == expected_int_negative);
@@ -234,7 +232,7 @@ int main(int ac, char* av[])
 {
    auto file = make_file();
    auto opts = set_options();
-   po::variables_map vars;
+   variables_map vars;
    auto unregistered = parse_file(file, opts, vars);
    check_results(vars, unregistered);   
 

@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 
 include_directories(".")
-add_executable(progopt
-        main.cpp
+
+add_library(libprogopt
         program_options.h
         options_description.h
         positional_options.h
@@ -32,5 +32,8 @@ add_executable(progopt
         eof_iterator.h
         utf8_codecvt_facet.h
         utf8_codecvt_facet.cpp
-
+        parsers.cpp
         )
+
+add_executable(progopt main.cpp)
+add_subdirectory(example)

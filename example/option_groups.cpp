@@ -19,18 +19,13 @@
 */
 
 
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/parsers.hpp>
-#include <boost/program_options/variables_map.hpp>
-#include <boost/tokenizer.hpp>
-#include <boost/token_functions.hpp>
-using namespace boost;
-using namespace boost::program_options;
+#include <options_description.h>
+#include <parsers.h>
+#include <variables_map.h>
 
 #include <iostream>
 #include <fstream>
 #include <exception>
-using namespace std;
 
 int main(int ac, char* av[])
 {
@@ -39,14 +34,14 @@ int main(int ac, char* av[])
         options_description general("General options");
         general.add_options()
             ("help", "produce a help message")
-            ("help-module", value<string>(),
+            ("help-module", value<std::string>(),
                 "produce a help for a given module")
             ("version", "output the version number")
             ;
 
         options_description gui("GUI options");
         gui.add_options()
-            ("display", value<string>(), "display to use")
+            ("display", value<std::string>(), "display to use")
             ;
 
         options_description backend("Backend options");
@@ -70,28 +65,28 @@ int main(int ac, char* av[])
 
         if (vm.count("help")) 
         {
-            cout << visible;
+           std::cout << visible;
             return 0;
         }
         if (vm.count("help-module")) {
-            const string& s = vm["help-module"].as<string>();
+            const std::string& s = vm["help-module"].as<std::string>();
             if (s == "gui") {
-                cout << gui;
+               std::cout << gui;
             } else if (s == "backend") {
-                cout << backend;
+               std::cout << backend;
             } else {
-                cout << "Unknown module '" 
+               std::cout << "Unknown module '"
                      << s << "' in the --help-module option\n";
                 return 1;
             }
             return 0;
         }
         if (vm.count("num-threads")) {
-            cout << "The 'num-threads' options was set to "
+           std::cout << "The 'num-threads' options was set to "
                  << vm["num-threads"].as<int>() << "\n";            
         }                           
     }
     catch(std::exception& e) {
-        cout << e.what() << "\n";
+        std::cout << e.what() << "\n";
     }
 }
