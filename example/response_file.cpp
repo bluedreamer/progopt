@@ -38,8 +38,8 @@ int main(int ac, char *av[])
    try
    {
       options_description desc("Allowed options");
-      desc.add_options()("help", "produce a help message")("include-path,I", value<vector<string>>()->composing(), "include path")(
-         "magic", value<int>(), "magic value")("response-file", value<string>(), "can be specified with '@name', too");
+      desc.add_options()("help", "produce a help message")("include-path,I", value<std::vector<std::string>>()->composing(), "include path")(
+         "magic", value<int>(), "magic value")("response-file", value<std::string>(), "can be specified with '@name', too");
 
       variables_map vm;
       store(command_line_parser(ac, av).options(desc).extra_parser(at_option_parser).run(), vm);
@@ -51,7 +51,7 @@ int main(int ac, char *av[])
       if(vm.count("response-file"))
       {
          // Load the file and tokenize it
-         std::ifstream ifs(vm["response-file"].as<string>().c_str());
+         std::ifstream ifs(vm["response-file"].as<std::string>().c_str());
          if(!ifs)
          {
             std::cout << "Could not open the response file\n";
@@ -61,20 +61,20 @@ int main(int ac, char *av[])
          std::stringstream ss;
          ss << ifs.rdbuf();
          // Split the file content
-         char_separator<char>            sep(" \n\r");
-         std::string                     sstr = ss.str();
-         tokenizer<char_separator<char>> tok(sstr, sep);
-         std::vector<std::string>        args;
-         std::copy(tok.begin(), tok.end(), back_inserter(args));
-         // Parse the file and store the options
-         store(command_line_parser(args).options(desc).run(), vm);
+//         char_separator<char>            sep(" \n\r");
+//         std::string                     sstr = ss.str();
+//         tokenizer<char_separator<char>> tok(sstr, sep);
+//         std::vector<std::string>        args;
+//         std::copy(tok.begin(), tok.end(), back_inserter(args));
+//         // Parse the file and store the options
+//         store(command_line_parser(args).options(desc).run(), vm);
       }
 
       if(vm.count("include-path"))
       {
-         const vector<string> &s = vm["include-path"].as<vector<string>>();
+         const std::vector<std::string> &s = vm["include-path"].as<std::vector<std::string>>();
          std::cout << "Include paths: ";
-         std::copy(s.begin(), s.end(), std::ostream_iterator<string>(cout, " "));
+         std::copy(s.begin(), s.end(), std::ostream_iterator<std::string>(std::cout, " "));
          std::cout << "\n";
       }
       if(vm.count("magic"))

@@ -18,7 +18,7 @@
 //   The magic is "456"
 //
 // and the second invocation should issue an error message.
-
+#include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <program_options.h>
 #include <regex>
@@ -55,7 +55,7 @@ void validate(std::any &v, const std::vector<std::string> &values, magic_number 
    std::smatch match;
    if(std::regex_match(s, match, r))
    {
-      v = std::any(magic_number(lexical_cast<int>(match[1])));
+      v = std::any(magic_number(boost::lexical_cast<int>(match[1])));
    }
    else
    {

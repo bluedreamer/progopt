@@ -26,7 +26,7 @@ void get_env_options()
                                                       "set verbosity: DEBUG, INFO, WARN, ERROR, FATAL");
 
    variables_map vm;
-   store(parse_environment(config, std::function < std::string(std::string > (mapper))), vm);
+   store(parse_environment(config, std::function<std::string(std::string)> (mapper)), vm);
    notify(vm);
 
    if(vm.count("path"))

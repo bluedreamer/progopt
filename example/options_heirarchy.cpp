@@ -195,7 +195,7 @@ private:
                common_options,
                // The next two lines are the crazy syntax to use EnvironmentMapper as
                // the lookup function for env->config name conversions
-               boost::function1<std::string, std::string>(std::bind1st(std::mem_fun(&OptionsHeirarchy::EnvironmentMapper), this))),
+               std::function<std::string(std::string)>(std::bind1st(std::mem_fun(&OptionsHeirarchy::EnvironmentMapper), this))),
             results);
       notify(results);
    }
