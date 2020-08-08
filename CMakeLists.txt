@@ -35,5 +35,7 @@ add_library(libprogopt
         parsers.cpp
         )
 
+
 add_executable(progopt main.cpp)
+target_link_libraries(progopt libprogopt)
 add_subdirectory(example)

@@ -2,8 +2,6 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-#include "config.h"
-
 #include "config_file.h"
 #include <convert.h>
 #include <errors.h>
@@ -136,25 +134,3 @@ auto common_config_file_iterator::allowed_option(const std::string &s) const -> 
       return true;
    return false;
 }
-
-#if BOOST_WORKAROUND(__COMO_VERSION__, BOOST_TESTED_AT(4303)) ||                                                                           \
-   (defined(__sgi) && BOOST_WORKAROUND(_COMPILER_VERSION, BOOST_TESTED_AT(741)))
-template<>
-bool basic_config_file_iterator<wchar_t>::getline(std::string &s)
-{
-   std::wstring ws;
-   // On Comeau, using two-argument version causes
-   // call to some internal function with std::wstring, and '\n'
-   // (not L'\n') and compile can't resolve that call.
-
-   if(std::getline(*is, ws, L'\n'))
-   {
-      s = to_utf8(ws);
-      return true;
-   }
-   else
-   {
-      return false;
-   }
-}
-#endif

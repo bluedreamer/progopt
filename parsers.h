@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include "config.h"
 #include "detail_cmdline.h"
 #include <option.h>
 

@@ -9,7 +9,6 @@
 #include <set>
 #include <string>
 
-#include "config.h"
 #include "eof_iterator.h"
 #include "option.h"
 

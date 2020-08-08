@@ -10,7 +10,6 @@
 #include <stdexcept>
 #include <string>
 
-#include "config.h"
 #include "convert.h"
 #include <utf8_codecvt_facet.h>
 
@@ -98,13 +97,15 @@ auto to_utf8(const std::wstring &s) -> std::string
 auto from_local_8_bit(const std::string &s) -> std::wstring
 {
    typedef std::codecvt<wchar_t, char, mbstate_t> facet_type;
-   return from_8_bit(s, BOOST_USE_FACET(facet_type, std::locale()));
+//   return from_8_bit(s, BOOST_USE_FACET(facet_type, std::locale()));
+   return {};
 }
 
 auto to_local_8_bit(const std::wstring &s) -> std::string
 {
    using facet_type = std::codecvt<wchar_t, char, mbstate_t>;
-   return to_8_bit(s, BOOST_USE_FACET(facet_type, std::locale()));
+//   return to_8_bit(s, BOOST_USE_FACET(facet_type, std::locale()));
+   return {};
 }
 auto to_internal(const std::string &s) -> std::string
 {

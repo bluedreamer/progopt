@@ -4,7 +4,6 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "cmdline.h"
-#include "config.h"
 #include "config_file.h"
 #include <convert.h>
 #include <environment_iterator.h>

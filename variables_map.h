@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include "config.h"
-
 #include <map>
 #include <set>
 #include <string>

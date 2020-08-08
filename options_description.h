@@ -6,14 +6,8 @@
 
 #pragma once
 
-#include "config.h"
 #include <errors.h>
 #include <value_semantic.h>
-
-//#include <boost/function.hpp>
-//#include <boost/shared_ptr.hpp>
-//#include <boost/detail/workaround.hpp>
-//#include <boost/any.hpp>
 
 #include <iosfwd>
 #include <map>
@@ -35,38 +29,9 @@
 class option_description
 {
 public:
-   option_description();
-
-   /** Initializes the object with the passed data.
-
-       Note: it would be nice to make the second parameter auto_ptr,
-       to explicitly pass ownership. Unfortunately, it's often needed to
-       create objects of types derived from 'value_semantic':
-          options_description d;
-          d.add_options()("a", parameter<int>("n")->default_value(1));
-       Here, the static type returned by 'parameter' should be derived
-       from value_semantic.
-
-       Alas, derived->base conversion for auto_ptr does not really work,
-       see
-       http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2000/n1232.pdf
-       http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#84
-
-       So, we have to use plain old pointers. Besides, users are not
-       expected to use the constructor directly.
-
-
-       The 'name' parameter is interpreted by the following rules:
-       - if there's no "," character in 'name', it specifies long name
-       - otherwise, the part before "," specifies long name and the part
-       after \-- short name.
-   */
+   option_description()=default;
    option_description(const char *name, const value_semantic *s);
-
-   /** Initializes the class with the passed data.
-    */
    option_description(const char *name, const value_semantic *s, const char *description);
-
    virtual ~option_description();
 
    enum match_result
@@ -149,13 +114,9 @@ class options_description_easy_init
 {
 public:
    options_description_easy_init(options_description *owner);
-
    options_description_easy_init &operator()(const char *name, const char *description);
-
    options_description_easy_init &operator()(const char *name, const value_semantic *s);
-
    options_description_easy_init &operator()(const char *name, const value_semantic *s, const char *description);
-
 private:
    options_description *owner;
 };

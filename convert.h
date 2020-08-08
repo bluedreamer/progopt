@@ -5,10 +5,6 @@
 
 #pragma once
 
-#include "config.h"
-
-#include <boost/detail/workaround.hpp>
-
 #include <locale>
 #include <string>
 #include <vector>

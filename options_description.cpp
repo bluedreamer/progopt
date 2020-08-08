@@ -5,7 +5,6 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "options_description.h"
-#include "config.h"
 // FIXME: this is only to get multiple_occurrences class
 // should move that to a separate headers.
 #include <parsers.h>
@@ -28,19 +27,17 @@ std::basic_string<charT> tolower_(const std::basic_string<charT> &str)
    return result;
 }
 
-option_description::option_description() = default;
-
 option_description::option_description(const char *names, const value_semantic *s)
    : m_value_semantic(s)
 {
-   this->set_names(names);
+   set_names(names);
 }
 
 option_description::option_description(const char *names, const value_semantic *s, const char *description)
    : m_description(description)
    , m_value_semantic(s)
 {
-   this->set_names(names);
+   set_names(names);
 }
 
 option_description::~option_description() = default;
