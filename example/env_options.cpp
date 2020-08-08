@@ -3,33 +3,33 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <iostream>
 #include <program_options.h>
 #include <string>
-#include <iostream>
 
 std::string mapper(std::string env_var)
 {
    // ensure the env_var is all caps
    std::transform(env_var.begin(), env_var.end(), env_var.begin(), ::toupper);
 
-   if (env_var == "PATH") return "path";
-   if (env_var == "EXAMPLE_VERBOSE") return "verbosity";
+   if(env_var == "PATH")
+      return "path";
+   if(env_var == "EXAMPLE_VERBOSE")
+      return "verbosity";
    return "";
 }
 
 void get_env_options()
 {
    options_description config("Configuration");
-   config.add_options()
-      ("path", "the execution path")
-      ("verbosity", value<std::string>()->default_value("INFO"), "set verbosity: DEBUG, INFO, WARN, ERROR, FATAL")
-      ;
+   config.add_options()("path", "the execution path")("verbosity", value<std::string>()->default_value("INFO"),
+                                                      "set verbosity: DEBUG, INFO, WARN, ERROR, FATAL");
 
    variables_map vm;
-   store(parse_environment(config, std::function<std::string(std::string>(mapper))), vm);
+   store(parse_environment(config, std::function < std::string(std::string > (mapper))), vm);
    notify(vm);
 
-   if (vm.count("path"))
+   if(vm.count("path"))
    {
       std::cout << "First 75 chars of the system path: \n";
       std::cout << vm["path"].as<std::string>().substr(0, 75) << std::endl;
@@ -38,7 +38,7 @@ void get_env_options()
    std::cout << "Verbosity: " << vm["verbosity"].as<std::string>() << std::endl;
 }
 
-int main(int ac, char* av[])
+int main(int ac, char *av[])
 {
    get_env_options();
 

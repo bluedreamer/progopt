@@ -13,10 +13,10 @@
 #include <sstream>
 
 const double FLOAT_SEPERATION = 0.00000000001;
-bool check_float(double test, double expected)
+bool         check_float(double test, double expected)
 {
    double seperation = expected * (1 + FLOAT_SEPERATION) / expected;
-   if ((test < expected + seperation) && (test > expected - seperation))
+   if((test < expected + seperation) && (test > expected - seperation))
    {
       return true;
    }
@@ -27,7 +27,7 @@ std::stringstream make_file()
 {
    std::stringstream ss;
    ss << "# This file checks parsing of various types of config values\n";
-   //FAILS: ss << "; a windows style comment\n";
+   // FAILS: ss << "; a windows style comment\n";
 
    ss << "global_string = global value\n";
    ss << "unregistered_entry = unregistered value\n";
@@ -36,14 +36,14 @@ std::stringstream make_file()
    ss << "word = word\n";
    ss << "phrase = this is a phrase\n";
    ss << "quoted = \"quotes are in result\"\n";
-   
+
    ss << "\n[ints]\n";
    ss << "positive = 41\n";
    ss << "negative = -42\n";
-   //FAILS: Lexical cast doesn't support hex, oct, or bin
-   //ss << "hex = 0x43\n";
-   //ss << "oct = 044\n";
-   //ss << "bin = 0b101010\n";
+   // FAILS: Lexical cast doesn't support hex, oct, or bin
+   // ss << "hex = 0x43\n";
+   // ss << "oct = 044\n";
+   // ss << "bin = 0b101010\n";
 
    ss << "\n[floats]\n";
    ss << "positive = 51.1\n";
@@ -69,8 +69,8 @@ std::stringstream make_file()
    ss << "onoff_true = on\n";
    ss << "onoff_false = off\n";
    ss << "present_equal_true = \n";
-   //FAILS: Must be an = 
-   //ss << "present_no_equal_true\n";
+   // FAILS: Must be an =
+   // ss << "present_no_equal_true\n";
 
    ss.seekp(std::ios_base::beg);
    return ss;
@@ -79,31 +79,18 @@ std::stringstream make_file()
 options_description set_options()
 {
    options_description opts;
-   opts.add_options()
-      ("global_string", value<std::string>())
+   opts.add_options()("global_string", value<std::string>())
 
-      ("strings.word", value<std::string>())
-      ("strings.phrase", value<std::string>())
-      ("strings.quoted", value<std::string>())
+      ("strings.word", value<std::string>())("strings.phrase", value<std::string>())("strings.quoted", value<std::string>())
 
-      ("ints.positive", value<int>())
-      ("ints.negative", value<int>())
-      ("ints.hex", value<int>())
-      ("ints.oct", value<int>())
-      ("ints.bin", value<int>())
+         ("ints.positive", value<int>())("ints.negative", value<int>())("ints.hex", value<int>())("ints.oct", value<int>())("ints.bin",
+                                                                                                                            value<int>())
 
-      ("floats.positive", value<float>())
-      ("floats.negative", value<float>())
-      ("floats.double", value<double>())
-      ("floats.int", value<float>())
-      ("floats.int_dot", value<float>())
-      ("floats.dot", value<float>())
-      ("floats.exp_lower", value<float>())
-      ("floats.exp_upper", value<float>())
-      ("floats.exp_decimal", value<float>())
-      ("floats.exp_negative", value<float>())
-      ("floats.exp_negative_val", value<float>())
-      ("floats.exp_negative_negative_val", value<float>())
+            ("floats.positive", value<float>())("floats.negative", value<float>())("floats.double", value<double>())(
+               "floats.int", value<float>())("floats.int_dot", value<float>())("floats.dot", value<float>())(
+               "floats.exp_lower", value<float>())("floats.exp_upper", value<float>())("floats.exp_decimal", value<float>())(
+               "floats.exp_negative", value<float>())("floats.exp_negative_val", value<float>())("floats.exp_negative_negative_val",
+                                                                                                 value<float>())
 
       // Load booleans as value<bool>, so they will require a --option=value on the command line
       //("booleans.number_true", po::value<bool>())
@@ -119,17 +106,10 @@ options_description set_options()
 
       // Load booleans as bool_switch, so that a --option will set it true on the command line
       // The difference between these two types does not show up when parsing a file
-      ("booleans.number_true", bool_switch())
-      ("booleans.number_false", bool_switch())
-      ("booleans.yn_true", bool_switch())
-      ("booleans.yn_false", bool_switch())
-      ("booleans.tf_true", bool_switch())
-      ("booleans.tf_false", bool_switch())
-      ("booleans.onoff_true", bool_switch())
-      ("booleans.onoff_false", bool_switch())
-      ("booleans.present_equal_true", bool_switch())
-      ("booleans.present_no_equal_true", bool_switch())
-      ;
+      ("booleans.number_true", bool_switch())("booleans.number_false", bool_switch())("booleans.yn_true", bool_switch())(
+         "booleans.yn_false", bool_switch())("booleans.tf_true", bool_switch())("booleans.tf_false", bool_switch())(
+         "booleans.onoff_true", bool_switch())("booleans.onoff_false", bool_switch())("booleans.present_equal_true", bool_switch())(
+         "booleans.present_no_equal_true", bool_switch());
    return opts;
 }
 
@@ -152,40 +132,40 @@ void check_results(variables_map &vm, std::vector<std::string> unregistered)
    std::string expected_global_string = "global value";
 
    std::string expected_unreg_option = "unregistered_entry";
-   std::string expected_unreg_value = "unregistered value";
+   std::string expected_unreg_value  = "unregistered value";
 
-   std::string expected_strings_word = "word";
+   std::string expected_strings_word   = "word";
    std::string expected_strings_phrase = "this is a phrase";
    std::string expected_strings_quoted = "\"quotes are in result\"";
 
    int expected_int_postitive = 41;
-   int expected_int_negative = -42;
-   int expected_int_hex = 0x43;
-   int expected_int_oct = 044;
-   int expected_int_bin = 0b101010;
+   int expected_int_negative  = -42;
+   int expected_int_hex       = 0x43;
+   int expected_int_oct       = 044;
+   int expected_int_bin       = 0b101010;
 
-   float expected_float_positive = 51.1f;
-   float expected_float_negative = -52.1f;
-   double expected_float_double = 53.1234567890;
-   float expected_float_int = 54.0f;
-   float expected_float_int_dot = 55.0f;
-   float expected_float_dot = .56f;
-   float expected_float_exp_lower = 57.1e5f;
-   float expected_float_exp_upper = 58.1E5f;
-   float expected_float_exp_decimal = .591e5f;
-   float expected_float_exp_negative = 60.1e-5f;
-   float expected_float_exp_negative_val = -61.1e5f;
-   float expected_float_exp_negative_negative_val = -62.1e-5f;
+   float  expected_float_positive                  = 51.1f;
+   float  expected_float_negative                  = -52.1f;
+   double expected_float_double                    = 53.1234567890;
+   float  expected_float_int                       = 54.0f;
+   float  expected_float_int_dot                   = 55.0f;
+   float  expected_float_dot                       = .56f;
+   float  expected_float_exp_lower                 = 57.1e5f;
+   float  expected_float_exp_upper                 = 58.1E5f;
+   float  expected_float_exp_decimal               = .591e5f;
+   float  expected_float_exp_negative              = 60.1e-5f;
+   float  expected_float_exp_negative_val          = -61.1e5f;
+   float  expected_float_exp_negative_negative_val = -62.1e-5f;
 
-   bool expected_number_true = true;
-   bool expected_number_false = false;
-   bool expected_yn_true = true;
-   bool expected_yn_false = false;
-   bool expected_tf_true = true;
-   bool expected_tf_false = false;
-   bool expected_onoff_true = true;
-   bool expected_onoff_false = false;
-   bool expected_present_equal_true = true;
+   bool expected_number_true           = true;
+   bool expected_number_false          = false;
+   bool expected_yn_true               = true;
+   bool expected_yn_false              = false;
+   bool expected_tf_true               = true;
+   bool expected_tf_false              = false;
+   bool expected_onoff_true            = true;
+   bool expected_onoff_false           = false;
+   bool expected_present_equal_true    = true;
    bool expected_present_no_equal_true = true;
 
    assert(vm["global_string"].as<std::string>() == expected_global_string);
@@ -199,9 +179,9 @@ void check_results(variables_map &vm, std::vector<std::string> unregistered)
 
    assert(vm["ints.positive"].as<int>() == expected_int_postitive);
    assert(vm["ints.negative"].as<int>() == expected_int_negative);
-   //assert(vm["ints.hex"].as<int>() == expected_int_hex);
-   //assert(vm["ints.oct"].as<int>() == expected_int_oct);
-   //assert(vm["ints.bin"].as<int>() == expected_int_bin);
+   // assert(vm["ints.hex"].as<int>() == expected_int_hex);
+   // assert(vm["ints.oct"].as<int>() == expected_int_oct);
+   // assert(vm["ints.bin"].as<int>() == expected_int_bin);
 
    assert(check_float(vm["floats.positive"].as<float>(), expected_float_positive));
    assert(check_float(vm["floats.negative"].as<float>(), expected_float_negative));
@@ -225,16 +205,16 @@ void check_results(variables_map &vm, std::vector<std::string> unregistered)
    assert(vm["booleans.onoff_true"].as<bool>() == expected_onoff_true);
    assert(vm["booleans.onoff_false"].as<bool>() == expected_onoff_false);
    assert(vm["booleans.present_equal_true"].as<bool>() == expected_present_equal_true);
-   //assert(vm["booleans.present_no_equal_true"].as<bool>() == expected_present_no_equal_true);
+   // assert(vm["booleans.present_no_equal_true"].as<bool>() == expected_present_no_equal_true);
 }
 
-int main(int ac, char* av[])
+int main(int ac, char *av[])
 {
-   auto file = make_file();
-   auto opts = set_options();
+   auto          file = make_file();
+   auto          opts = set_options();
    variables_map vars;
-   auto unregistered = parse_file(file, opts, vars);
-   check_results(vars, unregistered);   
+   auto          unregistered = parse_file(file, opts, vars);
+   check_results(vars, unregistered);
 
    return 0;
 }

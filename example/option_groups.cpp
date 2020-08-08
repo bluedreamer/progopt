@@ -18,75 +18,72 @@
 
 */
 
-
 #include <options_description.h>
 #include <parsers.h>
 #include <variables_map.h>
 
-#include <iostream>
-#include <fstream>
 #include <exception>
+#include <fstream>
+#include <iostream>
 
-int main(int ac, char* av[])
+int main(int ac, char *av[])
 {
-    try {
-        // Declare three groups of options.
-        options_description general("General options");
-        general.add_options()
-            ("help", "produce a help message")
-            ("help-module", value<std::string>(),
-                "produce a help for a given module")
-            ("version", "output the version number")
-            ;
+   try
+   {
+      // Declare three groups of options.
+      options_description general("General options");
+      general.add_options()("help", "produce a help message")("help-module", value<std::string>(),
+                                                              "produce a help for a given module")("version", "output the version number");
 
-        options_description gui("GUI options");
-        gui.add_options()
-            ("display", value<std::string>(), "display to use")
-            ;
+      options_description gui("GUI options");
+      gui.add_options()("display", value<std::string>(), "display to use");
 
-        options_description backend("Backend options");
-        backend.add_options()
-            ("num-threads", value<int>(), "the initial number of threads")
-            ;
-            
-        // Declare an options description instance which will include
-        // all the options
-        options_description all("Allowed options");
-        all.add(general).add(gui).add(backend);
+      options_description backend("Backend options");
+      backend.add_options()("num-threads", value<int>(), "the initial number of threads");
 
-        // Declare an options description instance which will be shown
-        // to the user
-        options_description visible("Allowed options");
-        visible.add(general).add(gui);
-           
+      // Declare an options description instance which will include
+      // all the options
+      options_description all("Allowed options");
+      all.add(general).add(gui).add(backend);
 
-        variables_map vm;
-        store(parse_command_line(ac, av, all), vm);
+      // Declare an options description instance which will be shown
+      // to the user
+      options_description visible("Allowed options");
+      visible.add(general).add(gui);
 
-        if (vm.count("help")) 
-        {
-           std::cout << visible;
-            return 0;
-        }
-        if (vm.count("help-module")) {
-            const std::string& s = vm["help-module"].as<std::string>();
-            if (s == "gui") {
-               std::cout << gui;
-            } else if (s == "backend") {
-               std::cout << backend;
-            } else {
-               std::cout << "Unknown module '"
-                     << s << "' in the --help-module option\n";
-                return 1;
-            }
-            return 0;
-        }
-        if (vm.count("num-threads")) {
-           std::cout << "The 'num-threads' options was set to "
-                 << vm["num-threads"].as<int>() << "\n";            
-        }                           
-    }
-    catch(std::exception& e) {
-        std::cout << e.what() << "\n";
-    }
+      variables_map vm;
+      store(parse_command_line(ac, av, all), vm);
+
+      if(vm.count("help"))
+      {
+         std::cout << visible;
+         return 0;
+      }
+      if(vm.count("help-module"))
+      {
+         const std::string &s = vm["help-module"].as<std::string>();
+         if(s == "gui")
+         {
+            std::cout << gui;
+         }
+         else if(s == "backend")
+         {
+            std::cout << backend;
+         }
+         else
+         {
+            std::cout << "Unknown module '" << s << "' in the --help-module option\n";
+            return 1;
+         }
+         return 0;
+      }
+      if(vm.count("num-threads"))
+      {
+         std::cout << "The 'num-threads' options was set to " << vm["num-threads"].as<int>() << "\n";
+      }
+   }
+   catch(std::exception &e)
+   {
+      std::cout << e.what() << "\n";
+   }
 }
