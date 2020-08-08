@@ -67,10 +67,7 @@ private: // iterator core operations
 
    auto equal(const eof_iterator &other) const -> bool
    {
-      if(m_at_eof && other.m_at_eof)
-         return true;
-      else
-         return false;
+      return static_cast<bool>(m_at_eof && other.m_at_eof);
    }
 
    auto dereference() const -> const ValueType & { return m_value; }

@@ -7,6 +7,9 @@
 // ../value_semantic.hpp.
 
 extern std::string arg;
+#include <any>
+#include <string>
+#include <vector>
 
 template<class T, class charT>
 std::string typed_value<T, charT>::name() const
@@ -77,7 +80,7 @@ using namespace validators;
     partial template ordering, just like the last 'long/int' parameter.
 */
 template<class T, class charT>
-void validate(std::any &v, const std::vector<std::basic_string<charT>> &xs, T *, long)
+void validate(std::any &v, const std::vector<std::basic_string<charT>> &xs, T * /*unused*/, long /*unused*/)
 {
    validators::check_first_occurrence(v);
    std::basic_string<charT> s(validators::get_single_string(xs));
@@ -104,7 +107,7 @@ void validate(std::any &v, const std::vector<std::wstring> &xs, std::string *, i
 /** Validates sequences. Allows multiple values per option occurrence
    and multiple occurrences. */
 template<class T, class charT>
-void validate(std::any &v, const std::vector<std::basic_string<charT>> &s, std::vector<T> *, int)
+void validate(std::any &v, const std::vector<std::basic_string<charT>> &s, std::vector<T> * /*unused*/, int /*unused*/)
 {
    if(!v.has_value())
    {
@@ -134,7 +137,7 @@ void validate(std::any &v, const std::vector<std::basic_string<charT>> &s, std::
 
 /** Validates optional arguments. */
 template<class T, class charT>
-void validate(std::any &v, const std::vector<std::basic_string<charT>> &s, std::optional<T> *, int)
+void validate(std::any &v, const std::vector<std::basic_string<charT>> &s, std::optional<T> * /*unused*/, int /*unused*/)
 {
    validators::check_first_occurrence(v);
    validators::get_single_string(s);

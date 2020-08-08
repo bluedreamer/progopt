@@ -10,6 +10,7 @@
 #include <string>
 #include <any>
 #include <utility>
+#include <memory>
 
 template<class charT>
 class basic_parsed_options;

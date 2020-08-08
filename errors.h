@@ -19,10 +19,10 @@ inline auto strip_prefixes(const std::string &text) -> std::string
    {
       return text;
    }
-   else
-   {
+   
+   
       return text.substr(i);
-   }
+   
 }
 
 /** Base class for all errors in the library. */
@@ -245,7 +245,7 @@ public:
    }
 
    /** Does NOT set option name, because no option name makes sense */
-   void set_option_name(const std::string &) override {}
+   void set_option_name(const std::string & /*option_name*/) override {}
 
    ~error_with_no_option_name() noexcept override = default;
 };

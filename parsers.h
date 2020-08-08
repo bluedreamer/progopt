@@ -121,9 +121,9 @@ public:
    auto positional(const positional_options_description &desc) -> basic_command_line_parser &;
 
    /** Sets the command line style. */
-   auto style(int) -> basic_command_line_parser &;
+   auto style(int /*xstyle*/) -> basic_command_line_parser &;
    /** Sets the extra parsers. */
-   auto extra_parser(ext_parser) -> basic_command_line_parser &;
+   auto extra_parser(ext_parser /*ext*/) -> basic_command_line_parser &;
 
    /** Parses the options and returns the result of parsing.
        Throws on error.
@@ -155,7 +155,7 @@ using wcommand_line_parser = basic_command_line_parser<wchar_t>;
     and returns the result of calling the 'run' method.
  */
 template<class charT>
-auto parse_command_line(int argc, const charT *const argv[], const options_description &, int style = 0,
+auto parse_command_line(int argc, const charT *const argv[], const options_description & /*desc*/, int style = 0,
                                                std::function<std::pair<std::string, std::string>(const std::string &)> ext = ext_parser()) -> basic_parsed_options<charT>;
 
 /** Parse a config file.

@@ -135,10 +135,10 @@ public:
    void xparse(std::any &value_store, const std::vector<std::string> &new_tokens) const override;
 
    /** Does nothing. */
-   auto apply_default(std::any &) const -> bool { return false; }
+   auto apply_default(std::any & /*value_store*/) const -> bool { return false; }
 
    /** Does nothing. */
-   void notify(const std::any &) const override {}
+   void notify(const std::any & /*value_store*/) const override {}
 
 private:
    bool m_zero_tokens;
@@ -299,10 +299,10 @@ public: // value semantic overrides
       {
          return 0;
       }
-      else
-      {
+      
+      
          return 1;
-      }
+      
    }
 
    [[nodiscard]] auto max_tokens() const -> unsigned
@@ -311,14 +311,14 @@ public: // value semantic overrides
       {
          return std::numeric_limits<unsigned>::max BOOST_PREVENT_MACRO_SUBSTITUTION();
       }
-      else if(m_zero_tokens)
+      if(m_zero_tokens)
       {
          return 0;
       }
-      else
-      {
+      
+      
          return 1;
-      }
+      
    }
 
    [[nodiscard]] auto is_required() const -> bool { return m_required; }
@@ -337,11 +337,11 @@ public: // value semantic overrides
       {
          return false;
       }
-      else
-      {
+      
+      
          value_store = m_default_value;
          return true;
-      }
+      
    }
 
    /** If an address of variable to store value was specified

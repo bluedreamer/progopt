@@ -63,7 +63,7 @@ protected: // Stubs for derived classes
    // The most clean thing would be to pass 'line_iterator' to
    // constructor of this class, but to avoid templating this class
    // we'd need polymorphic iterator, which does not exist yet.
-   virtual auto getline(std::string &) -> bool { return false; }
+   virtual auto getline(std::string & /*unused*/) -> bool { return false; }
 
 private:
    /** Adds another allowed option. If the 'name' ends with
@@ -95,7 +95,7 @@ public:
    basic_config_file_iterator(std::basic_istream<charT> &is, const std::set<std::string> &allowed_options, bool allow_unregistered = false);
 
 private: // base overrides
-   auto getline(std::string &) -> bool;
+   auto getline(std::string & /*s*/) -> bool;
 
 private: // internal data
    std::shared_ptr<std::basic_istream<charT>> is;
@@ -106,7 +106,7 @@ using wconfig_file_iterator = basic_config_file_iterator<wchar_t>;
 
 struct null_deleter
 {
-   void operator()(void const *) const {}
+   void operator()(void const * /*unused*/) const {}
 };
 
 template<class charT>
@@ -131,8 +131,8 @@ auto basic_config_file_iterator<charT>::getline(std::string &s) -> bool
       s = to_internal(in);
       return true;
    }
-   else
-   {
+   
+   
       return false;
-   }
+   
 }
