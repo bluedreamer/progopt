@@ -3,18 +3,13 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_OPTION_HPP_VP_2004_02_25
-#define BOOST_OPTION_HPP_VP_2004_02_25
+#pragma once
 
-#include <boost/program_options/config.hpp>
+#include <config.h>
 
 #include <string>
 #include <vector>
 
-namespace boost
-{
-namespace program_options
-{
 /** Option found in input source.
     Contains a key and a value. The key, in turn, can be a string (name of
     an option), or an integer (position in input source) \-- in case no name
@@ -69,8 +64,3 @@ public:
 };
 typedef basic_option<char>    option;
 typedef basic_option<wchar_t> woption;
-
-} // namespace program_options
-} // namespace boost
-
-#endif

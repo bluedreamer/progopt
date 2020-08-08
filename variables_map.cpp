@@ -3,24 +3,17 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_PROGRAM_OPTIONS_SOURCE
-#include <boost/program_options/config.hpp>
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/parsers.hpp>
-#include <boost/program_options/value_semantic.hpp>
-#include <boost/program_options/variables_map.hpp>
+#include <config.h>
+#include <options_description.h>
+#include <parsers.h>
+#include <value_semantic.h>
+#include <variables_map.h>
 
 #include <cassert>
 
-namespace boost
-{
-namespace program_options
-{
-using namespace std;
-
 // First, performs semantic actions for 'oa'.
 // Then, stores in 'm' all options that are defined in 'desc'.
-BOOST_PROGRAM_OPTIONS_DECL
+
 void store(const parsed_options &options, variables_map &xm, bool utf8)
 {
    // TODO: what if we have different definition
@@ -39,8 +32,8 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
    unsigned i;
 
    // Declared here so can be used to provide context for exceptions
-   string option_name;
-   string original_token;
+   std::string option_name;
+   std::string original_token;
 
 #ifndef BOOST_NO_EXCEPTIONS
    try
@@ -100,11 +93,11 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
    xm.m_final.insert(new_final.begin(), new_final.end());
 
    // Second, apply default values and store required options.
-   const vector<shared_ptr<option_description>> &all = desc.options();
+   const std::vector<std::shared_ptr<option_description>> &all = desc.options();
    for(i = 0; i < all.size(); ++i)
    {
       const option_description &d   = *all[i];
-      string                    key = d.key("");
+      std::string               key = d.key("");
       // FIXME: this logic relies on knowledge of option_description
       // internals.
       // The 'key' is empty if options description contains '*'.
@@ -116,7 +109,7 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
       }
       if(m.count(key) == 0)
       {
-         boost::any def;
+         std::any def;
          if(d.semantic()->apply_default(def))
          {
             m[key]                  = variable_value(def, true);
@@ -131,20 +124,18 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
          // config file etc, the following precedence rules apply:
          //  "--"  >  ("-" or "/")  >  ""
          //  Precedence is set conveniently by a single call to length()
-         string canonical_name = d.canonical_display_name(options.m_options_prefix);
+         std::string canonical_name = d.canonical_display_name(options.m_options_prefix);
          if(canonical_name.length() > xm.m_required[key].length())
             xm.m_required[key] = canonical_name;
       }
    }
 }
 
-BOOST_PROGRAM_OPTIONS_DECL
 void store(const wparsed_options &options, variables_map &m)
 {
    store(options.utf8_encoded_options, m, true);
 }
 
-BOOST_PROGRAM_OPTIONS_DECL
 void notify(variables_map &vm)
 {
    vm.notify();
@@ -213,11 +204,11 @@ const variable_value &variables_map::get(const std::string &name) const
 void variables_map::notify()
 {
    // This checks if all required options occur
-   for(map<string, string>::const_iterator r = m_required.begin(); r != m_required.end(); ++r)
+   for(std::map<std::string, std::string>::const_iterator r = m_required.begin(); r != m_required.end(); ++r)
    {
-      const string &                              opt         = r->first;
-      const string &                              display_opt = r->second;
-      map<string, variable_value>::const_iterator iter        = find(opt);
+      const std::string &                                   opt         = r->first;
+      const std::string &                                   display_opt = r->second;
+      std::map<std::string, variable_value>::const_iterator iter        = find(opt);
       if(iter == end() || iter->second.empty())
       {
          boost::throw_exception(required_option(display_opt));
@@ -225,7 +216,7 @@ void variables_map::notify()
    }
 
    // Lastly, run notify actions.
-   for(map<string, variable_value>::iterator k = begin(); k != end(); ++k)
+   for(std::map<std::string, variable_value>::iterator k = begin(); k != end(); ++k)
    {
       /* Users might wish to use variables_map to store their own values
          that are not parsed, and therefore will not have value_semantics
@@ -239,6 +230,3 @@ void variables_map::notify()
          k->second.m_value_semantic->notify(k->second.value());
    }
 }
-
-} // namespace program_options
-} // namespace boost

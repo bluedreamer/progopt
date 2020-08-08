@@ -3,19 +3,12 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_PROGRAM_OPTIONS_SOURCE
-#include <boost/program_options/config.hpp>
+#include <config.h>
 
-#include <boost/program_options/positional_options.hpp>
-
-#include <boost/limits.hpp>
+#include <positional_options.h>
 
 #include <cassert>
 
-namespace boost
-{
-namespace program_options
-{
 positional_options_description::positional_options_description()
 {
 }
@@ -47,6 +40,3 @@ const std::string &positional_options_description::name_for_position(unsigned po
    else
       return m_trailing;
 }
-
-} // namespace program_options
-} // namespace boost

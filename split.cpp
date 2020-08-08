@@ -3,24 +3,17 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_PROGRAM_OPTIONS_SOURCE
-
-#include <boost/program_options/parsers.hpp>
-#include <boost/tokenizer.hpp>
+#include <parsers.h>
 
 #include <string>
 #include <vector>
 
-namespace boost
-{
-namespace program_options
-{
-namespace detail
-{
 template<class charT>
 std::vector<std::basic_string<charT>> split_unix(const std::basic_string<charT> &cmdline, const std::basic_string<charT> &seperator,
                                                  const std::basic_string<charT> &quote, const std::basic_string<charT> &escape)
 {
+   // TODO replace boost tokenizer
+#if 0
    typedef boost::tokenizer<boost::escaped_list_separator<charT>, typename std::basic_string<charT>::const_iterator,
                             std::basic_string<charT>>
       tokenizerT;
@@ -34,31 +27,22 @@ std::vector<std::basic_string<charT>> split_unix(const std::basic_string<charT> 
          result.push_back(*cur_token);
    }
    return result;
+#endif
+   return {};
 }
 
-} // namespace detail
-} // namespace program_options
-} // namespace boost
-
-namespace boost
-{
-namespace program_options
-{
 // Take a command line string and splits in into tokens, according
 // to the given collection of seperators chars.
-BOOST_PROGRAM_OPTIONS_DECL std::vector<std::string> split_unix(const std::string &cmdline, const std::string &seperator,
-                                                               const std::string &quote, const std::string &escape)
+std::vector<std::string> split_unix(const std::string &cmdline, const std::string &seperator, const std::string &quote,
+                                    const std::string &escape)
 {
-   return detail::split_unix<char>(cmdline, seperator, quote, escape);
+   // return detail::split_unix<char>(cmdline, seperator, quote, escape);
+   return {};
 }
 
-#ifndef BOOST_NO_STD_WSTRING
-BOOST_PROGRAM_OPTIONS_DECL std::vector<std::wstring> split_unix(const std::wstring &cmdline, const std::wstring &seperator,
-                                                                const std::wstring &quote, const std::wstring &escape)
+std::vector<std::wstring> split_unix(const std::wstring &cmdline, const std::wstring &seperator, const std::wstring &quote,
+                                     const std::wstring &escape)
 {
-   return detail::split_unix<wchar_t>(cmdline, seperator, quote, escape);
+   //   return detail::split_unix<wchar_t>(cmdline, seperator, quote, escape);
+   return {};
 }
-#endif
-
-} // namespace program_options
-} // namespace boost

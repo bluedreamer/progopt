@@ -3,17 +3,14 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_ENVIRONMENT_ITERATOR_VP_2004_05_14
-#define BOOST_ENVIRONMENT_ITERATOR_VP_2004_05_14
+#pragma once
 
-#include "eof_iterator.hpp"
+#include "eof_iterator.h"
 
 #include <cassert>
 #include <string>
 #include <utility>
 
-namespace boost
-{
 class environment_iterator : public eof_iterator<environment_iterator, std::pair<std::string, std::string>>
 {
 public:
@@ -44,5 +41,3 @@ public:
 private:
    char **m_environment;
 };
-} // namespace boost
-#endif

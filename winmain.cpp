@@ -3,17 +3,12 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_PROGRAM_OPTIONS_SOURCE
-#include <boost/program_options/parsers.hpp>
 #include <cctype>
+#include <parsers.h>
 
 using std::size_t;
 
 #ifdef _WIN32
-namespace boost
-{
-namespace program_options
-{
 // Take a command line string and splits in into tokens, according
 // to the rules windows command line processor uses.
 //
@@ -111,6 +106,4 @@ BOOST_PROGRAM_OPTIONS_DECL std::vector<std::wstring> split_winmain(const std::ws
 }
    #endif
 
-} // namespace program_options
-} // namespace boost
 #endif

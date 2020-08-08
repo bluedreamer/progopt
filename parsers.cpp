@@ -3,35 +3,20 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/config.hpp>
-
-#define BOOST_PROGRAM_OPTIONS_SOURCE
-#include <boost/program_options/config.hpp>
-#include <boost/program_options/detail/cmdline.hpp>
-#include <boost/program_options/detail/config_file.hpp>
-#include <boost/program_options/detail/convert.hpp>
-#include <boost/program_options/environment_iterator.hpp>
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/parsers.hpp>
-#include <boost/program_options/positional_options.hpp>
-
-#include <boost/bind.hpp>
-#include <boost/throw_exception.hpp>
+#include <cmdline.h>
+#include <config.h>
+#include <config_file.h>
+#include <convert.h>
+#include <environment_iterator.h>
+#include <options_description.h>
+#include <parsers.h>
+#include <positional_options.h>
 
 #include <cctype>
 #include <fstream>
 
-#if !defined(__GNUC__) || __GNUC__ < 3
-   #include <iostream>
-#else
-   #include <istream>
-#endif
-
-#ifdef _WIN32
-   #include <stdlib.h>
-#else
-   #include <unistd.h>
-#endif
+#include <iostream>
+#include <unistd.h>
 
 // The 'environ' should be declared in some cases. E.g. Linux man page says:
 // (This variable must be declared in the user program, but is declared in
@@ -62,15 +47,6 @@ extern char **environ;
    #endif
 #endif
 
-using namespace std;
-
-namespace boost
-{
-namespace program_options
-{
-#ifndef BOOST_NO_STD_WSTRING
-namespace
-{
 woption woption_from_option(const option &opt)
 {
    woption result;
@@ -78,13 +54,12 @@ woption woption_from_option(const option &opt)
    result.position_key = opt.position_key;
    result.unregistered = opt.unregistered;
 
-   std::transform(opt.value.begin(), opt.value.end(), back_inserter(result.value), boost::bind(from_utf8, _1));
+   std::transform(opt.value.begin(), opt.value.end(), back_inserter(result.value), std::bind(from_utf8, std::placeholders::_1));
 
    std::transform(opt.original_tokens.begin(), opt.original_tokens.end(), back_inserter(result.original_tokens),
-                  boost::bind(from_utf8, _1));
+                  std::bind(from_utf8, std::placeholders::_1));
    return result;
 }
-} // namespace
 
 basic_parsed_options<wchar_t>::basic_parsed_options(const parsed_options &po)
    : description(po.description)
@@ -94,14 +69,13 @@ basic_parsed_options<wchar_t>::basic_parsed_options(const parsed_options &po)
    for(unsigned i = 0; i < po.options.size(); ++i)
       options.push_back(woption_from_option(po.options[i]));
 }
-#endif
 
 template<class charT>
 basic_parsed_options<charT> parse_config_file(std::basic_istream<charT> &is, const options_description &desc, bool allow_unregistered)
 {
-   set<string> allowed_options;
+   std::set<std::string> allowed_options;
 
-   const vector<shared_ptr<option_description>> &options = desc.options();
+   const std::vector<std::shared_ptr<option_description>> &options = desc.options();
    for(unsigned i = 0; i < options.size(); ++i)
    {
       const option_description &d = *options[i];
@@ -114,18 +88,19 @@ basic_parsed_options<charT> parse_config_file(std::basic_istream<charT> &is, con
 
    // Parser return char strings
    parsed_options result(&desc);
-   copy(detail::basic_config_file_iterator<charT>(is, allowed_options, allow_unregistered), detail::basic_config_file_iterator<charT>(),
-        back_inserter(result.options));
+// TODO must put this back
+//   copy(basic_config_file_iterator<charT>(is, allowed_options, allow_unregistered), basic_config_file_iterator<charT>(),
+//        back_inserter(result.options));
    // Convert char strings into desired type.
    return basic_parsed_options<charT>(result);
 }
 
-template BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<char> parse_config_file(std::basic_istream<char> & is,
-                                                                                 const options_description &desc, bool allow_unregistered);
+template basic_parsed_options<char> parse_config_file(std::basic_istream<char> &is, const options_description &desc,
+                                                      bool allow_unregistered);
 
 #ifndef BOOST_NO_STD_WSTRING
-template BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<wchar_t>
-                                    parse_config_file(std::basic_istream<wchar_t> &is, const options_description &desc, bool allow_unregistered);
+template basic_parsed_options<wchar_t> parse_config_file(std::basic_istream<wchar_t> &is, const options_description &desc,
+                                                         bool allow_unregistered);
 #endif
 
 template<class charT>
@@ -148,12 +123,10 @@ basic_parsed_options<charT> parse_config_file(const char *filename, const option
    return result;
 }
 
-template BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<char> parse_config_file(const char *filename, const options_description &desc,
-                                                                                 bool allow_unregistered);
+template basic_parsed_options<char> parse_config_file(const char *filename, const options_description &desc, bool allow_unregistered);
 
 #ifndef BOOST_NO_STD_WSTRING
-template BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<wchar_t> parse_config_file(const char *filename, const options_description &desc,
-                                                                                    bool allow_unregistered);
+template basic_parsed_options<wchar_t> parse_config_file(const char *filename, const options_description &desc, bool allow_unregistered);
 #endif
 
 // This versio, which accepts any options without validation, is disabled,
@@ -171,14 +144,13 @@ template BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<wchar_t> parse_config_f
     }
 #endif
 
-BOOST_PROGRAM_OPTIONS_DECL parsed_options parse_environment(const options_description &                desc,
-                                                            const function1<std::string, std::string> &name_mapper)
+parsed_options parse_environment(const options_description &desc, const std::function<std::string(std::string)> &name_mapper)
 {
    parsed_options result(&desc);
-
+#if 0 // TODO fix the iterator shite
    for(environment_iterator i(environ), e; i != e; ++i)
    {
-      string option_name = name_mapper(i->first);
+      std::string option_name = name_mapper(i->first);
 
       if(!option_name.empty())
       {
@@ -188,12 +160,10 @@ BOOST_PROGRAM_OPTIONS_DECL parsed_options parse_environment(const options_descri
          result.options.push_back(n);
       }
    }
-
+#endif
    return result;
 }
 
-namespace detail
-{
 class prefix_name_mapper
 {
 public:
@@ -204,10 +174,10 @@ public:
 
    std::string operator()(const std::string &s)
    {
-      string result;
+      std::string result;
       if(s.find(prefix) == 0)
       {
-         for(string::size_type n = prefix.size(); n < s.size(); ++n)
+         for(std::string::size_type n = prefix.size(); n < s.size(); ++n)
          {
             // Intel-Win-7.1 does not understand
             // push_back on string.
@@ -220,17 +190,13 @@ public:
 private:
    std::string prefix;
 };
-} // namespace detail
 
-BOOST_PROGRAM_OPTIONS_DECL parsed_options parse_environment(const options_description &desc, const std::string &prefix)
+parsed_options parse_environment(const options_description &desc, const std::string &prefix)
 {
-   return parse_environment(desc, detail::prefix_name_mapper(prefix));
+   return parse_environment(desc, prefix_name_mapper(prefix));
 }
 
-BOOST_PROGRAM_OPTIONS_DECL parsed_options parse_environment(const options_description &desc, const char *prefix)
+parsed_options parse_environment(const options_description &desc, const char *prefix)
 {
-   return parse_environment(desc, string(prefix));
+   return parse_environment(desc, std::string(prefix));
 }
-
-} // namespace program_options
-} // namespace boost

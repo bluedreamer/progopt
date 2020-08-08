@@ -15,14 +15,14 @@
 //#include <boost/detail/workaround.hpp>
 //#include <boost/any.hpp>
 
+#include <iosfwd>
 #include <map>
+#include <memory>
 #include <set>
 #include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
-
-#include <iosfwd>
 
 /** Describes one possible command line/config file option. There are two
     kinds of properties of an option. First describe it syntactically and
@@ -32,7 +32,7 @@
     never use second kind of properties \-- they are side effect free.
     @sa options_description
 */
-class BOOST_PROGRAM_OPTIONS_DECL option_description
+class option_description
 {
 public:
    option_description();
@@ -108,7 +108,7 @@ public:
    const std::string &description() const;
 
    /// Semantic of option's value
-   shared_ptr<const value_semantic> semantic() const;
+   std::shared_ptr<const value_semantic> semantic() const;
 
    /// Returns the option name, formatted suitably for usage message.
    std::string format_name() const;
@@ -138,14 +138,14 @@ private:
 
    // shared_ptr is needed to simplify memory management in
    // copy ctor and destructor.
-   shared_ptr<const value_semantic> m_value_semantic;
+   std::shared_ptr<const value_semantic> m_value_semantic;
 };
 
 class options_description;
 
 /** Class which provides convenient creation syntax to option_description.
  */
-class BOOST_PROGRAM_OPTIONS_DECL options_description_easy_init
+class options_description_easy_init
 {
 public:
    options_description_easy_init(options_description *owner);
@@ -167,7 +167,7 @@ private:
     See @ref a_adding_options "here" for option adding interface discussion.
     @sa option_description
 */
-class BOOST_PROGRAM_OPTIONS_DECL options_description
+class options_description
 {
 public:
    static const unsigned m_default_line_length;
@@ -186,7 +186,7 @@ public:
    /** Adds new variable description. Throws duplicate_variable_error if
        either short or long name matches that of already present one.
    */
-   void add(shared_ptr<option_description> desc);
+   void add(std::shared_ptr<option_description> desc);
    /** Adds a group of option description. This has the same
        effect as adding all option_descriptions in 'desc'
        individually, except that output operator will show
@@ -214,23 +214,18 @@ public:
    const option_description *find_nothrow(const std::string &name, bool approx, bool long_ignore_case = false,
                                           bool short_ignore_case = false) const;
 
-   const std::vector<shared_ptr<option_description>> &options() const;
+   const std::vector<std::shared_ptr<option_description>> &options() const;
 
    /** Produces a human readable output of 'desc', listing options,
        their descriptions and allowed parameters. Other options_description
        instances previously passed to add will be output separately. */
-   friend BOOST_PROGRAM_OPTIONS_DECL std::ostream &operator<<(std::ostream &os, const options_description &desc);
+   friend std::ostream &operator<<(std::ostream &os, const options_description &desc);
 
    /** Outputs 'desc' to the specified stream, calling 'f' to output each
        option_description element. */
    void print(std::ostream &os, unsigned width = 0) const;
 
 private:
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1800))
-   // prevent warning C4512: assignment operator could not be generated
-   options_description &operator=(const options_description &);
-#endif
-
    typedef std::map<std::string, int>::const_iterator          name2index_iterator;
    typedef std::pair<name2index_iterator, name2index_iterator> approximation_range;
 
@@ -243,22 +238,16 @@ private:
    // Data organization is chosen because:
    // - there could be two names for one option
    // - option_add_proxy needs to know the last added option
-   std::vector<shared_ptr<option_description>> m_options;
+   std::vector<std::shared_ptr<option_description>> m_options;
 
    // Whether the option comes from one of declared groups.
-#if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, BOOST_TESTED_AT(313))
-   // vector<bool> is buggy there, see
-   // http://support.microsoft.com/default.aspx?scid=kb;en-us;837698
-   std::vector<char> belong_to_group;
-#else
    std::vector<bool> belong_to_group;
-#endif
 
-   std::vector<shared_ptr<options_description>> groups;
+   std::vector<std::shared_ptr<options_description>> groups;
 };
 
 /** Class thrown when duplicate option description is found. */
-class BOOST_PROGRAM_OPTIONS_DECL duplicate_option_error : public error
+class duplicate_option_error : public error
 {
 public:
    duplicate_option_error(const std::string &xwhat)

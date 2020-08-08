@@ -3,15 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_CMDLINE_HPP_VP_2004_03_13
-#define BOOST_CMDLINE_HPP_VP_2004_03_13
-
-namespace boost
-{
-namespace program_options
-{
-namespace command_line_style
-{
+#pragma once
 /** Various possible styles of options.
 
 There are "long" options, which start with "--" and "short",
@@ -87,8 +79,3 @@ enum style_t
    /** The default style. */
    default_style = unix_style
 };
-} // namespace command_line_style
-} // namespace program_options
-} // namespace boost
-
-#endif

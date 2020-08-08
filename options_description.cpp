@@ -4,17 +4,11 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_PROGRAM_OPTIONS_SOURCE
-#include <boost/program_options/config.hpp>
-#include <boost/program_options/options_description.hpp>
+#include <config.h>
+#include <options_description.h>
 // FIXME: this is only to get multiple_occurrences class
 // should move that to a separate headers.
-#include <boost/program_options/parsers.hpp>
-
-#include <boost/detail/workaround.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/throw_exception.hpp>
-#include <boost/tokenizer.hpp>
+#include <parsers.h>
 
 #include <cassert>
 #include <climits>
@@ -22,14 +16,7 @@
 #include <cstring>
 #include <iterator>
 #include <sstream>
-using namespace std;
 
-namespace boost
-{
-namespace program_options
-{
-namespace
-{
 template<class charT>
 std::basic_string<charT> tolower_(const std::basic_string<charT> &str)
 {
@@ -40,8 +27,6 @@ std::basic_string<charT> tolower_(const std::basic_string<charT> &str)
    }
    return result;
 }
-
-} // unnamed namespace
 
 option_description::option_description()
 {
@@ -119,7 +104,7 @@ const std::string &option_description::key(const std::string &option) const
    if(!m_long_names.empty())
    {
       const std::string &first_long_name = *m_long_names.begin();
-      if(first_long_name.find('*') != string::npos)
+      if(first_long_name.find('*') != std::string::npos)
          // The '*' character means we're long_name
          // matches only part of the input. So, returning
          // long name will remove some of the information,
@@ -138,18 +123,18 @@ std::string option_description::canonical_display_name(int prefix_style) const
    // We prefer the first long name over any others
    if(!m_long_names.empty())
    {
-      if(prefix_style == command_line_style::allow_long)
+      if(prefix_style == style_t::allow_long)
          return "--" + *m_long_names.begin();
-      if(prefix_style == command_line_style::allow_long_disguise)
+      if(prefix_style == style_t::allow_long_disguise)
          return "-" + *m_long_names.begin();
    }
    // sanity check: m_short_name[0] should be '-' or '/'
    if(m_short_name.length() == 2)
    {
-      if(prefix_style == command_line_style::allow_slash_for_short)
-         return string("/") + m_short_name[1];
-      if(prefix_style == command_line_style::allow_dash_for_short)
-         return string("-") + m_short_name[1];
+      if(prefix_style == style_t::allow_slash_for_short)
+         return std::string("/") + m_short_name[1];
+      if(prefix_style == style_t::allow_dash_for_short)
+         return std::string("-") + m_short_name[1];
    }
    if(!m_long_names.empty())
       return *m_long_names.begin();
@@ -209,7 +194,7 @@ const std::string &option_description::description() const
    return m_description;
 }
 
-shared_ptr<const value_semantic> option_description::semantic() const
+std::shared_ptr<const value_semantic> option_description::semantic() const
 {
    return m_value_semantic;
 }
@@ -218,9 +203,9 @@ std::string option_description::format_name() const
 {
    if(!m_short_name.empty())
    {
-      return m_long_names.empty() ? m_short_name : string(m_short_name).append(" [ --").append(*m_long_names.begin()).append(" ]");
+      return m_long_names.empty() ? m_short_name : std::string(m_short_name).append(" [ --").append(*m_long_names.begin()).append(" ]");
    }
-   return string("--").append(*m_long_names.begin());
+   return std::string("--").append(*m_long_names.begin());
 }
 
 std::string option_description::format_parameter() const
@@ -241,7 +226,7 @@ options_description_easy_init &options_description_easy_init::operator()(const c
    // Create untypes semantic which accepts zero tokens: i.e.
    // no value can be specified on command line.
    // FIXME: does not look exception-safe
-   shared_ptr<option_description> d(new option_description(name, new untyped_value(true), description));
+   std::shared_ptr<option_description> d(new option_description(name, new untyped_value(true), description));
 
    owner->add(d);
    return *this;
@@ -249,14 +234,14 @@ options_description_easy_init &options_description_easy_init::operator()(const c
 
 options_description_easy_init &options_description_easy_init::operator()(const char *name, const value_semantic *s)
 {
-   shared_ptr<option_description> d(new option_description(name, s));
+   std::shared_ptr<option_description> d(new option_description(name, s));
    owner->add(d);
    return *this;
 }
 
 options_description_easy_init &options_description_easy_init::operator()(const char *name, const value_semantic *s, const char *description)
 {
-   shared_ptr<option_description> d(new option_description(name, s, description));
+   std::shared_ptr<option_description> d(new option_description(name, s, description));
 
    owner->add(d);
    return *this;
@@ -281,7 +266,7 @@ options_description::options_description(const std::string &caption, unsigned li
    assert(m_min_description_length < m_line_length - 1);
 }
 
-void options_description::add(shared_ptr<option_description> desc)
+void options_description::add(std::shared_ptr<option_description> desc)
 {
    m_options.push_back(desc);
    belong_to_group.push_back(false);
@@ -289,7 +274,7 @@ void options_description::add(shared_ptr<option_description> desc)
 
 options_description &options_description::add(const options_description &desc)
 {
-   shared_ptr<options_description> d(new options_description(desc));
+   std::shared_ptr<options_description> d(new options_description(desc));
    groups.push_back(d);
 
    for(size_t i = 0; i < desc.m_options.size(); ++i)
@@ -315,7 +300,7 @@ const option_description &options_description::find(const std::string &name, boo
    return *d;
 }
 
-const std::vector<shared_ptr<option_description>> &options_description::options() const
+const std::vector<std::shared_ptr<option_description>> &options_description::options() const
 {
    return m_options;
 }
@@ -323,10 +308,10 @@ const std::vector<shared_ptr<option_description>> &options_description::options(
 const option_description *options_description::find_nothrow(const std::string &name, bool approx, bool long_ignore_case,
                                                             bool short_ignore_case) const
 {
-   shared_ptr<option_description> found;
-   bool                           had_full_match = false;
-   vector<string>                 approximate_matches;
-   vector<string>                 full_matches;
+   std::shared_ptr<option_description> found;
+   bool                                had_full_match = false;
+   std::vector<std::string>            approximate_matches;
+   std::vector<std::string>            full_matches;
 
    // We use linear search because matching specified option
    // name with the declared option name need to take care about
@@ -367,7 +352,6 @@ const option_description *options_description::find_nothrow(const std::string &n
    return found.get();
 }
 
-BOOST_PROGRAM_OPTIONS_DECL
 std::ostream &operator<<(std::ostream &os, const options_description &desc)
 {
    desc.print(os);
@@ -396,9 +380,9 @@ void format_paragraph(std::ostream &os, std::string par, unsigned indent, unsign
    // index of tab (if present) is used as additional indent relative
    // to first_column_width if paragrapth is spanned over multiple
    // lines if tab is not on first line it is ignored
-   string::size_type par_indent = par.find('\t');
+   std::string::size_type par_indent = par.find('\t');
 
-   if(par_indent == string::npos)
+   if(par_indent == std::string::npos)
    {
       par_indent = 0;
    }
@@ -407,7 +391,7 @@ void format_paragraph(std::ostream &os, std::string par, unsigned indent, unsign
       // only one tab per paragraph allowed
       if(count(par.begin(), par.end(), '\t') > 1)
       {
-         boost::throw_exception(program_options::error("Only one tab per paragraph is allowed in the options description"));
+         throw error("Only one tab per paragraph is allowed in the options description");
       }
 
       // erase tab from string
@@ -430,8 +414,8 @@ void format_paragraph(std::ostream &os, std::string par, unsigned indent, unsign
    }
    else
    {
-      string::const_iterator       line_begin = par.begin();
-      const string::const_iterator par_end    = par.end();
+      std::string::const_iterator       line_begin = par.begin();
+      const std::string::const_iterator par_end    = par.end();
 
       bool first_line = true; // of current paragraph!
 
@@ -452,16 +436,17 @@ void format_paragraph(std::ostream &os, std::string par, unsigned indent, unsign
          // Take care to never increment the iterator past
          // the end, since MSVC 8.0 (brokenly), assumes that
          // doing that, even if no access happens, is a bug.
-         unsigned               remaining = static_cast<unsigned>(std::distance(line_begin, par_end));
-         string::const_iterator line_end  = line_begin + ((remaining < line_length) ? remaining : line_length);
+         unsigned                    remaining = static_cast<unsigned>(std::distance(line_begin, par_end));
+         std::string::const_iterator line_end  = line_begin + ((remaining < line_length) ? remaining : line_length);
 
          // prevent chopped words
          // Is line_end between two non-space characters?
          if((*(line_end - 1) != ' ') && ((line_end < par_end) && (*line_end != ' ')))
          {
             // find last ' ' in the second half of the current paragraph line
-            string::const_iterator last_space =
-               find(reverse_iterator<string::const_iterator>(line_end), reverse_iterator<string::const_iterator>(line_begin), ' ').base();
+            std::string::const_iterator last_space = find(std::reverse_iterator<std::string::const_iterator>(line_end),
+                                                          std::reverse_iterator<std::string::const_iterator>(line_begin), ' ')
+                                                        .base();
 
             if(last_space != line_begin)
             {
@@ -475,7 +460,7 @@ void format_paragraph(std::ostream &os, std::string par, unsigned indent, unsign
          } // prevent chopped words
 
          // write line to stream
-         copy(line_begin, line_end, ostream_iterator<char>(os));
+         copy(line_begin, line_end, std::ostream_iterator<char>(os));
 
          if(first_line)
          {
@@ -518,6 +503,9 @@ void format_description(std::ostream &os, const std::string &desc, unsigned firs
    // Note: can't use 'tokenizer' as name of typedef -- borland
    // will consider uses of 'tokenizer' below as uses of
    // boost::tokenizer, not typedef.
+
+   // TODO remove boost tokenizer
+#if 0
    typedef boost::tokenizer<boost::char_separator<char>> tok;
 
    tok paragraphs(desc, char_separator<char>("\n", "", boost::keep_empty_tokens));
@@ -542,11 +530,12 @@ void format_description(std::ostream &os, const std::string &desc, unsigned firs
          }
       }
    } // paragraphs
+#endif
 }
 
 void format_one(std::ostream &os, const option_description &opt, unsigned first_column_width, unsigned line_length)
 {
-   stringstream ss;
+   std::stringstream ss;
    ss << "  " << opt.format_name() << ' ' << opt.format_parameter();
 
    // Don't use ss.rdbuf() since g++ 2.96 is buggy on it.
@@ -583,20 +572,20 @@ unsigned options_description::get_option_column_width() const
    for(i = 0; i < m_options.size(); ++i)
    {
       const option_description &opt = *m_options[i];
-      stringstream              ss;
+      std::stringstream         ss;
       ss << "  " << opt.format_name() << ' ' << opt.format_parameter();
-      width = (max)(width, static_cast<unsigned>(ss.str().size()));
+      width = std::max(width, static_cast<unsigned>(ss.str().size()));
    }
 
    /* Get width of groups as well*/
    for(unsigned j = 0; j < groups.size(); ++j)
-      width = max(width, groups[j]->get_option_column_width());
+      width = std::max(width, groups[j]->get_option_column_width());
 
    /* this is the column were description should start, if first
       column is longer, we go to a new line */
    const unsigned start_of_description_column = m_line_length - m_min_description_length;
 
-   width = (min)(width, start_of_description_column - 1);
+   width = std::min(width, start_of_description_column - 1);
 
    /* add an additional space to improve readability */
    ++width;
@@ -630,6 +619,3 @@ void options_description::print(std::ostream &os, unsigned width) const
       groups[j]->print(os, width);
    }
 }
-
-} // namespace program_options
-} // namespace boost

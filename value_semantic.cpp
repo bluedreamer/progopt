@@ -3,45 +3,35 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_PROGRAM_OPTIONS_SOURCE
-#include <boost/program_options/config.hpp>
-#include <boost/program_options/detail/cmdline.hpp>
-#include <boost/program_options/detail/convert.hpp>
-#include <boost/program_options/value_semantic.hpp>
+#include <config.h>
+#include <convert.h>
+#include <detail_cmdline.h>
 #include <set>
+#include <value_semantic.h>
 
 #include <cctype>
 
-namespace boost
-{
-namespace program_options
-{
-using namespace std;
-
-#ifndef BOOST_NO_STD_WSTRING
-namespace
-{
 std::string convert_value(const std::wstring &s)
 {
    try
    {
-      return to_local_8_bit(s);
+      // TODO fix me
+      //      return to_local_8_bit(s);
+      return {};
    }
    catch(const std::exception &)
    {
       return "<unrepresentable unicode string>";
    }
 }
-} // namespace
-#endif
 
-void value_semantic_codecvt_helper<char>::parse(boost::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const
+void value_semantic_codecvt_helper<char>::parse(std::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const
 {
    if(utf8)
    {
 #ifndef BOOST_NO_STD_WSTRING
       // Need to convert to local encoding.
-      std::vector<string> local_tokens;
+      std::vector<std::string> local_tokens;
       for(unsigned i = 0; i < new_tokens.size(); ++i)
       {
          std::wstring w = from_utf8(new_tokens[i]);
@@ -60,9 +50,9 @@ void value_semantic_codecvt_helper<char>::parse(boost::any &value_store, const s
 }
 
 #ifndef BOOST_NO_STD_WSTRING
-void value_semantic_codecvt_helper<wchar_t>::parse(boost::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const
+void value_semantic_codecvt_helper<wchar_t>::parse(std::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const
 {
-   std::vector<wstring> tokens;
+   std::vector<std::wstring> tokens;
    if(utf8)
    {
       // Convert from utf8
@@ -84,7 +74,7 @@ void value_semantic_codecvt_helper<wchar_t>::parse(boost::any &value_store, cons
 }
 #endif
 
-BOOST_PROGRAM_OPTIONS_DECL std::string arg("arg");
+std::string arg("arg");
 
 std::string untyped_value::name() const
 {
@@ -107,21 +97,21 @@ unsigned untyped_value::max_tokens() const
       return 1;
 }
 
-void untyped_value::xparse(boost::any &value_store, const std::vector<std::string> &new_tokens) const
+void untyped_value::xparse(std::any &value_store, const std::vector<std::string> &new_tokens) const
 {
-   if(!value_store.empty())
+   if(value_store.has_value())
       boost::throw_exception(multiple_occurrences());
    if(new_tokens.size() > 1)
       boost::throw_exception(multiple_values());
    value_store = new_tokens.empty() ? std::string("") : new_tokens.front();
 }
 
-BOOST_PROGRAM_OPTIONS_DECL typed_value<bool> *bool_switch()
+typed_value<bool> *bool_switch()
 {
    return bool_switch(0);
 }
 
-BOOST_PROGRAM_OPTIONS_DECL typed_value<bool> *bool_switch(bool *v)
+typed_value<bool> *bool_switch(bool *v)
 {
    typed_value<bool> *r = new typed_value<bool>(v);
    r->default_value(0);
@@ -136,18 +126,18 @@ BOOST_PROGRAM_OPTIONS_DECL typed_value<bool> *bool_switch(bool *v)
     Case is ignored. The 'xs' vector can either be empty, in which
     case the value is 'true', or can contain explicit value.
 */
-BOOST_PROGRAM_OPTIONS_DECL void validate(any &v, const vector<string> &xs, bool *, int)
+void validate(std::any &v, const std::vector<std::string> &xs, bool *, int)
 {
    check_first_occurrence(v);
-   string s(get_single_string(xs, true));
+   std::string s(get_single_string(xs, true));
 
    for(size_t i = 0; i < s.size(); ++i)
       s[i] = char(tolower(s[i]));
 
    if(s.empty() || s == "on" || s == "yes" || s == "1" || s == "true")
-      v = any(true);
+      v = std::any(true);
    else if(s == "off" || s == "no" || s == "0" || s == "false")
-      v = any(false);
+      v = std::any(false);
    else
       boost::throw_exception(invalid_bool_value(s));
 }
@@ -157,46 +147,43 @@ BOOST_PROGRAM_OPTIONS_DECL void validate(any &v, const vector<string> &xs, bool 
 // create auxiliary 'widen' routine to convert from char* into
 // needed string type, and that's more work.
 #if !defined(BOOST_NO_STD_WSTRING)
-BOOST_PROGRAM_OPTIONS_DECL
-void validate(any &v, const vector<wstring> &xs, bool *, int)
+void validate(std::any &v, const std::vector<std::wstring> &xs, bool *, int)
 {
    check_first_occurrence(v);
-   wstring s(get_single_string(xs, true));
+   std::wstring s(get_single_string(xs, true));
 
    for(size_t i = 0; i < s.size(); ++i)
       s[i] = wchar_t(tolower(s[i]));
 
    if(s.empty() || s == L"on" || s == L"yes" || s == L"1" || s == L"true")
-      v = any(true);
+      v = std::any(true);
    else if(s == L"off" || s == L"no" || s == L"0" || s == L"false")
-      v = any(false);
+      v = std::any(false);
    else
       boost::throw_exception(invalid_bool_value(convert_value(s)));
 }
 #endif
-BOOST_PROGRAM_OPTIONS_DECL
-void validate(any &v, const vector<string> &xs, std::string *, int)
+
+void validate(std::any &v, const std::vector<std::string> &xs, std::string *, int)
 {
    check_first_occurrence(v);
-   v = any(get_single_string(xs));
+   v = std::any(get_single_string(xs));
 }
 
 #if !defined(BOOST_NO_STD_WSTRING)
-BOOST_PROGRAM_OPTIONS_DECL
-void validate(any &v, const vector<wstring> &xs, std::string *, int)
+void validate(std::any &v, const std::vector<std::wstring> &xs, std::string *, int)
 {
    check_first_occurrence(v);
-   v = any(get_single_string(xs));
+   v = std::any(get_single_string(xs));
 }
 #endif
 
 namespace validators
 {
-BOOST_PROGRAM_OPTIONS_DECL
-void check_first_occurrence(const boost::any &value)
+void check_first_occurrence(const std::any &value)
 {
-   if(!value.empty())
-      boost::throw_exception(multiple_occurrences());
+   if(value.has_value())
+      throw multiple_occurrences();
 }
 } // namespace validators
 
@@ -206,13 +193,11 @@ invalid_option_value::invalid_option_value(const std::string &bad_value)
    set_substitute("value", bad_value);
 }
 
-#ifndef BOOST_NO_STD_WSTRING
 invalid_option_value::invalid_option_value(const std::wstring &bad_value)
    : validation_error(validation_error::invalid_option_value)
 {
    set_substitute("value", convert_value(bad_value));
 }
-#endif
 
 invalid_bool_value::invalid_bool_value(const std::string &bad_value)
    : validation_error(validation_error::invalid_bool_value)
@@ -243,7 +228,7 @@ const char *error_with_option_name::what() const throw()
    return m_message.c_str();
 }
 
-void error_with_option_name::replace_token(const string &from, const string &to) const
+void error_with_option_name::replace_token(const std::string &from, const std::string &to) const
 {
    for(;;)
    {
@@ -255,17 +240,17 @@ void error_with_option_name::replace_token(const string &from, const string &to)
    }
 }
 
-string error_with_option_name::get_canonical_option_prefix() const
+std::string error_with_option_name::get_canonical_option_prefix() const
 {
    switch(m_option_style)
    {
-      case command_line_style::allow_dash_for_short:
+      case style_t::allow_dash_for_short:
          return "-";
-      case command_line_style::allow_slash_for_short:
+      case style_t::allow_slash_for_short:
          return "/";
-      case command_line_style::allow_long_disguise:
+      case style_t::allow_long_disguise:
          return "-";
-      case command_line_style::allow_long:
+      case style_t::allow_long:
          return "--";
       case 0:
          return "";
@@ -275,16 +260,16 @@ string error_with_option_name::get_canonical_option_prefix() const
                           "allow_long_disguise or allow_long]");
 }
 
-string error_with_option_name::get_canonical_option_name() const
+std::string error_with_option_name::get_canonical_option_name() const
 {
    if(!m_substitutions.find("option")->second.length())
       return m_substitutions.find("original_token")->second;
 
-   string original_token = strip_prefixes(m_substitutions.find("original_token")->second);
-   string option_name    = strip_prefixes(m_substitutions.find("option")->second);
+   std::string original_token = strip_prefixes(m_substitutions.find("original_token")->second);
+   std::string option_name    = strip_prefixes(m_substitutions.find("option")->second);
 
    //  For long options, use option name
-   if(m_option_style == command_line_style::allow_long || m_option_style == command_line_style::allow_long_disguise)
+   if(m_option_style == style_t::allow_long || m_option_style == style_t::allow_long_disguise)
       return get_canonical_option_prefix() + option_name;
 
    //  For short options use first letter of original_token
@@ -295,7 +280,7 @@ string error_with_option_name::get_canonical_option_name() const
    return option_name;
 }
 
-void error_with_option_name::substitute_placeholders(const string &error_template) const
+void error_with_option_name::substitute_placeholders(const std::string &error_template) const
 {
    m_message = error_template;
    std::map<std::string, std::string> substitutions(m_substitutions);
@@ -305,7 +290,8 @@ void error_with_option_name::substitute_placeholders(const string &error_templat
    //
    //  replace placeholder with defaults if values are missing
    //
-   for(map<string, string_pair>::const_iterator iter = m_substitution_defaults.begin(); iter != m_substitution_defaults.end(); ++iter)
+   for(std::map<std::string, string_pair>::const_iterator iter = m_substitution_defaults.begin(); iter != m_substitution_defaults.end();
+       ++iter)
    {
       // missing parameter: use default
       if(substitutions.count(iter->first) == 0 || substitutions[iter->first].length() == 0)
@@ -316,22 +302,22 @@ void error_with_option_name::substitute_placeholders(const string &error_templat
    //  replace placeholder with values
    //  placeholder are denoted by surrounding '%'
    //
-   for(map<string, string>::iterator iter = substitutions.begin(); iter != substitutions.end(); ++iter)
+   for(std::map<std::string, std::string>::iterator iter = substitutions.begin(); iter != substitutions.end(); ++iter)
       replace_token('%' + iter->first + '%', iter->second);
 }
 
-void ambiguous_option::substitute_placeholders(const string &original_error_template) const
+void ambiguous_option::substitute_placeholders(const std::string &original_error_template) const
 {
    // For short forms, all alternatives must be identical, by
    //      definition, to the specified option, so we don't need to
    //      display alternatives
-   if(m_option_style == command_line_style::allow_dash_for_short || m_option_style == command_line_style::allow_slash_for_short)
+   if(m_option_style == style_t::allow_dash_for_short || m_option_style == style_t::allow_slash_for_short)
    {
       error_with_option_name::substitute_placeholders(original_error_template);
       return;
    }
 
-   string error_template = original_error_template;
+   std::string error_template = original_error_template;
    // remove duplicates using std::set
    std::set<std::string>    alternatives_set(m_alternatives.begin(), m_alternatives.end());
    std::vector<std::string> alternatives_vec(alternatives_set.begin(), alternatives_set.end());
@@ -355,7 +341,7 @@ void ambiguous_option::substitute_placeholders(const string &original_error_temp
    error_with_option_name::substitute_placeholders(error_template);
 }
 
-string validation_error::get_template(kind_t kind)
+std::string validation_error::get_template(kind_t kind)
 {
    // Initially, store the message in 'const char*' variable,
    // to avoid conversion to std::string in all cases.
@@ -384,6 +370,3 @@ string validation_error::get_template(kind_t kind)
    }
    return msg;
 }
-
-} // namespace program_options
-} // namespace boost

@@ -3,13 +3,10 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_EOF_ITERATOR_VP_2004_03_12
-#define BOOST_EOF_ITERATOR_VP_2004_03_12
+#pragma once
 
-#include <boost/iterator/iterator_facade.hpp>
+//#include <boost/iterator/iterator_facade.hpp>
 
-namespace boost
-{
 /** The 'eof_iterator' class is useful for constructing forward iterators
     in cases where iterator extract data from some source and it's easy
     to detect 'eof' \-- i.e. the situation where there's no data. One
@@ -42,7 +39,7 @@ namespace boost
     implicitly moves data pointer, like for stream operation.
 */
 template<class Derived, class ValueType>
-class eof_iterator : public iterator_facade<Derived, const ValueType, forward_traversal_tag>
+class eof_iterator // TODO find out what this did : public iterator_facade<Derived, const ValueType, forward_traversal_tag>
 {
 public:
    eof_iterator()
@@ -81,6 +78,3 @@ private: // iterator core operations
    bool      m_at_eof;
    ValueType m_value;
 };
-} // namespace boost
-
-#endif
