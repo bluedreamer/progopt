@@ -5,7 +5,7 @@
 
 /* Shows how to use both command line and config file. */
 
-#include <boost/program_options.hpp>
+#include "program_options.hpp"
 namespace po = boost::program_options;
 
 

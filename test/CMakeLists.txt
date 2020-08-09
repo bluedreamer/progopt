@@ -2,61 +2,61 @@ enable_testing()
 
 add_executable(cmdline_test cmdline_test.cpp)
 add_test(test_cmdline_test cmdline_test)
-target_link_libraries(cmdline_test libprogopt)
+target_link_libraries(cmdline_test ${LIBRARY_NAME})
 
 add_executable(exception_test exception_test.cpp)
 add_test(test_exception_test exception_test)
-target_link_libraries(exception_test libprogopt)
+target_link_libraries(exception_test ${LIBRARY_NAME})
 
 add_executable(exception_txt_test exception_txt_test.cpp)
 add_test(test_exception_txt_test exception_txt_test)
-target_link_libraries(exception_txt_test libprogopt)
+target_link_libraries(exception_txt_test ${LIBRARY_NAME})
 
 add_executable(optional_test optional_test.cpp)
 add_test(test_optional_test optional_test)
-target_link_libraries(optional_test libprogopt)
+target_link_libraries(optional_test ${LIBRARY_NAME})
 
 add_executable(options_description_test options_description_test.cpp)
 add_test(test_options_description_test options_description_test)
-target_link_libraries(options_description_test libprogopt)
+target_link_libraries(options_description_test ${LIBRARY_NAME})
 
 add_executable(parsers_test parsers_test.cpp)
 add_test(NAME test_parsers_test COMMAND parsers_test config_test.cfg WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(parsers_test libprogopt)
+target_link_libraries(parsers_test ${LIBRARY_NAME})
 
 add_executable(positional_options_test positional_options_test.cpp)
 add_test(test_positional_options_test positional_options_test)
-target_link_libraries(positional_options_test libprogopt)
+target_link_libraries(positional_options_test ${LIBRARY_NAME})
 
 add_executable(quick quick.cpp)
 add_test(NAME test_quick COMMAND quick --path=initial)
-target_link_libraries(quick libprogopt)
+target_link_libraries(quick ${LIBRARY_NAME})
 
 add_executable(required_test required_test.cpp)
 add_test(NAME test_required_test COMMAND required_test required_test.cfg WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(required_test libprogopt)
+target_link_libraries(required_test ${LIBRARY_NAME})
 
 add_executable(split_test split_test.cpp)
 add_test(test_split_test split_test)
-target_link_libraries(split_test libprogopt)
+target_link_libraries(split_test ${LIBRARY_NAME})
 
 add_executable(test_convert test_convert.cpp)
 add_test(test_test_convert test_convert)
-target_link_libraries(test_convert libprogopt)
+target_link_libraries(test_convert ${LIBRARY_NAME})
 
 add_executable(unicode_test unicode_test.cpp)
 add_test(test_unicode_test unicode_test)
-target_link_libraries(unicode_test libprogopt)
+target_link_libraries(unicode_test ${LIBRARY_NAME})
 
 add_executable(unrecognized_test unrecognized_test.cpp)
 add_test(test_unrecognized_test unrecognized_test)
-target_link_libraries(unrecognized_test libprogopt)
+target_link_libraries(unrecognized_test ${LIBRARY_NAME})
 
 add_executable(variable_map_test variable_map_test.cpp)
 add_test(test_variable_map_test variable_map_test)
-target_link_libraries(variable_map_test libprogopt)
+target_link_libraries(variable_map_test ${LIBRARY_NAME})
 
 add_executable(winmain winmain.cpp)
 add_test(test_winmain winmain)
-target_link_libraries(winmain libprogopt)
+target_link_libraries(winmain ${LIBRARY_NAME})
 

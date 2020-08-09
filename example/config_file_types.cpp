@@ -6,7 +6,7 @@
 // This example shows a config file (in ini format) being parsed by the
 // program_options library. It includes a numebr of different value types.
 
-#include <boost/program_options.hpp>
+#include "program_options.hpp"
 namespace po = boost::program_options;
 
 #include <assert.h>

@@ -20,7 +20,7 @@
 // See the bottom of this file for full usage examples
 //
 
-#include <boost/program_options.hpp>
+#include "program_options.hpp"
 namespace po = boost::program_options;
 #include <string>
 #include <iostream>
