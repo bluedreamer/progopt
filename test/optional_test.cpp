@@ -3,7 +3,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "program_options.hpp"
-namespace po = boost::program_options;
+namespace po = boost::argsy;
 
 #include <boost/optional.hpp>
 

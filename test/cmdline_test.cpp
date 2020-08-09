@@ -3,11 +3,11 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "program_options/cmdline.hpp"
-#include "program_options/options_description.hpp"
-#include "program_options/detail/cmdline.hpp"
-using namespace boost::program_options;
-using boost::program_options::detail::cmdline;
+#include "argsy/cmdline.hpp"
+#include "argsy/options_description.hpp"
+#include "argsy/detail/cmdline.hpp"
+using namespace boost::argsy;
+using boost::argsy::detail::cmdline;
 
 #include <iostream>
 #include <sstream>
@@ -60,7 +60,7 @@ struct test_case {
 
 /* Parses the syntax description in 'syntax' and initialized
    'cmd' accordingly' 
-   The "boost::program_options" in parameter type is needed because CW9 
+   The "boost::argsy" in parameter type is needed because CW9
    has std::detail and it causes an ambiguity.
 */
 void apply_syntax(options_description& desc, 

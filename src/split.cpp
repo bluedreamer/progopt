@@ -5,13 +5,13 @@
 
 #define BOOST_PROGRAM_OPTIONS_SOURCE
 
-#include <boost/program_options/parsers.hpp>
+#include "argsy/parsers.hpp"
 #include <boost/tokenizer.hpp>
 
 #include <string>
 #include <vector>
 
-namespace boost { namespace program_options { namespace detail {
+namespace boost { namespace argsy { namespace detail {
 
    template< class charT >
    std::vector<std::basic_string<charT> > 
@@ -38,7 +38,7 @@ namespace boost { namespace program_options { namespace detail {
    
 }}}   // namespace
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
    // Take a command line string and splits in into tokens, according
    // to the given collection of seperators chars.

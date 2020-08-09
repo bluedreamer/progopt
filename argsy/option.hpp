@@ -4,12 +4,12 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
-#include "program_options/config.hpp"
+#include "argsy/config.hpp"
 
 #include <string>
 #include <vector>
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
     /** Option found in input source.
         Contains a key and a value. The key, in turn, can be a string (name of

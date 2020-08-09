@@ -6,11 +6,11 @@
 
 
 #define BOOST_PROGRAM_OPTIONS_SOURCE
-#include <boost/program_options/config.hpp>
-#include <boost/program_options/options_description.hpp>
+#include "argsy/config.hpp"
+#include "argsy/options_description.hpp"
 // FIXME: this is only to get multiple_occurrences class
 // should move that to a separate headers.
-#include <boost/program_options/parsers.hpp>
+#include "argsy/parsers.hpp"
 
 
 #include <boost/lexical_cast.hpp>
@@ -26,7 +26,7 @@
 #include <iterator>
 using namespace std;
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
    namespace {
 
@@ -456,7 +456,7 @@ namespace boost { namespace program_options {
                 // only one tab per paragraph allowed
                 if (count(par.begin(), par.end(), '\t') > 1)
                 {
-                    boost::throw_exception(program_options::error(
+                    boost::throw_exception(argsy::error(
                         "Only one tab per paragraph is allowed in the options description"));
                 }
           

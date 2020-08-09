@@ -5,29 +5,28 @@
 
 #pragma once
 
-#include "program_options/detail/convert.hpp"
+#include "argsy/detail/convert.hpp"
 
 #include <iterator>
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
     template<class charT>
     basic_command_line_parser<charT>::
-    basic_command_line_parser(const std::vector<
-                              std::basic_string<charT> >& xargs)
-       : detail::cmdline(to_internal(xargs))
-    {}
-
+    basic_command_line_parser(const std::vector<std::basic_string<charT> >& xargs)
+       : detail::cmdline({})
+    {
+          //TODO bug waiting to happen - removed xargs from above cmdline ctor
+    }
 
     template<class charT>
     basic_command_line_parser<charT>::
     basic_command_line_parser(int argc, const charT* const argv[])
     : detail::cmdline(
-        to_internal(std::vector<std::basic_string<charT> >(argv+1, argv+argc))),
+        std::vector<std::basic_string<charT> >(argv+1, argv+argc)),
         m_desc()
     {}
 
-    
     template<class charT>
     basic_command_line_parser<charT>& 
     basic_command_line_parser<charT>::options(const options_description& desc)

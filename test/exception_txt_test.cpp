@@ -4,11 +4,11 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include "program_options/parsers.hpp"
-#include "program_options/options_description.hpp"
-#include "program_options/variables_map.hpp"
-#include "program_options/cmdline.hpp"
-using namespace boost::program_options;
+#include "argsy/parsers.hpp"
+#include "argsy/options_description.hpp"
+#include "argsy/variables_map.hpp"
+#include "argsy/cmdline.hpp"
+using namespace boost::argsy;
 
 #include <iostream>
 #include <sstream>
@@ -576,16 +576,16 @@ void test_invalid_command_line_style_exception_msg()
     invalid_styles.push_back(allow_short | allow_dash_for_short);
     invalid_styles.push_back(allow_long);
     vector<string> invalid_diagnostics;
-    invalid_diagnostics.push_back("boost::program_options misconfiguration: choose one "
+    invalid_diagnostics.push_back("boost::argsy misconfiguration: choose one "
                                   "or other of 'command_line_style::allow_slash_for_short' "
                                   "(slashes) or 'command_line_style::allow_dash_for_short' "
                                   "(dashes) for short options.");
-    invalid_diagnostics.push_back("boost::program_options misconfiguration: choose one "
+    invalid_diagnostics.push_back("boost::argsy misconfiguration: choose one "
                                   "or other of 'command_line_style::short_allow_next' "
                                   "(whitespace separated arguments) or "
                                   "'command_line_style::short_allow_adjacent' ('=' "
                                   "separated arguments) for short options.");
-    invalid_diagnostics.push_back("boost::program_options misconfiguration: choose one "
+    invalid_diagnostics.push_back("boost::argsy misconfiguration: choose one "
                                   "or other of 'command_line_style::long_allow_next' "
                                   "(whitespace separated arguments) or "
                                   "'command_line_style::long_allow_adjacent' ('=' "

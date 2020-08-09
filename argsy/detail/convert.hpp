@@ -1,10 +1,11 @@
+#if 0
 // Copyright Vladimir Prus 2004.
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
-#include "program_options/config.hpp"
+#include "argsy/config.hpp"
 
 #if !defined(BOOST_NO_STD_WSTRING)
 
@@ -59,10 +60,10 @@ namespace boost {
     BOOST_PROGRAM_OPTIONS_DECL std::wstring
     from_local_8_bit(const std::string& s);
 
-    namespace program_options
+    namespace argsy
     {
         /** Convert the input string into internal encoding used by
-            program_options. Presence of this function allows to avoid
+            argsy. Presence of this function allows to avoid
             specializing all methods which access input on wchar_t.
         */
         BOOST_PROGRAM_OPTIONS_DECL std::string to_internal(const std::string&);
@@ -88,7 +89,7 @@ namespace boost {
 #include <vector>
 #include <string>
 namespace boost{
-   namespace program_options{
+   namespace argsy{
         BOOST_PROGRAM_OPTIONS_DECL std::string to_internal(const std::string&);
 
         template<class T>
@@ -102,3 +103,5 @@ namespace boost{
    }
 }
 #endif
+
+   #endif

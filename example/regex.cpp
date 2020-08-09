@@ -24,7 +24,7 @@
 #include <regex>
 
 using namespace boost;
-using namespace boost::program_options;
+using namespace boost::argsy;
 
 #include <iostream>
 using namespace std;
@@ -48,7 +48,7 @@ void validate(boost::any& v,
 {
     static std::regex r("\\d\\d\\d-(\\d\\d\\d)");
 
-    using namespace boost::program_options;
+    using namespace boost::argsy;
 
     // Make sure no previous assignment to 'a' was made.
     validators::check_first_occurrence(v);

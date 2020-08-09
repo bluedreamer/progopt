@@ -4,7 +4,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "program_options.hpp"
-using namespace boost::program_options;
+using namespace boost::argsy;
 
 #include <string>
 #include <iostream>

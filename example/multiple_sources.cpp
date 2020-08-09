@@ -6,7 +6,7 @@
 /* Shows how to use both command line and config file. */
 
 #include "program_options.hpp"
-namespace po = boost::program_options;
+namespace po = boost::argsy;
 
 
 #include <iostream>

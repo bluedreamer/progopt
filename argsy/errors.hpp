@@ -4,14 +4,14 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
-#include "program_options/config.hpp"
+#include "argsy/config.hpp"
 
 #include <string>
 #include <stdexcept>
 #include <vector>
 #include <map>
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
     inline std::string strip_prefixes(const std::string& text)
     {

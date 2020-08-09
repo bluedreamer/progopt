@@ -4,15 +4,15 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_PROGRAM_OPTIONS_SOURCE
-#include <boost/program_options/config.hpp>
+#include "argsy/config.hpp"
 
-#include <boost/program_options/positional_options.hpp>
+#include "argsy/positional_options.hpp"
 
 #include <boost/limits.hpp>
 
 #include <cassert>
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
     positional_options_description::positional_options_description()
     {}

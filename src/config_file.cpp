@@ -5,18 +5,18 @@
 
 
 #define BOOST_PROGRAM_OPTIONS_SOURCE
-#include <boost/program_options/config.hpp>
+#include "argsy/config.hpp"
 
-#include <boost/program_options/detail/config_file.hpp>
-#include <boost/program_options/errors.hpp>
-#include <boost/program_options/detail/convert.hpp>
+#include "argsy/detail/config_file.hpp"
+#include "argsy/errors.hpp"
+#include "argsy/detail/convert.hpp"
 #include <boost/throw_exception.hpp>
 
 #include <iostream>
 #include <fstream>
 #include <cassert>
 
-namespace boost { namespace program_options { namespace detail {
+namespace boost { namespace argsy { namespace detail {
 
     using namespace std;
 
@@ -166,7 +166,7 @@ namespace boost { namespace program_options { namespace detail {
 }}}
 
 #if 0
-using boost::program_options::config_file;
+using boost::argsy::config_file;
 
 #include <sstream>
 #include <cassert>

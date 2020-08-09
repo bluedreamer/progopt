@@ -4,12 +4,12 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
-#include "program_options/config.hpp"
-#include "program_options/errors.hpp"
-#include "program_options/cmdline.hpp"
-#include "program_options/option.hpp"
-#include "program_options/options_description.hpp"
-#include "program_options/positional_options.hpp"
+#include "argsy/config.hpp"
+#include "argsy/errors.hpp"
+#include "argsy/cmdline.hpp"
+#include "argsy/option.hpp"
+#include "argsy/options_description.hpp"
+#include "argsy/positional_options.hpp"
 
 #include <boost/detail/workaround.hpp>
 #include <boost/function.hpp>
@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-namespace boost { namespace program_options { namespace detail {
+namespace boost { namespace argsy { namespace detail {
 
     /** Command line parser class. Main requirements were:
         - Powerful enough to support all common uses.
@@ -49,7 +49,7 @@ namespace boost { namespace program_options { namespace detail {
     class BOOST_PROGRAM_OPTIONS_DECL cmdline {
     public:
 
-        typedef ::boost::program_options::command_line_style::style_t style_t;
+        typedef ::boost::argsy::command_line_style::style_t style_t;
 
         typedef function1<std::pair<std::string, std::string>, 
                           const std::string&> 

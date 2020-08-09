@@ -13,7 +13,7 @@
 // forward declaration
 namespace boost { template<class T> class optional; }
 
-namespace boost { namespace program_options { 
+namespace boost { namespace argsy {
 
     extern BOOST_PROGRAM_OPTIONS_DECL std::string arg;
     
@@ -191,7 +191,7 @@ namespace boost { namespace program_options {
     value()
     {
         // Explicit qualification is vc6 workaround.
-        return boost::program_options::value<T>(0);
+        return boost::argsy::value<T>(0);
     }
 
     template<class T>

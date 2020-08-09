@@ -7,32 +7,24 @@
 #include <boost/config.hpp>
 
 #define BOOST_PROGRAM_OPTIONS_SOURCE
-#include <boost/program_options/config.hpp>
-#include <boost/program_options/parsers.hpp>
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/positional_options.hpp>
-#include <boost/program_options/detail/cmdline.hpp>
-#include <boost/program_options/detail/config_file.hpp>
-#include <boost/program_options/environment_iterator.hpp>
-#include <boost/program_options/detail/convert.hpp>
+#include "argsy/config.hpp"
+#include "argsy/parsers.hpp"
+#include "argsy/options_description.hpp"
+#include "argsy/positional_options.hpp"
+#include "argsy/detail/cmdline.hpp"
+#include "argsy/detail/config_file.hpp"
+#include "argsy/environment_iterator.hpp"
+#include "argsy/detail/convert.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/throw_exception.hpp>
 
 #include <cctype>
 #include <fstream>
-
-#if !defined(__GNUC__) || __GNUC__ < 3
-#include <iostream>
-#else
 #include <istream>
-#endif
 
-#ifdef _WIN32
-#include <stdlib.h>
-#else
+
 #include <unistd.h>
-#endif
 
 // The 'environ' should be declared in some cases. E.g. Linux man page says:
 // (This variable must be declared in the user program, but is declared in 
@@ -62,7 +54,7 @@ extern char** environ;
 
 using namespace std;
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
 #ifndef BOOST_NO_STD_WSTRING
     namespace {
@@ -72,15 +64,15 @@ namespace boost { namespace program_options {
             result.string_key = opt.string_key;
             result.position_key = opt.position_key;
             result.unregistered = opt.unregistered;
-            
-            std::transform(opt.value.begin(), opt.value.end(),
-                           back_inserter(result.value),
-                           boost::bind(from_utf8, _1));
 
-            std::transform(opt.original_tokens.begin(), 
-                           opt.original_tokens.end(),
-                           back_inserter(result.original_tokens),
-                           boost::bind(from_utf8, _1));
+//            std::transform(opt.value.begin(), opt.value.end(),
+//                           back_inserter(result.value),
+//                           boost::bind(from_utf8, _1));
+//
+//            std::transform(opt.original_tokens.begin(),
+//                           opt.original_tokens.end(),
+//                           back_inserter(result.original_tokens),
+//                           boost::bind(from_utf8, _1));
             return result;
         }
     }
@@ -97,10 +89,8 @@ namespace boost { namespace program_options {
 #endif
 
     template<class charT>
-    basic_parsed_options<charT>
-    parse_config_file(std::basic_istream<charT>& is, 
-                      const options_description& desc,
-                      bool allow_unregistered)
+    basic_parsed_options<charT> parse_config_file(std::basic_istream<charT>& is, const options_description& desc, bool
+    allow_unregistered)
     {    
         set<string> allowed_options;
 

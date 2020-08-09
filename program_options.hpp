@@ -3,15 +3,15 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-//  See www.boost.org/libs/program_options for documentation.
+//  See www.boost.org/libs/argsy for documentation.
 #pragma once
 
-#include "program_options/options_description.hpp"
-#include "program_options/positional_options.hpp"
-#include "program_options/parsers.hpp"
-#include "program_options/variables_map.hpp"
-#include "program_options/cmdline.hpp"
-#include "program_options/errors.hpp"
-#include "program_options/option.hpp"
-#include "program_options/value_semantic.hpp"
-#include "program_options/version.hpp"
+#include "argsy/options_description.hpp"
+#include "argsy/positional_options.hpp"
+#include "argsy/parsers.hpp"
+#include "argsy/variables_map.hpp"
+#include "argsy/cmdline.hpp"
+#include "argsy/errors.hpp"
+#include "argsy/option.hpp"
+#include "argsy/value_semantic.hpp"
+#include "argsy/version.hpp"

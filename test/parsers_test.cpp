@@ -4,12 +4,12 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include "program_options/parsers.hpp"
-#include "program_options/options_description.hpp"
-#include "program_options/variables_map.hpp"
-using namespace boost::program_options;
+#include "argsy/parsers.hpp"
+#include "argsy/options_description.hpp"
+#include "argsy/variables_map.hpp"
+using namespace boost::argsy;
 // We'll use po::value everywhere to workaround vc6 bug.
-namespace po = boost::program_options;
+namespace po = boost::argsy;
 
 #include <boost/function.hpp>
 using namespace boost;

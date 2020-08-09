@@ -5,15 +5,15 @@
 
 
 #define BOOST_PROGRAM_OPTIONS_SOURCE
-#include <boost/program_options/config.hpp>
-#include <boost/program_options/parsers.hpp>
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/value_semantic.hpp>
-#include <boost/program_options/variables_map.hpp>
+#include "argsy/config.hpp"
+#include "argsy/parsers.hpp"
+#include "argsy/options_description.hpp"
+#include "argsy/value_semantic.hpp"
+#include "argsy/variables_map.hpp"
 
 #include <cassert>
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
     using namespace std;
 

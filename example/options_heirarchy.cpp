@@ -5,7 +5,7 @@
 
 // 
 // This is an example of a program that uses multiple facets of the boost
-// program_options library. It will go through different types of config 
+// argsy library. It will go through different types of config
 // options in a heirarchal manner:
 // 1. Default options are set.
 // 2. Command line options are set (they override defaults).
@@ -21,7 +21,7 @@
 //
 
 #include "program_options.hpp"
-namespace po = boost::program_options;
+namespace po = boost::argsy;
 #include <string>
 #include <iostream>
 #include <map>
@@ -506,7 +506,7 @@ option/
     Network Port: 12345
 
 However, if the --verboseity flag is also set, it will override the env
-variable. This illustrates an important example, the way program_options works,
+variable. This illustrates an important example, the way argsy works,
 is that a parser will not override a value that has previously been set by 
 another parser. Thus the env parser doesn't override the command line parser.
 (We will see this again in config files.) Default values are seperate from this

@@ -9,12 +9,12 @@ call = "   hook(10); hook2(10);hook3(0);hook4(0);\n";
 
 def run_test(num_calls, compiler_command):
    f = open("program_options_test.cpp", "w")
-   f.write("""#include <boost/program_options.hpp>
-using namespace boost::program_options;   
+   f.write("""#include <boost/argsy.hpp>
+using namespace boost::argsy;   
 
 void do_it()
 {
-   boost::program_options::options_description desc;
+   boost::argsy::options_description desc;
    desc.add_options()
 """)
    for i in range(0, num_calls):

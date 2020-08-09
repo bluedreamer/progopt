@@ -4,12 +4,12 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include "program_options/cmdline.hpp"
-#include "program_options/options_description.hpp"
-#include "program_options/parsers.hpp"
-#include "program_options/detail/cmdline.hpp"
-using namespace boost::program_options;
-using boost::program_options::detail::cmdline;
+#include "argsy/cmdline.hpp"
+#include "argsy/options_description.hpp"
+#include "argsy/parsers.hpp"
+#include "argsy/detail/cmdline.hpp"
+using namespace boost::argsy;
+using boost::argsy::detail::cmdline;
 
 #include <iostream>
 #include <sstream>

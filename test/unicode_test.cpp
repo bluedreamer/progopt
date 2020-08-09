@@ -4,13 +4,13 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include "program_options/variables_map.hpp"
-#include "program_options/options_description.hpp"
-#include "program_options/parsers.hpp"
-#include "program_options/detail/utf8_codecvt_facet.hpp"
-using namespace boost::program_options;
+#include "argsy/variables_map.hpp"
+#include "argsy/options_description.hpp"
+#include "argsy/parsers.hpp"
+#include "argsy/detail/utf8_codecvt_facet.hpp"
+using namespace boost::argsy;
 // We'll use po::value everywhere to workaround vc6 bug.
-namespace po = boost::program_options;
+namespace po = boost::argsy;
 
 #include <boost/function.hpp>
 using namespace boost;
@@ -49,7 +49,7 @@ void test_unicode_to_unicode()
 void test_unicode_to_native()
 {
     std::codecvt<wchar_t, char, mbstate_t>* facet = 
-        new boost::program_options::detail::utf8_codecvt_facet;
+        new boost::argsy::detail::utf8_codecvt_facet;
     locale::global(locale(locale(), facet));
 
     options_description desc;
@@ -70,7 +70,7 @@ void test_unicode_to_native()
 void test_native_to_unicode()
 {
     std::codecvt<wchar_t, char, mbstate_t>* facet = 
-        new boost::program_options::detail::utf8_codecvt_facet;
+        new boost::argsy::detail::utf8_codecvt_facet;
     locale::global(locale(locale(), facet));
 
     options_description desc;
@@ -135,7 +135,7 @@ void test_command_line()
 void test_config_file()
 {
     std::codecvt<wchar_t, char, mbstate_t>* facet = 
-        new boost::program_options::detail::utf8_codecvt_facet;
+        new boost::argsy::detail::utf8_codecvt_facet;
     locale::global(locale(locale(), facet));
 
     options_description desc;

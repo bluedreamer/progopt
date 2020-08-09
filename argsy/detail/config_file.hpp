@@ -9,12 +9,12 @@
 #include <set>
 
 #include <boost/noncopyable.hpp>
-#include <boost/program_options/config.hpp>
-#include <boost/program_options/option.hpp>
-#include <boost/program_options/eof_iterator.hpp>
+#include "argsy/config.hpp"
+#include "argsy/option.hpp"
+#include "argsy/eof_iterator.hpp"
 
 #include <boost/detail/workaround.hpp>
-#include <boost/program_options/detail/convert.hpp>
+#include "argsy/detail/convert.hpp"
 
 #if BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
 #include <istream> // std::getline
@@ -24,14 +24,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/shared_ptr.hpp>
 
-#ifdef BOOST_MSVC
-# pragma warning(push)
-# pragma warning(disable: 4251) // class XYZ needs to have dll-interface to be used by clients of class XYZ
-#endif
-
-
-
-namespace boost { namespace program_options { namespace detail {
+namespace boost { namespace argsy { namespace detail {
 
     /** Standalone parser for config files in ini-line format.
         The parser is a model of single-pass lvalue iterator, and
@@ -79,11 +72,6 @@ namespace boost { namespace program_options { namespace detail {
         
         void get();
         
-#if BOOST_WORKAROUND(_MSC_VER, <= 1900)
-        void decrement() {}
-        void advance(difference_type) {}
-#endif
-
     protected: // Stubs for derived classes
 
         // Obtains next line from the config file
@@ -165,21 +153,14 @@ namespace boost { namespace program_options { namespace detail {
     {
         std::basic_string<charT> in;
         if (std::getline(*is, in)) {
-            s = to_internal(in);
+           for(auto x: in)
+           {
+              s+=x;
+           }
             return true;
         } else {
             return false;
         }
     }
-
-    // Specialization is needed to workaround getline bug on Comeau.
-#if BOOST_WORKAROUND(__COMO_VERSION__, BOOST_TESTED_AT(4303)) || \
-        (defined(__sgi) && BOOST_WORKAROUND(_COMPILER_VERSION, BOOST_TESTED_AT(741)))
-    template<>
-    bool
-    basic_config_file_iterator<wchar_t>::getline(std::string& s);
-#endif
-
-    
 
 }}}

@@ -3,7 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
-#include "program_options/config.hpp"
+#include "argsy/config.hpp"
 
 #include <boost/any.hpp>
 #include <boost/shared_ptr.hpp>
@@ -12,7 +12,7 @@
 #include <map>
 #include <set>
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
     template<class charT>
     class basic_parsed_options;

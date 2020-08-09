@@ -4,15 +4,15 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_PROGRAM_OPTIONS_SOURCE
-#include <boost/program_options/config.hpp>
+#include "argsy/config.hpp"
 
 #include <boost/config.hpp>
 
-#include <boost/program_options/detail/cmdline.hpp>
-#include <boost/program_options/errors.hpp>
-#include <boost/program_options/value_semantic.hpp>
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/positional_options.hpp>
+#include "argsy/detail/cmdline.hpp"
+#include "argsy/errors.hpp"
+#include "argsy/value_semantic.hpp"
+#include "argsy/options_description.hpp"
+#include "argsy/positional_options.hpp"
 #include <boost/throw_exception.hpp>
 
 #include <boost/bind.hpp>
@@ -29,10 +29,10 @@
 
 #include <iostream>
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
     using namespace std;
-    using namespace boost::program_options::command_line_style;
+    using namespace boost::argsy::command_line_style;
     
     
     string 
@@ -75,12 +75,12 @@ namespace boost { namespace program_options {
 }}
 
 
-namespace boost { namespace program_options { namespace detail {
+namespace boost { namespace argsy { namespace detail {
 
     // vc6 needs this, but borland chokes when this is added.
 #if BOOST_WORKAROUND(_MSC_VER, < 1300)
     using namespace std;
-    using namespace program_options;
+    using namespace argsy;
 #endif
 
 
@@ -135,7 +135,7 @@ namespace boost { namespace program_options { namespace detail {
         const char* error = 0;
         if (allow_some_long && 
             !(style & long_allow_adjacent) && !(style & long_allow_next))
-            error = "boost::program_options misconfiguration: "
+            error = "boost::argsy misconfiguration: "
                     "choose one or other of 'command_line_style::long_allow_next' "
                     "(whitespace separated arguments) or "
                     "'command_line_style::long_allow_adjacent' ('=' separated arguments) for "
@@ -143,7 +143,7 @@ namespace boost { namespace program_options { namespace detail {
 
         if (!error && (style & allow_short) &&
             !(style & short_allow_adjacent) && !(style & short_allow_next))
-            error = "boost::program_options misconfiguration: "
+            error = "boost::argsy misconfiguration: "
                     "choose one or other of 'command_line_style::short_allow_next' "
                     "(whitespace separated arguments) or "
                     "'command_line_style::short_allow_adjacent' ('=' separated arguments) for "
@@ -151,7 +151,7 @@ namespace boost { namespace program_options { namespace detail {
 
         if (!error && (style & allow_short) &&
             !(style & allow_dash_for_short) && !(style & allow_slash_for_short))
-            error = "boost::program_options misconfiguration: "
+            error = "boost::argsy misconfiguration: "
                     "choose one or other of 'command_line_style::allow_slash_for_short' "
                     "(slashes) or 'command_line_style::allow_dash_for_short' (dashes) for "
                     "short options.";

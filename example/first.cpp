@@ -7,7 +7,7 @@
  */
 
 #include "program_options.hpp"
-namespace po = boost::program_options;
+namespace po = boost::argsy;
 
 #include <iostream>
 #include <iterator>

@@ -5,9 +5,9 @@
 
 #pragma once
 
-#include "program_options/config.hpp"
-#include "program_options/option.hpp"
-#include "program_options/detail/cmdline.hpp"
+#include "argsy/config.hpp"
+#include "argsy/option.hpp"
+#include "argsy/detail/cmdline.hpp"
 
 #include <boost/function/function1.hpp>
 
@@ -15,7 +15,7 @@
 #include <vector>
 #include <utility>
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
     class options_description;
     class positional_options_description;
@@ -280,5 +280,5 @@ namespace boost { namespace program_options {
 }}
 
 #undef DECL
-#include "program_options/detail/parsers.hpp"
+#include "argsy/detail/parsers.hpp"
 

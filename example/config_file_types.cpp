@@ -4,10 +4,10 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // This example shows a config file (in ini format) being parsed by the
-// program_options library. It includes a numebr of different value types.
+// argsy library. It includes a numebr of different value types.
 
 #include "program_options.hpp"
-namespace po = boost::program_options;
+namespace po = boost::argsy;
 
 #include <assert.h>
 #include <iostream>

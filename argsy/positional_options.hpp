@@ -3,12 +3,12 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
-#include "program_options/config.hpp"
+#include "argsy/config.hpp"
 
 #include <vector>
 #include <string>
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
     /** Describes positional options. 
 

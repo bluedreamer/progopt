@@ -5,7 +5,7 @@
 
 
 #include "program_options.hpp"
-using namespace boost::program_options;
+using namespace boost::argsy;
 
 #include <iostream>
 using namespace std;

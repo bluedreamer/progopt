@@ -4,11 +4,11 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include "program_options/parsers.hpp"
-#include "program_options/options_description.hpp"
-#include "program_options/variables_map.hpp"
-#include "program_options/cmdline.hpp"
-using namespace boost::program_options;
+#include "argsy/parsers.hpp"
+#include "argsy/options_description.hpp"
+#include "argsy/variables_map.hpp"
+#include "argsy/cmdline.hpp"
+using namespace boost::argsy;
 
 #include <iostream>
 #include <sstream>

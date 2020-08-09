@@ -5,7 +5,7 @@
 
 #pragma once
 
-namespace boost { namespace program_options { namespace command_line_style {
+namespace boost { namespace argsy { namespace command_line_style {
     /** Various possible styles of options.
         
     There are "long" options, which start with "--" and "short",

@@ -13,8 +13,8 @@
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
 
-#include "program_options/detail/convert.hpp"
-#include "program_options/detail/utf8_codecvt_facet.hpp"
+#include "argsy/detail/convert.hpp"
+#include "argsy/detail/utf8_codecvt_facet.hpp"
 
 #include "minitest.hpp"
 
@@ -78,7 +78,7 @@ std::wstring from_8_bit_2(const std::string& s,
 void test_convert(const std::string& input, 
                   const std::string& expected_output)
 {
-    boost::program_options::detail::utf8_codecvt_facet facet;
+    boost::argsy::detail::utf8_codecvt_facet facet;
     
     std::wstring output;
     { 

@@ -16,13 +16,13 @@
 */
 
 
-#include "program_options/options_description.hpp"
-#include "program_options/parsers.hpp"
-#include "program_options/variables_map.hpp"
+#include "argsy/options_description.hpp"
+#include "argsy/parsers.hpp"
+#include "argsy/variables_map.hpp"
 #include <boost/tokenizer.hpp>
 #include <boost/token_functions.hpp>
 using namespace boost;
-using namespace boost::program_options;
+using namespace boost::argsy;
 
 #include <iostream>
 #include <fstream>

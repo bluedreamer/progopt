@@ -4,8 +4,8 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
-#include "program_options/config.hpp"
-#include "program_options/errors.hpp"
+#include "argsy/config.hpp"
+#include "argsy/errors.hpp"
 
 #include <boost/any.hpp>
 #include <boost/function/function1.hpp>
@@ -16,7 +16,7 @@
 #include <typeinfo>
 #include <limits>
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
     /** Class which specifies how the option's value is to be parsed
         and converted into C++ types.
@@ -416,4 +416,4 @@ namespace boost { namespace program_options {
 
 }}
 
-#include "program_options/detail/value_semantic.hpp"
+#include "argsy/detail/value_semantic.hpp"

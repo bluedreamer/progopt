@@ -6,7 +6,7 @@
 #include "program_options.hpp"
 
 using namespace boost;
-namespace po = boost::program_options;
+namespace po = boost::argsy;
 
 #include <iostream>
 #include <algorithm>

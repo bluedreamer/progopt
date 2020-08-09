@@ -5,9 +5,9 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
-#include "program_options/config.hpp"
-#include "program_options/errors.hpp"
-#include "program_options/value_semantic.hpp"
+#include "argsy/config.hpp"
+#include "argsy/errors.hpp"
+#include "argsy/value_semantic.hpp"
 
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
@@ -24,9 +24,9 @@
 #include <iosfwd>
 
 /** Boost namespace */
-namespace boost { 
+namespace boost {
 /** Namespace for the library. */
-namespace program_options {
+namespace argsy {
 
     /** Describes one possible command line/config file option. There are two
         kinds of properties of an option. First describe it syntactically and

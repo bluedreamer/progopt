@@ -4,83 +4,31 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_PROGRAM_OPTIONS_SOURCE
-#include <boost/program_options/config.hpp>
-#include <boost/program_options/value_semantic.hpp>
-#include <boost/program_options/detail/convert.hpp>
-#include <boost/program_options/detail/cmdline.hpp>
+#include "argsy/config.hpp"
+#include "argsy/value_semantic.hpp"
+#include "argsy/detail/convert.hpp"
+#include "argsy/detail/cmdline.hpp"
 #include <set>
 
 #include <cctype>
 
-namespace boost { namespace program_options {
+namespace boost { namespace argsy {
 
     using namespace std;
-
-
-#ifndef BOOST_NO_STD_WSTRING
-    namespace
-    {
-        std::string convert_value(const std::wstring& s)
-        {
-            try {
-                return to_local_8_bit(s);
-            }
-            catch(const std::exception&) {
-                return "<unrepresentable unicode string>";
-            }
-        }
-    }
-#endif
-
-    void 
+    void
     value_semantic_codecvt_helper<char>::
     parse(boost::any& value_store, 
           const std::vector<std::string>& new_tokens,
           bool utf8) const
     {
         if (utf8) {
-#ifndef BOOST_NO_STD_WSTRING
-            // Need to convert to local encoding.
-            std::vector<string> local_tokens;
-            for (unsigned i = 0; i < new_tokens.size(); ++i) {
-                std::wstring w = from_utf8(new_tokens[i]);
-                local_tokens.push_back(to_local_8_bit(w));
-            }
-            xparse(value_store, local_tokens);
-#else
             boost::throw_exception(
                 std::runtime_error("UTF-8 conversion not supported."));
-#endif
         } else {
             // Already in local encoding, pass unmodified
             xparse(value_store, new_tokens);
         }        
     }
-
-#ifndef BOOST_NO_STD_WSTRING
-    void 
-    value_semantic_codecvt_helper<wchar_t>::
-    parse(boost::any& value_store, 
-          const std::vector<std::string>& new_tokens,
-          bool utf8) const
-    {
-        std::vector<wstring> tokens;
-        if (utf8) {
-            // Convert from utf8
-            for (unsigned i = 0; i < new_tokens.size(); ++i) {
-                tokens.push_back(from_utf8(new_tokens[i]));
-            }
-               
-        } else {
-            // Convert from local encoding
-            for (unsigned i = 0; i < new_tokens.size(); ++i) {
-                tokens.push_back(from_local_8_bit(new_tokens[i]));
-            }
-        }      
-
-        xparse(value_store, tokens);  
-    }
-#endif
 
     BOOST_PROGRAM_OPTIONS_DECL std::string arg("arg");
 
@@ -160,43 +108,12 @@ namespace boost { namespace program_options {
             boost::throw_exception(invalid_bool_value(s));
     }
 
-    // This is blatant copy-paste. However, templating this will cause a problem,
-    // since wstring can't be constructed/compared with char*. We'd need to
-    // create auxiliary 'widen' routine to convert from char* into 
-    // needed string type, and that's more work.
-#if !defined(BOOST_NO_STD_WSTRING)
-    BOOST_PROGRAM_OPTIONS_DECL 
-    void validate(any& v, const vector<wstring>& xs, bool*, int)
-    {
-        check_first_occurrence(v);
-        wstring s(get_single_string(xs, true));
-
-        for (size_t i = 0; i < s.size(); ++i)
-            s[i] = wchar_t(tolower(s[i]));
-
-        if (s.empty() || s == L"on" || s == L"yes" || s == L"1" || s == L"true")
-            v = any(true);
-        else if (s == L"off" || s == L"no" || s == L"0" || s == L"false")
-            v = any(false);
-        else
-            boost::throw_exception(invalid_bool_value(convert_value(s)));
-    }
-#endif
-    BOOST_PROGRAM_OPTIONS_DECL 
+    BOOST_PROGRAM_OPTIONS_DECL
     void validate(any& v, const vector<string>& xs, std::string*, int)
     {
         check_first_occurrence(v);
         v = any(get_single_string(xs));
     }
-
-#if !defined(BOOST_NO_STD_WSTRING)
-    BOOST_PROGRAM_OPTIONS_DECL 
-    void validate(any& v, const vector<wstring>& xs, std::string*, int)
-    {
-        check_first_occurrence(v);
-        v = any(get_single_string(xs));
-    }
-#endif
 
     namespace validators {
 
@@ -216,17 +133,6 @@ namespace boost { namespace program_options {
     {
         set_substitute("value", bad_value);
     }
-
-#ifndef BOOST_NO_STD_WSTRING
-    invalid_option_value::
-    invalid_option_value(const std::wstring& bad_value)
-    : validation_error(validation_error::invalid_option_value)
-    {
-        set_substitute("value", convert_value(bad_value));
-    }
-#endif
-
-
 
     invalid_bool_value::
     invalid_bool_value(const std::string& bad_value)
