@@ -23,7 +23,7 @@ auto sv(const char *array[], unsigned size) -> std::vector<std::string>
 
 void test_optional()
 {
-   boost::optional<int> foo, bar, baz;
+   std::optional<int> foo, bar, baz;
 
    po::options_description desc;
    desc.add_options()("foo,f", po::value(&foo), "")("bar,b", po::value(&bar), "")("baz,z", po::value(&baz), "");

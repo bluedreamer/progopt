@@ -9,8 +9,6 @@
 #include "argsy/detail/cmdline.hpp"
 #include "argsy/option.hpp"
 
-#include <boost/function/function1.hpp>
-
 #include <iosfwd>
 #include <utility>
 #include <vector>

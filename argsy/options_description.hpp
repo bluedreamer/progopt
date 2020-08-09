@@ -10,7 +10,7 @@
 #include "argsy/value_semantic.hpp"
 
 #include <any>
-//#include <boost/detail/workaround.hpp>
+#include <memory>
 #include <functional>
 
 #include <map>

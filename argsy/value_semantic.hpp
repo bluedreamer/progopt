@@ -8,7 +8,6 @@
 #include "argsy/errors.hpp"
 
 #include <any>
-#include <boost/function/function1.hpp>
 #include <boost/lexical_cast.hpp>
 
 #include <limits>
@@ -362,7 +361,7 @@ private:
    T *m_store_to;
 
    // Default value is stored as std::any and not
-   // as boost::optional to avoid unnecessary instantiations.
+   // as std::optional to avoid unnecessary instantiations.
    std::string                    m_value_name;
    std::any                       m_default_value;
    std::string                    m_default_value_as_text;

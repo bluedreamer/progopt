@@ -3,7 +3,6 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_PROGRAM_OPTIONS_SOURCE
 #include "argsy/config.hpp"
 
 #include <boost/config.hpp>
@@ -15,8 +14,6 @@
 #include "argsy/value_semantic.hpp"
 #include <boost/throw_exception.hpp>
 
-#include <boost/bind.hpp>
-
 #include <cassert>
 #include <cctype>
 #include <climits>
@@ -24,9 +21,7 @@
 #include <string>
 #include <utility>
 #include <vector>
-
 #include <cstdio>
-
 #include <iostream>
 
 namespace argsy
@@ -225,30 +220,30 @@ auto cmdline::run() -> vector<option>
 
    if(m_additional_parser)
    {
-      style_parsers.emplace_back(boost::bind(&cmdline::handle_additional_parser, this, _1));
+      style_parsers.emplace_back(std::bind(&cmdline::handle_additional_parser, this, std::placeholders::_1));
    }
 
    if(m_style & allow_long)
    {
-      style_parsers.emplace_back(boost::bind(&cmdline::parse_long_option, this, _1));
+      style_parsers.emplace_back(std::bind(&cmdline::parse_long_option, this, std::placeholders::_1));
    }
 
    if((m_style & allow_long_disguise))
    {
-      style_parsers.emplace_back(boost::bind(&cmdline::parse_disguised_long_option, this, _1));
+      style_parsers.emplace_back(std::bind(&cmdline::parse_disguised_long_option, this, std::placeholders::_1));
    }
 
    if((m_style & allow_short) && (m_style & allow_dash_for_short))
    {
-      style_parsers.emplace_back(boost::bind(&cmdline::parse_short_option, this, _1));
+      style_parsers.emplace_back(std::bind(&cmdline::parse_short_option, this, std::placeholders::_1));
    }
 
    if((m_style & allow_short) && (m_style & allow_slash_for_short))
    {
-      style_parsers.emplace_back(boost::bind(&cmdline::parse_dos_option, this, _1));
+      style_parsers.emplace_back(std::bind(&cmdline::parse_dos_option, this, std::placeholders::_1));
    }
 
-   style_parsers.emplace_back(boost::bind(&cmdline::parse_terminator, this, _1));
+   style_parsers.emplace_back(std::bind(&cmdline::parse_terminator, this, std::placeholders::_1));
 
    vector<option>  result;
    vector<string> &args = m_args;

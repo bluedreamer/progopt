@@ -15,11 +15,6 @@
 #include <boost/noncopyable.hpp>
 
 #include "argsy/detail/convert.hpp"
-#include <boost/detail/workaround.hpp>
-
-#if BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
-   #include <istream> // std::getline
-#endif
 
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>

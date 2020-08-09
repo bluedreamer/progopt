@@ -2,14 +2,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#define BOOST_PROGRAM_OPTIONS_SOURCE
 #include "argsy/value_semantic.hpp"
 #include "argsy/config.hpp"
 #include "argsy/detail/cmdline.hpp"
 #include "argsy/detail/convert.hpp"
-#include <set>
 
+#include <set>
 #include <cctype>
 
 namespace argsy

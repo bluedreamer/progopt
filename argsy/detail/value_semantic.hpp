@@ -10,13 +10,6 @@
 
 #include <boost/throw_exception.hpp>
 
-// forward declaration
-namespace boost
-{
-template<class T>
-class optional;
-}
-
 namespace argsy
 {
 extern std::string arg;
@@ -153,13 +146,13 @@ void validate(std::any &v, const std::vector<std::basic_string<charT>> &s, std::
 
 /** Validates optional arguments. */
 template<class T, class charT>
-void validate(std::any &v, const std::vector<std::basic_string<charT>> &s, boost::optional<T> * /*unused*/, int /*unused*/)
+void validate(std::any &v, const std::vector<std::basic_string<charT>> &s, std::optional<T> * /*unused*/, int /*unused*/)
 {
    validators::check_first_occurrence(v);
    validators::get_single_string(s);
    std::any a;
    validate(a, s, (T *)0, 0);
-   v = std::any(boost::optional<T>(std::any_cast<T>(a)));
+   v = std::any(std::optional<T>(std::any_cast<T>(a)));
 }
 
 template<class T, class charT>

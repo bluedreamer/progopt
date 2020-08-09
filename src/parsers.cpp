@@ -5,7 +5,6 @@
 
 #include <boost/config.hpp>
 
-#define BOOST_PROGRAM_OPTIONS_SOURCE
 #include "argsy/config.hpp"
 #include "argsy/detail/cmdline.hpp"
 #include "argsy/detail/config_file.hpp"
@@ -15,7 +14,6 @@
 #include "argsy/parsers.hpp"
 #include "argsy/positional_options.hpp"
 
-#include <boost/bind.hpp>
 #include <boost/throw_exception.hpp>
 
 #include <cctype>
