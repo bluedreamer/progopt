@@ -4,10 +4,10 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include <boost/program_options/variables_map.hpp>
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/parsers.hpp>
-#include <boost/program_options/detail/utf8_codecvt_facet.hpp>
+#include "program_options/variables_map.hpp"
+#include "program_options/options_description.hpp"
+#include "program_options/parsers.hpp"
+#include "program_options/detail/utf8_codecvt_facet.hpp"
 using namespace boost::program_options;
 // We'll use po::value everywhere to workaround vc6 bug.
 namespace po = boost::program_options;

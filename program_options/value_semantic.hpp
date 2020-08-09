@@ -6,8 +6,8 @@
 #ifndef BOOST_VALUE_SEMANTIC_HPP_VP_2004_02_24
 #define BOOST_VALUE_SEMANTIC_HPP_VP_2004_02_24
 
-#include <boost/program_options/config.hpp>
-#include <boost/program_options/errors.hpp>
+#include "program_options/config.hpp"
+#include "program_options/errors.hpp"
 
 #include <boost/any.hpp>
 #include <boost/function/function1.hpp>
@@ -418,7 +418,7 @@ namespace boost { namespace program_options {
 
 }}
 
-#include "boost/program_options/detail/value_semantic.hpp"
+#include "program_options/detail/value_semantic.hpp"
 
 #endif
 

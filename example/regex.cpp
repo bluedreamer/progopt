@@ -19,8 +19,9 @@
 //
 // and the second invocation should issue an error message.
 
-#include <boost/program_options.hpp>
-#include <boost/regex.hpp>
+#include "program_options.hpp"
+//#include <boost/regex.hpp>
+#include <regex>
 
 using namespace boost;
 using namespace boost::program_options;
@@ -45,7 +46,7 @@ void validate(boost::any& v,
               const std::vector<std::string>& values,
               magic_number*, int)
 {
-    static regex r("\\d\\d\\d-(\\d\\d\\d)");
+    static std::regex r("\\d\\d\\d-(\\d\\d\\d)");
 
     using namespace boost::program_options;
 

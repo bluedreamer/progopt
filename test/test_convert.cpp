@@ -13,8 +13,8 @@
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
 
-#include <boost/program_options/detail/convert.hpp>
-#include <boost/program_options/detail/utf8_codecvt_facet.hpp>
+#include "program_options/detail/convert.hpp"
+#include "program_options/detail/utf8_codecvt_facet.hpp"
 
 #include "minitest.hpp"
 

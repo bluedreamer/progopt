@@ -8,9 +8,9 @@
 #ifndef BOOST_OPTION_DESCRIPTION_VP_2003_05_19
 #define BOOST_OPTION_DESCRIPTION_VP_2003_05_19
 
-#include <boost/program_options/config.hpp>
-#include <boost/program_options/errors.hpp>
-#include <boost/program_options/value_semantic.hpp>
+#include "program_options/config.hpp"
+#include "program_options/errors.hpp"
+#include "program_options/value_semantic.hpp"
 
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>

@@ -12,14 +12,14 @@
 #pragma once
 #endif
 
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/positional_options.hpp>
-#include <boost/program_options/parsers.hpp>
-#include <boost/program_options/variables_map.hpp>
-#include <boost/program_options/cmdline.hpp>
-#include <boost/program_options/errors.hpp>
-#include <boost/program_options/option.hpp>
-#include <boost/program_options/value_semantic.hpp>
-#include <boost/program_options/version.hpp>
+#include "program_options/options_description.hpp"
+#include "program_options/positional_options.hpp"
+#include "program_options/parsers.hpp"
+#include "program_options/variables_map.hpp"
+#include "program_options/cmdline.hpp"
+#include "program_options/errors.hpp"
+#include "program_options/option.hpp"
+#include "program_options/value_semantic.hpp"
+#include "program_options/version.hpp"
 
 #endif

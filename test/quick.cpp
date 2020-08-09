@@ -8,7 +8,7 @@
 
 // See library home page at http://www.boost.org/libs/program_options
 
-#include <boost/program_options.hpp>
+#include "program_options.hpp"
 #include <boost/core/lightweight_test.hpp>
 
 namespace po = boost::program_options;
