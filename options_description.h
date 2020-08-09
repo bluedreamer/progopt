@@ -110,17 +110,17 @@ class options_description;
 
 /** Class which provides convenient creation syntax to option_description.
  */
-class options_description_easy_init
-{
-public:
-   options_description_easy_init(options_description *owner);
-   auto operator()(const char *name, const char *description) -> options_description_easy_init &;
-   auto operator()(const char *name, const value_semantic *s) -> options_description_easy_init &;
-   auto operator()(const char *name, const value_semantic *s, const char *description) -> options_description_easy_init &;
-
-private:
-   options_description *owner;
-};
+//class options_description_easy_init
+//{
+//public:
+//   options_description_easy_init(options_description *owner);
+//   auto operator()(const char *name, const char *description) -> options_description_easy_init &;
+//   auto operator()(const char *name, const value_semantic *s) -> options_description_easy_init &;
+//   auto operator()(const char *name, const value_semantic *s, const char *description) -> options_description_easy_init &;
+//
+//private:
+//   options_description *owner;
+//};
 
 /** A set of option descriptions. This provides convenient interface for
     adding new option (the add_options) method, and facilities to search
@@ -148,7 +148,7 @@ public:
    /** Adds new variable description. Throws duplicate_variable_error if
        either short or long name matches that of already present one.
    */
-   void add(std::shared_ptr<option_description> desc);
+//   void add(std::shared_ptr<option_description> desc);
    /** Adds a group of option description. This has the same
        effect as adding all option_descriptions in 'desc'
        individually, except that output operator will show
@@ -161,14 +161,15 @@ public:
        in groups. */
    [[nodiscard]] auto get_option_column_width() const -> unsigned;
 
-public:
    /** Returns an object of implementation-defined type suitable for adding
        options to options_description. The returned object will
        have overloaded operator() with parameter type matching
        'option_description' constructors. Calling the operator will create
        new option_description instance and add it.
    */
-   auto add_options() -> options_description_easy_init;
+//   auto add_options() -> options_description_easy_init;
+
+   auto add_options(std::initializer_list<option_description> list) -> void;
 
    [[nodiscard]] auto find(const std::string &name, bool approx, bool long_ignore_case = false, bool short_ignore_case = false) const
       -> const option_description &;
@@ -176,7 +177,7 @@ public:
    [[nodiscard]] auto find_nothrow(const std::string &name, bool approx, bool long_ignore_case = false,
                                    bool short_ignore_case = false) const -> const option_description *;
 
-   [[nodiscard]] auto options() const -> const std::vector<std::shared_ptr<option_description>> &;
+   [[nodiscard]] auto options() const -> const std::vector<option_description> &;
 
    /** Produces a human readable output of 'desc', listing options,
        their descriptions and allowed parameters. Other options_description
@@ -194,13 +195,14 @@ private:
    // approximation_range find_approximation(const std::string& prefix) const;
 
    std::string    m_caption;
-   const unsigned m_line_length;
-   const unsigned m_min_description_length;
+   const uint32_t m_line_length;
+   const uint32_t m_min_description_length;
 
    // Data organization is chosen because:
    // - there could be two names for one option
    // - option_add_proxy needs to know the last added option
-   std::vector<std::shared_ptr<option_description>> m_options;
+//   std::vector<std::shared_ptr<option_description>> m_options;
+   std::vector<option_description> m_options;
 
    // Whether the option comes from one of declared groups.
    std::vector<bool> belong_to_group;

@@ -100,10 +100,10 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
    xm.m_final.insert(new_final.begin(), new_final.end());
 
    // Second, apply default values and store required options.
-   const std::vector<std::shared_ptr<option_description>> &all = desc.options();
+   const auto &all = desc.options();
    for(i = 0; i < all.size(); ++i)
    {
-      const option_description &d   = *all[i];
+      const option_description &d   = all[i];
       std::string               key = d.key("");
       // FIXME: this logic relies on knowledge of option_description
       // internals.

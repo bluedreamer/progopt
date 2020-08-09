@@ -6,7 +6,7 @@ auto main(int argc, char *argv[]) -> int
    try
    {
       options_description desc("Allowed options");
-      desc.add_options()("help", "produce help message")("compression", value<double>(), "set compression level");
+      desc.add_options({{"help", "produce help message"},{"compression", value<double>(), "set compression level"}});
 
       variables_map vm;
       store(parse_command_line(argc, argv, desc), vm);

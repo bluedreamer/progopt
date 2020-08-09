@@ -231,37 +231,37 @@ auto option_description::format_parameter() const -> std::string
    }
 }
 
-options_description_easy_init::options_description_easy_init(options_description *owner)
-   : owner(owner)
-{
-}
-
-auto options_description_easy_init::operator()(const char *name, const char *description) -> options_description_easy_init &
-{
-   // Create untypes semantic which accepts zero tokens: i.e.
-   // no value can be specified on command line.
-   // FIXME: does not look exception-safe
-   std::shared_ptr<option_description> d(new option_description(name, new untyped_value(true), description));
-
-   owner->add(d);
-   return *this;
-}
-
-auto options_description_easy_init::operator()(const char *name, const value_semantic *s) -> options_description_easy_init &
-{
-   std::shared_ptr<option_description> d(new option_description(name, s));
-   owner->add(d);
-   return *this;
-}
-
-auto options_description_easy_init::operator()(const char *name, const value_semantic *s, const char *description)
-   -> options_description_easy_init &
-{
-   std::shared_ptr<option_description> d(new option_description(name, s, description));
-
-   owner->add(d);
-   return *this;
-}
+//options_description_easy_init::options_description_easy_init(options_description *owner)
+//   : owner(owner)
+//{
+//}
+//
+//auto options_description_easy_init::operator()(const char *name, const char *description) -> options_description_easy_init &
+//{
+//   // Create untypes semantic which accepts zero tokens: i.e.
+//   // no value can be specified on command line.
+//   // FIXME: does not look exception-safe
+//   std::shared_ptr<option_description> d(new option_description(name, new untyped_value(true), description));
+//
+//   owner->add(d);
+//   return *this;
+//}
+//
+//auto options_description_easy_init::operator()(const char *name, const value_semantic *s) -> options_description_easy_init &
+//{
+//   std::shared_ptr<option_description> d(new option_description(name, s));
+//   owner->add(d);
+//   return *this;
+//}
+//
+//auto options_description_easy_init::operator()(const char *name, const value_semantic *s, const char *description)
+//   -> options_description_easy_init &
+//{
+//   std::shared_ptr<option_description> d(new option_description(name, s, description));
+//
+//   owner->add(d);
+//   return *this;
+//}
 
 const unsigned options_description::m_default_line_length = 80;
 
@@ -282,29 +282,34 @@ options_description::options_description(std::string caption, unsigned line_leng
    assert(m_min_description_length < m_line_length - 1);
 }
 
-void options_description::add(std::shared_ptr<option_description> desc)
-{
-   m_options.push_back(desc);
-   belong_to_group.push_back(false);
-}
+//void options_description::add(std::shared_ptr<option_description> desc)
+//{
+//   m_options.push_back(desc);
+//   belong_to_group.push_back(false);
+//}
 
 auto options_description::add(const options_description &desc) -> options_description &
 {
    std::shared_ptr<options_description> d(new options_description(desc));
    groups.push_back(d);
 
-   for(const auto &m_option : desc.m_options)
+   for(const auto &option : desc.m_options)
    {
-      add(m_option);
+      m_options.emplace_back(option);
       belong_to_group.back() = true;
    }
 
    return *this;
 }
 
-auto options_description::add_options() -> options_description_easy_init
+//auto options_description::add_options() -> options_description_easy_init
+//{
+//   return {this};
+//}
+
+auto options_description::add_options(std::initializer_list<option_description> list) -> void
 {
-   return {this};
+   m_options.insert(m_options.end(), list.begin(), list.end());
 }
 
 auto options_description::find(const std::string &name, bool approx, bool long_ignore_case, bool short_ignore_case) const
@@ -318,7 +323,7 @@ auto options_description::find(const std::string &name, bool approx, bool long_i
    return *d;
 }
 
-auto options_description::options() const -> const std::vector<std::shared_ptr<option_description>> &
+auto options_description::options() const -> const std::vector<option_description> &
 {
    return m_options;
 }
@@ -326,7 +331,7 @@ auto options_description::options() const -> const std::vector<std::shared_ptr<o
 auto options_description::find_nothrow(const std::string &name, bool approx, bool long_ignore_case, bool short_ignore_case) const
    -> const option_description *
 {
-   std::shared_ptr<option_description> found;
+   const option_description *found{nullptr};
    bool                                had_full_match = false;
    std::vector<std::string>            approximate_matches;
    std::vector<std::string>            full_matches;
@@ -334,9 +339,9 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
    // We use linear search because matching specified option
    // name with the declared option name need to take care about
    // case sensitivity and trailing '*' and so we can't use simple map.
-   for(const auto &m_option : m_options)
+   for(const auto &option : m_options)
    {
-      option_description::match_result r = m_option->match(name, approx, long_ignore_case, short_ignore_case);
+      option_description::match_result r = option.match(name, approx, long_ignore_case, short_ignore_case);
 
       if(r == option_description::no_match)
       {
@@ -345,18 +350,18 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
 
       if(r == option_description::full_match)
       {
-         full_matches.push_back(m_option->key(name));
-         found          = m_option;
+         full_matches.push_back(option.key(name));
+         found          = &option;
          had_full_match = true;
       }
       else
       {
          // FIXME: the use of 'key' here might not
          // be the best approach.
-         approximate_matches.push_back(m_option->key(name));
+         approximate_matches.push_back(option.key(name));
          if(!had_full_match)
          {
-            found = m_option;
+            found = &option;
          }
       }
    }
@@ -375,7 +380,7 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
       boost::throw_exception(ambiguous_option(approximate_matches));
    }
 
-   return found.get();
+   return found;
 }
 
 auto operator<<(std::ostream &os, const options_description &desc) -> std::ostream &
@@ -595,9 +600,9 @@ auto options_description::get_option_column_width() const -> unsigned
    /* Find the maximum width of the option column */
    unsigned width(23);
    unsigned i; // vc6 has broken for loop scoping
-   for(i = 0; i < m_options.size(); ++i)
+//   for(i = 0; i < m_options.size(); ++i)
+   for(const auto &opt : m_options)
    {
-      const option_description &opt = *m_options[i];
       std::stringstream         ss;
       ss << "  " << opt.format_name() << ' ' << opt.format_parameter();
       width = std::max(width, static_cast<unsigned>(ss.str().size()));
@@ -640,7 +645,7 @@ void options_description::print(std::ostream &os, unsigned width) const
          continue;
       }
 
-      const option_description &opt = *m_options[i];
+      const option_description &opt = m_options[i];
 
       format_one(os, opt, width, m_line_length);
 

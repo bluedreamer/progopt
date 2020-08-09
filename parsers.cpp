@@ -18,35 +18,6 @@
 #include <unistd.h>
 #include <utility>
 
-// The 'environ' should be declared in some cases. E.g. Linux man page says:
-// (This variable must be declared in the user program, but is declared in
-// the header file unistd.h in case the header files came from libc4 or libc5,
-// and in case they came from glibc and _GNU_SOURCE was defined.)
-// To be safe, declare it here.
-
-// It appears that on Mac OS X the 'environ' variable is not
-// available to dynamically linked libraries.
-// See: http://article.gmane.org/gmane.comp.lib.boost.devel/103843
-// See: http://lists.gnu.org/archive/html/bug-guile/2004-01/msg00013.html
-#if defined(__APPLE__) && defined(__DYNAMIC__)
-// The proper include for this is crt_externs.h, however it's not
-// available on iOS. The right replacement is not known. See
-// https://svn.boost.org/trac/boost/ticket/5053
-extern "C"
-{
-   extern char ***_NSGetEnviron(void);
-}
-   #define environ (*_NSGetEnviron())
-#else
-   #if defined(__MWERKS__)
-      #include <crtl.h>
-   #else
-      #if !defined(_WIN32) || defined(__COMO_VERSION__)
-
-      #endif
-   #endif
-#endif
-
 auto woption_from_option(const option &opt) -> woption
 {
    woption result;
@@ -78,10 +49,10 @@ auto parse_config_file(std::basic_istream<charT> &is, const options_description 
 {
    std::set<std::string> allowed_options;
 
-   const std::vector<std::shared_ptr<option_description>> &options = desc.options();
+   const auto &options = desc.options();
    for(const auto &option : options)
    {
-      const option_description &d = *option;
+      const option_description &d = option;
 
       if(d.long_name().empty())
       {
