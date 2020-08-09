@@ -7,8 +7,8 @@
 #include "argsy/detail/cmdline.hpp"
 #include "argsy/options_description.hpp"
 #include "argsy/parsers.hpp"
-using namespace boost::argsy;
-using boost::argsy::detail::cmdline;
+using namespace argsy;
+using argsy::detail::cmdline;
 
 #include <cassert>
 #include <iostream>

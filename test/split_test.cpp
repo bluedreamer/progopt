@@ -7,7 +7,7 @@
 #include "argsy/options_description.hpp"
 #include "argsy/parsers.hpp"
 #include "argsy/variables_map.hpp"
-using namespace boost::argsy;
+using namespace argsy;
 
 #include <cassert>
 #include <iostream>

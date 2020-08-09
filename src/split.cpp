@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace boost::argsy::detail
+namespace argsy::detail
 {
 template<class charT>
 auto split_unix(const std::basic_string<charT> &cmdline, const std::basic_string<charT> &seperator, const std::basic_string<charT> &quote,
@@ -34,9 +34,9 @@ auto split_unix(const std::basic_string<charT> &cmdline, const std::basic_string
    return result;
 }
 
-} // namespace boost::argsy::detail
+} // namespace argsy::detail
 
-namespace boost::argsy
+namespace argsy
 {
 // Take a command line string and splits in into tokens, according
 // to the given collection of seperators chars.
@@ -54,4 +54,4 @@ BOOST_PROGRAM_OPTIONS_DECL auto split_unix(const std::wstring &cmdline, const st
 }
 #endif
 
-} // namespace boost::argsy
+} // namespace argsy

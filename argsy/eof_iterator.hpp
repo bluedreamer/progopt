@@ -2,10 +2,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#ifndef BOOST_EOF_ITERATOR_VP_2004_03_12
-#define BOOST_EOF_ITERATOR_VP_2004_03_12
-
+#pragma once
 #include <boost/iterator/iterator_facade.hpp>
 
 namespace boost
@@ -83,5 +80,3 @@ private: // iterator core operations
    ValueType m_value;
 };
 } // namespace boost
-
-#endif

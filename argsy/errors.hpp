@@ -12,7 +12,7 @@
 #include <utility>
 #include <vector>
 
-namespace boost::argsy
+namespace argsy
 {
 inline auto strip_prefixes(const std::string &text) -> std::string
 {
@@ -398,4 +398,4 @@ public:
    invalid_bool_value(const std::string &value);
 };
 
-} // namespace boost::argsy
+} // namespace argsy

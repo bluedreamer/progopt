@@ -24,7 +24,7 @@
 #include <regex>
 
 using namespace boost;
-using namespace boost::argsy;
+using namespace argsy;
 
 #include <iostream>
 using namespace std;
@@ -50,7 +50,7 @@ void validate(boost::any &v, const std::vector<std::string> &values, magic_numbe
 {
    static std::regex r(R"(\d\d\d-(\d\d\d))");
 
-   using namespace boost::argsy;
+   using namespace argsy;
 
    // Make sure no previous assignment to 'a' was made.
    validators::check_first_occurrence(v);

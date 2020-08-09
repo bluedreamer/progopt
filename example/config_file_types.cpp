@@ -7,7 +7,7 @@
 // argsy library. It includes a numebr of different value types.
 
 #include "program_options.hpp"
-namespace po = boost::argsy;
+namespace po = argsy;
 
 #include <cassert>
 #include <iostream>

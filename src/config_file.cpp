@@ -15,7 +15,7 @@
 #include <fstream>
 #include <iostream>
 
-namespace boost::argsy::detail
+namespace argsy::detail
 {
 using namespace std;
 
@@ -184,7 +184,7 @@ bool basic_config_file_iterator<wchar_t>::getline(std::string &s)
 }
 #endif
 
-} // namespace boost::argsy::detail
+} // namespace argsy::detail
 
 #if 0
 using boost::argsy::config_file;

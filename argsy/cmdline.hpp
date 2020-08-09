@@ -5,7 +5,7 @@
 
 #pragma once
 
-namespace boost::argsy::command_line_style
+namespace argsy::command_line_style
 {
 /** Various possible styles of options.
 
@@ -82,4 +82,4 @@ enum style_t
    /** The default style. */
    default_style = unix_style
 };
-} // namespace boost::argsy::command_line_style
+} // namespace argsy::command_line_style

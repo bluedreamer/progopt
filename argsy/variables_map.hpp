@@ -13,7 +13,7 @@
 #include <string>
 #include <utility>
 
-namespace boost::argsy
+namespace argsy
 {
 template<class charT>
 class basic_parsed_options;
@@ -87,7 +87,7 @@ private:
    // they are known only after all sources are stored. By that
    // time options_description for the first source might not
    // be easily accessible, so we need to store semantic here.
-   shared_ptr<const value_semantic> m_value_semantic;
+   boost::shared_ptr<const value_semantic> m_value_semantic;
 
    friend BOOST_PROGRAM_OPTIONS_DECL void store(const basic_parsed_options<char> &options, variables_map &m, bool);
 
@@ -193,4 +193,4 @@ inline auto variable_value::value() -> boost::any &
    return v;
 }
 
-} // namespace boost::argsy
+} // namespace argsy

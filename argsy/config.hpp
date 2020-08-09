@@ -3,9 +3,7 @@
 //    Use, modification and distribution is subject to the Boost Software
 //    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //    http://www.boost.org/LICENSE_1_0.txt)
-
-#ifndef BOOST_PROGRAM_OPTIONS_CONFIG_HK_2004_01_11
-#define BOOST_PROGRAM_OPTIONS_CONFIG_HK_2004_01_11
+#pragma once
 
 #include <boost/config.hpp>
 #include <boost/version.hpp>
@@ -45,5 +43,3 @@
 #ifndef BOOST_PROGRAM_OPTIONS_DECL
    #define BOOST_PROGRAM_OPTIONS_DECL
 #endif
-
-#endif // PROGRAM_OPTIONS_CONFIG_HK_2004_01_11

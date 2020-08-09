@@ -17,9 +17,9 @@ template<class T>
 class optional;
 }
 
-namespace boost::argsy
+namespace argsy
 {
-extern BOOST_PROGRAM_OPTIONS_DECL std::string arg;
+extern std::string arg;
 
 template<class T, class charT>
 std::string typed_value<T, charT>::name() const
@@ -96,9 +96,9 @@ void validate(boost::any &v, const std::vector<std::basic_string<charT>> &xs, T 
    std::basic_string<charT> s(validators::get_single_string(xs));
    try
    {
-      v = any(lexical_cast<T>(s));
+      v = boost::any(boost::lexical_cast<T>(s));
    }
-   catch(const bad_lexical_cast &)
+   catch(const boost::bad_lexical_cast &)
    {
       boost::throw_exception(invalid_option_value(s));
    }
@@ -144,7 +144,7 @@ void validate(boost::any &v, const std::vector<std::basic_string<charT>> &s, std
          validate(a, cv, (T *)0, 0);
          tv->push_back(boost::any_cast<T>(a));
       }
-      catch(const bad_lexical_cast & /*e*/)
+      catch(const boost::bad_lexical_cast & /*e*/)
       {
          boost::throw_exception(invalid_option_value(s[i]));
       }
@@ -178,7 +178,7 @@ template<class T>
 typed_value<T> *value()
 {
    // Explicit qualification is vc6 workaround.
-   return boost::argsy::value<T>(0);
+   return argsy::value<T>(0);
 }
 
 template<class T>
@@ -203,4 +203,4 @@ typed_value<T, wchar_t> *wvalue(T *v)
    return r;
 }
 
-} // namespace boost::argsy
+} // namespace argsy

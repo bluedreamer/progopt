@@ -56,7 +56,7 @@ extern char **environ;
 
 using namespace std;
 
-namespace boost::argsy
+namespace argsy
 {
 #ifndef BOOST_NO_STD_WSTRING
 namespace
@@ -98,7 +98,7 @@ auto parse_config_file(std::basic_istream<charT> &is, const options_description 
 {
    set<string> allowed_options;
 
-   const vector<shared_ptr<option_description>> &options = desc.options();
+   const vector<boost::shared_ptr<option_description>> &options = desc.options();
    for(const auto &option : options)
    {
       const option_description &d = *option;
@@ -170,12 +170,12 @@ template BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<wchar_t> parse_config_f
     }
 #endif
 
-BOOST_PROGRAM_OPTIONS_DECL auto parse_environment(const options_description &desc, const function1<std::string, std::string> &name_mapper)
-   -> parsed_options
+BOOST_PROGRAM_OPTIONS_DECL auto parse_environment(const options_description &                       desc,
+                                                  const boost::function1<std::string, std::string> &name_mapper) -> parsed_options
 {
    parsed_options result(&desc);
 
-   for(environment_iterator i(environ), e; i != e; ++i)
+   for(boost::environment_iterator i(environ), e; i != e; ++i)
    {
       string option_name = name_mapper(i->first);
 
@@ -231,4 +231,4 @@ BOOST_PROGRAM_OPTIONS_DECL auto parse_environment(const options_description &des
    return parse_environment(desc, string(prefix));
 }
 
-} // namespace boost::argsy
+} // namespace argsy

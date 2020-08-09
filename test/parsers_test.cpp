@@ -6,9 +6,9 @@
 #include "argsy/options_description.hpp"
 #include "argsy/parsers.hpp"
 #include "argsy/variables_map.hpp"
-using namespace boost::argsy;
+using namespace argsy;
 // We'll use po::value everywhere to workaround vc6 bug.
-namespace po = boost::argsy;
+namespace po = argsy;
 
 #include <boost/function.hpp>
 using namespace boost;

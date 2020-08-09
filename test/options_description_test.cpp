@@ -4,7 +4,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "argsy/options_description.hpp"
-using namespace boost::argsy;
+using namespace argsy;
 
 #include <boost/function.hpp>
 using namespace boost;

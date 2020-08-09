@@ -3,8 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_ENVIRONMENT_ITERATOR_VP_2004_05_14
-#define BOOST_ENVIRONMENT_ITERATOR_VP_2004_05_14
+#pragma once
 
 #include "eof_iterator.hpp"
 
@@ -47,4 +46,3 @@ private:
    char **m_environment;
 };
 } // namespace boost
-#endif

@@ -16,7 +16,7 @@
 #include <typeinfo>
 #include <vector>
 
-namespace boost::argsy
+namespace argsy
 {
 /** Class which specifies how the option's value is to be parsed
     and converted into C++ types.
@@ -249,7 +249,7 @@ public:
 
    /** Specifies a function to be called when the final value
        is determined. */
-   auto notifier(function1<void, const T &> f) -> typed_value *
+   auto notifier(boost::function1<void, const T &> f) -> typed_value *
    {
       m_notifier = f;
       return this;
@@ -408,6 +408,6 @@ BOOST_PROGRAM_OPTIONS_DECL auto bool_switch() -> typed_value<bool> *;
  */
 BOOST_PROGRAM_OPTIONS_DECL auto bool_switch(bool *v) -> typed_value<bool> *;
 
-} // namespace boost::argsy
+} // namespace argsy
 
 #include "argsy/detail/value_semantic.hpp"

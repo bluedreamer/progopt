@@ -9,7 +9,7 @@
 
 #include <iterator>
 
-namespace boost::argsy
+namespace argsy
 {
 template<class charT>
 basic_command_line_parser<charT>::basic_command_line_parser(const std::vector<std::basic_string<charT>> &xargs)
@@ -85,7 +85,7 @@ basic_parsed_options<charT> basic_command_line_parser<charT>::run()
 
 template<class charT>
 basic_parsed_options<charT> parse_command_line(int argc, const charT *const argv[], const options_description &desc, int style,
-                                               function1<std::pair<std::string, std::string>, const std::string &> ext)
+                                               boost::function1<std::pair<std::string, std::string>, const std::string &> ext)
 {
    return basic_command_line_parser<charT>(argc, argv).options(desc).style(style).extra_parser(ext).run();
 }
@@ -105,4 +105,4 @@ std::vector<std::basic_string<charT>> collect_unrecognized(const std::vector<bas
    return result;
 }
 
-} // namespace boost::argsy
+} // namespace argsy

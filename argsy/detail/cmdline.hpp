@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-namespace boost::argsy::detail
+namespace argsy::detail
 {
 /** Command line parser class. Main requirements were:
     - Powerful enough to support all common uses.
@@ -49,11 +49,11 @@ namespace boost::argsy::detail
 class BOOST_PROGRAM_OPTIONS_DECL cmdline
 {
 public:
-   using style_t = ::boost::argsy::command_line_style::style_t;
+   using style_t = ::argsy::command_line_style::style_t;
 
-   typedef function1<std::pair<std::string, std::string>, const std::string &> additional_parser;
+   typedef boost::function1<std::pair<std::string, std::string>, const std::string &> additional_parser;
 
-   typedef function1<std::vector<option>, std::vector<std::string> &> style_parser;
+   typedef boost::function1<std::vector<option>, std::vector<std::string> &> style_parser;
 
    /** Constructs a command line parser for (argc, argv) pair. Uses
        style options passed in 'style', which should be binary or'ed values
@@ -128,4 +128,4 @@ public:
 
 void test_cmdline_detail();
 
-} // namespace boost::argsy::detail
+} // namespace argsy::detail

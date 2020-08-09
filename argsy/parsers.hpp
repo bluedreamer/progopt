@@ -15,7 +15,7 @@
 #include <utility>
 #include <vector>
 
-namespace boost::argsy
+namespace argsy
 {
 class options_description;
 class positional_options_description;
@@ -91,7 +91,7 @@ using wparsed_options = basic_parsed_options<wchar_t>;
 /** Augments basic_parsed_options<wchar_t> with conversion from
     'parsed_options' */
 
-typedef function1<std::pair<std::string, std::string>, const std::string &> ext_parser;
+typedef boost::function1<std::pair<std::string, std::string>, const std::string &> ext_parser;
 
 /** Command line parser.
 
@@ -160,8 +160,8 @@ using wcommand_line_parser = basic_command_line_parser<wchar_t>;
     and returns the result of calling the 'run' method.
  */
 template<class charT>
-auto parse_command_line(int argc, const charT *const argv[], const options_description &, int style = 0,
-                        function1<std::pair<std::string, std::string>, const std::string &> ext = ext_parser())
+auto parse_command_line(int argc, const charT *const argv[], const options_description & /*desc*/, int style = 0,
+                        boost::function1<std::pair<std::string, std::string>, const std::string &> ext = ext_parser())
    -> basic_parsed_options<charT>;
 
 /** Parse a config file.
@@ -219,8 +219,8 @@ auto collect_unrecognized(const std::vector<basic_option<charT>> &options, enum 
     This is done since naming of environment variables is typically
     different from the naming of command line options.
 */
-BOOST_PROGRAM_OPTIONS_DECL auto parse_environment(const options_description &, const function1<std::string, std::string> &name_mapper)
-   -> parsed_options;
+BOOST_PROGRAM_OPTIONS_DECL auto parse_environment(const options_description &,
+                                                  const boost::function1<std::string, std::string> &name_mapper) -> parsed_options;
 
 /** Parse environment.
 
@@ -269,7 +269,7 @@ BOOST_PROGRAM_OPTIONS_DECL std::vector<std::wstring> split_winmain(const std::ws
    #endif
 #endif
 
-} // namespace boost::argsy
+} // namespace argsy
 
 #undef DECL
 #include "argsy/detail/parsers.hpp"

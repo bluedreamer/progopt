@@ -12,7 +12,7 @@
 
 #include <cctype>
 
-namespace boost::argsy
+namespace argsy
 {
 using namespace std;
 void value_semantic_codecvt_helper<char>::parse(boost::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const
@@ -92,7 +92,7 @@ BOOST_PROGRAM_OPTIONS_DECL auto bool_switch(bool *v) -> typed_value<bool> *
     Case is ignored. The 'xs' vector can either be empty, in which
     case the value is 'true', or can contain explicit value.
 */
-BOOST_PROGRAM_OPTIONS_DECL void validate(any &v, const vector<string> &xs, bool *, int)
+BOOST_PROGRAM_OPTIONS_DECL void validate(boost::any &v, const vector<string> &xs, bool * /*unused*/, int /*unused*/)
 {
    check_first_occurrence(v);
    string s(get_single_string(xs, true));
@@ -104,11 +104,11 @@ BOOST_PROGRAM_OPTIONS_DECL void validate(any &v, const vector<string> &xs, bool 
 
    if(s.empty() || s == "on" || s == "yes" || s == "1" || s == "true")
    {
-      v = any(true);
+      v = boost::any(true);
    }
    else if(s == "off" || s == "no" || s == "0" || s == "false")
    {
-      v = any(false);
+      v = boost::any(false);
    }
    else
    {
@@ -117,10 +117,10 @@ BOOST_PROGRAM_OPTIONS_DECL void validate(any &v, const vector<string> &xs, bool 
 }
 
 BOOST_PROGRAM_OPTIONS_DECL
-void validate(any &v, const vector<string> &xs, std::string *, int)
+void validate(boost::any &v, const vector<string> &xs, std::string * /*unused*/, int /*unused*/)
 {
    check_first_occurrence(v);
-   v = any(get_single_string(xs));
+   v = boost::any(get_single_string(xs));
 }
 
 namespace validators
@@ -328,4 +328,4 @@ auto validation_error::get_template(kind_t kind) -> string
    return msg;
 }
 
-} // namespace boost::argsy
+} // namespace argsy

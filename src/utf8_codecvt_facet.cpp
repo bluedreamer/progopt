@@ -7,14 +7,11 @@
 #include "argsy/config.hpp"
 
 #define BOOST_UTF8_BEGIN_NAMESPACE                                                                                                         \
-   namespace boost                                                                                                                         \
-   {                                                                                                                                       \
-   namespace program_options                                                                                                               \
+   namespace argsy                                                                                                                         \
    {                                                                                                                                       \
    namespace detail                                                                                                                        \
    {
 #define BOOST_UTF8_END_NAMESPACE                                                                                                           \
-   }                                                                                                                                       \
    }                                                                                                                                       \
    }
 #define BOOST_UTF8_DECL BOOST_PROGRAM_OPTIONS_DECL

@@ -25,7 +25,7 @@
 #include <utility>
 using namespace std;
 
-namespace boost::argsy
+namespace argsy
 {
 namespace
 {
@@ -224,7 +224,7 @@ auto option_description::description() const -> const std::string &
    return m_description;
 }
 
-auto option_description::semantic() const -> shared_ptr<const value_semantic>
+auto option_description::semantic() const -> boost::shared_ptr<const value_semantic>
 {
    return m_value_semantic;
 }
@@ -260,7 +260,7 @@ auto options_description_easy_init::operator()(const char *name, const char *des
    // Create untypes semantic which accepts zero tokens: i.e.
    // no value can be specified on command line.
    // FIXME: does not look exception-safe
-   shared_ptr<option_description> d(new option_description(name, new untyped_value(true), description));
+   boost::shared_ptr<option_description> d(new option_description(name, new untyped_value(true), description));
 
    owner->add(d);
    return *this;
@@ -268,7 +268,7 @@ auto options_description_easy_init::operator()(const char *name, const char *des
 
 auto options_description_easy_init::operator()(const char *name, const value_semantic *s) -> options_description_easy_init &
 {
-   shared_ptr<option_description> d(new option_description(name, s));
+   boost::shared_ptr<option_description> d(new option_description(name, s));
    owner->add(d);
    return *this;
 }
@@ -276,7 +276,7 @@ auto options_description_easy_init::operator()(const char *name, const value_sem
 auto options_description_easy_init::operator()(const char *name, const value_semantic *s, const char *description)
    -> options_description_easy_init &
 {
-   shared_ptr<option_description> d(new option_description(name, s, description));
+   boost::shared_ptr<option_description> d(new option_description(name, s, description));
 
    owner->add(d);
    return *this;
@@ -301,7 +301,7 @@ options_description::options_description(std::string caption, unsigned line_leng
    assert(m_min_description_length < m_line_length - 1);
 }
 
-void options_description::add(shared_ptr<option_description> desc)
+void options_description::add(boost::shared_ptr<option_description> desc)
 {
    m_options.push_back(desc);
    belong_to_group.push_back(false);
@@ -309,7 +309,7 @@ void options_description::add(shared_ptr<option_description> desc)
 
 auto options_description::add(const options_description &desc) -> options_description &
 {
-   shared_ptr<options_description> d(new options_description(desc));
+   boost::shared_ptr<options_description> d(new options_description(desc));
    groups.push_back(d);
 
    for(const auto &m_option : desc.m_options)
@@ -337,7 +337,7 @@ auto options_description::find(const std::string &name, bool approx, bool long_i
    return *d;
 }
 
-auto options_description::options() const -> const std::vector<shared_ptr<option_description>> &
+auto options_description::options() const -> const std::vector<boost::shared_ptr<option_description>> &
 {
    return m_options;
 }
@@ -345,10 +345,10 @@ auto options_description::options() const -> const std::vector<shared_ptr<option
 auto options_description::find_nothrow(const std::string &name, bool approx, bool long_ignore_case, bool short_ignore_case) const
    -> const option_description *
 {
-   shared_ptr<option_description> found;
-   bool                           had_full_match = false;
-   vector<string>                 approximate_matches;
-   vector<string>                 full_matches;
+   boost::shared_ptr<option_description> found;
+   bool                                  had_full_match = false;
+   vector<string>                        approximate_matches;
+   vector<string>                        full_matches;
 
    // We use linear search because matching specified option
    // name with the declared option name need to take care about
@@ -550,7 +550,7 @@ void format_description(std::ostream &os, const std::string &desc, unsigned firs
    // boost::tokenizer, not typedef.
    using tok = boost::tokenizer<boost::char_separator<char>>;
 
-   tok paragraphs(desc, char_separator<char>("\n", "", boost::keep_empty_tokens));
+   tok paragraphs(desc, boost::char_separator<char>("\n", "", boost::keep_empty_tokens));
 
    tok::const_iterator       par_iter = paragraphs.begin();
    const tok::const_iterator par_end  = paragraphs.end();
@@ -669,4 +669,4 @@ void options_description::print(std::ostream &os, unsigned width) const
    }
 }
 
-} // namespace boost::argsy
+} // namespace argsy

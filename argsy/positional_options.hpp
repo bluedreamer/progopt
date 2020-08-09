@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-namespace boost::argsy
+namespace argsy
 {
 /** Describes positional options.
 
@@ -56,4 +56,4 @@ private:
    std::string              m_trailing;
 };
 
-} // namespace boost::argsy
+} // namespace argsy

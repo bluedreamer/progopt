@@ -29,10 +29,10 @@
 
 #include <iostream>
 
-namespace boost::argsy
+namespace argsy
 {
 using namespace std;
-using namespace boost::argsy::command_line_style;
+using namespace argsy::command_line_style;
 
 auto invalid_syntax::get_template(kind_t kind) -> string
 {
@@ -69,9 +69,9 @@ auto invalid_syntax::get_template(kind_t kind) -> string
    return msg;
 }
 
-} // namespace boost::argsy
+} // namespace argsy
 
-namespace boost::argsy::detail
+namespace argsy::detail
 {
 // vc6 needs this, but borland chokes when this is added.
 #if BOOST_WORKAROUND(_MSC_VER, < 1300)
@@ -721,4 +721,4 @@ void cmdline::extra_style_parser(style_parser s)
    m_style_parser = s;
 }
 
-} // namespace boost::argsy::detail
+} // namespace argsy::detail

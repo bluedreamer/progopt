@@ -11,7 +11,7 @@
 #include "program_options.hpp"
 #include <boost/core/lightweight_test.hpp>
 
-namespace po = boost::argsy;
+namespace po = argsy;
 
 auto main(int argc, char const *argv[]) -> int
 {

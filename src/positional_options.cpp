@@ -12,7 +12,7 @@
 
 #include <cassert>
 
-namespace boost::argsy
+namespace argsy
 {
 positional_options_description::positional_options_description() = default;
 
@@ -50,4 +50,4 @@ auto positional_options_description::name_for_position(unsigned position) const 
    }
 }
 
-} // namespace boost::argsy
+} // namespace argsy

@@ -21,7 +21,7 @@
 //
 
 #include "program_options.hpp"
-namespace po = boost::argsy;
+namespace po = argsy;
 #include <fstream>
 #include <iostream>
 #include <map>

@@ -12,7 +12,7 @@
 
 #include <cassert>
 
-namespace boost::argsy
+namespace argsy
 {
 using namespace std;
 
@@ -106,7 +106,7 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
    xm.m_final.insert(new_final.begin(), new_final.end());
 
    // Second, apply default values and store required options.
-   const vector<shared_ptr<option_description>> &all = desc.options();
+   const vector<boost::shared_ptr<option_description>> &all = desc.options();
    for(i = 0; i < all.size(); ++i)
    {
       const option_description &d   = *all[i];
@@ -258,4 +258,4 @@ void variables_map::notify()
    }
 }
 
-} // namespace boost::argsy
+} // namespace argsy

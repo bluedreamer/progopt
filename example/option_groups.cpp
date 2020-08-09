@@ -24,7 +24,7 @@
 #include <boost/token_functions.hpp>
 #include <boost/tokenizer.hpp>
 using namespace boost;
-using namespace boost::argsy;
+using namespace argsy;
 
 #include <exception>
 #include <fstream>

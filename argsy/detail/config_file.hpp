@@ -24,7 +24,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-namespace boost::argsy::detail
+namespace argsy::detail
 {
 /** Standalone parser for config files in ini-line format.
     The parser is a model of single-pass lvalue iterator, and
@@ -57,7 +57,7 @@ namespace boost::argsy::detail
      TODO: maybe, we should just accept a pointer to options_description
      class.
  */
-class BOOST_PROGRAM_OPTIONS_DECL common_config_file_iterator : public eof_iterator<common_config_file_iterator, option>
+class BOOST_PROGRAM_OPTIONS_DECL common_config_file_iterator : public boost::eof_iterator<common_config_file_iterator, option>
 {
 public:
    common_config_file_iterator() { found_eof(); }
@@ -109,7 +109,7 @@ private: // base overrides
    auto getline(std::string &) -> bool override;
 
 private: // internal data
-   shared_ptr<std::basic_istream<charT>> is;
+   boost::shared_ptr<std::basic_istream<charT>> is;
 };
 
 using config_file_iterator  = basic_config_file_iterator<char>;
@@ -151,4 +151,4 @@ auto basic_config_file_iterator<charT>::getline(std::string &s) -> bool
    }
 }
 
-} // namespace boost::argsy::detail
+} // namespace argsy::detail

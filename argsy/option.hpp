@@ -10,7 +10,7 @@
 #include <utility>
 #include <vector>
 
-namespace boost::argsy
+namespace argsy
 {
 /** Option found in input source.
     Contains a key and a value. The key, in turn, can be a string (name of
@@ -62,4 +62,4 @@ public:
 using option  = basic_option<char>;
 using woption = basic_option<wchar_t>;
 
-} // namespace boost::argsy
+} // namespace argsy
