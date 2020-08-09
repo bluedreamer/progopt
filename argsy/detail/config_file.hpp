@@ -7,6 +7,7 @@
 #include <iosfwd>
 #include <set>
 #include <string>
+#include <memory>
 
 #include "argsy/config.hpp"
 #include "argsy/eof_iterator.hpp"
@@ -20,7 +21,6 @@
    #include <istream> // std::getline
 #endif
 
-#include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
@@ -109,7 +109,7 @@ private: // base overrides
    auto getline(std::string &) -> bool override;
 
 private: // internal data
-   boost::shared_ptr<std::basic_istream<charT>> is;
+   std::shared_ptr<std::basic_istream<charT>> is;
 };
 
 using config_file_iterator  = basic_config_file_iterator<char>;

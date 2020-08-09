@@ -224,7 +224,7 @@ auto option_description::description() const -> const std::string &
    return m_description;
 }
 
-auto option_description::semantic() const -> boost::shared_ptr<const value_semantic>
+auto option_description::semantic() const -> std::shared_ptr<const value_semantic>
 {
    return m_value_semantic;
 }
@@ -260,7 +260,7 @@ auto options_description_easy_init::operator()(const char *name, const char *des
    // Create untypes semantic which accepts zero tokens: i.e.
    // no value can be specified on command line.
    // FIXME: does not look exception-safe
-   boost::shared_ptr<option_description> d(new option_description(name, new untyped_value(true), description));
+   std::shared_ptr<option_description> d(new option_description(name, new untyped_value(true), description));
 
    owner->add(d);
    return *this;
@@ -268,7 +268,7 @@ auto options_description_easy_init::operator()(const char *name, const char *des
 
 auto options_description_easy_init::operator()(const char *name, const value_semantic *s) -> options_description_easy_init &
 {
-   boost::shared_ptr<option_description> d(new option_description(name, s));
+   std::shared_ptr<option_description> d(new option_description(name, s));
    owner->add(d);
    return *this;
 }
@@ -276,7 +276,7 @@ auto options_description_easy_init::operator()(const char *name, const value_sem
 auto options_description_easy_init::operator()(const char *name, const value_semantic *s, const char *description)
    -> options_description_easy_init &
 {
-   boost::shared_ptr<option_description> d(new option_description(name, s, description));
+   std::shared_ptr<option_description> d(new option_description(name, s, description));
 
    owner->add(d);
    return *this;
@@ -301,7 +301,7 @@ options_description::options_description(std::string caption, unsigned line_leng
    assert(m_min_description_length < m_line_length - 1);
 }
 
-void options_description::add(boost::shared_ptr<option_description> desc)
+void options_description::add(std::shared_ptr<option_description> desc)
 {
    m_options.push_back(desc);
    belong_to_group.push_back(false);
@@ -309,7 +309,7 @@ void options_description::add(boost::shared_ptr<option_description> desc)
 
 auto options_description::add(const options_description &desc) -> options_description &
 {
-   boost::shared_ptr<options_description> d(new options_description(desc));
+   std::shared_ptr<options_description> d(new options_description(desc));
    groups.push_back(d);
 
    for(const auto &m_option : desc.m_options)
@@ -337,7 +337,7 @@ auto options_description::find(const std::string &name, bool approx, bool long_i
    return *d;
 }
 
-auto options_description::options() const -> const std::vector<boost::shared_ptr<option_description>> &
+auto options_description::options() const -> const std::vector<std::shared_ptr<option_description>> &
 {
    return m_options;
 }
@@ -345,7 +345,7 @@ auto options_description::options() const -> const std::vector<boost::shared_ptr
 auto options_description::find_nothrow(const std::string &name, bool approx, bool long_ignore_case, bool short_ignore_case) const
    -> const option_description *
 {
-   boost::shared_ptr<option_description> found;
+   std::shared_ptr<option_description> found;
    bool                                  had_full_match = false;
    vector<string>                        approximate_matches;
    vector<string>                        full_matches;

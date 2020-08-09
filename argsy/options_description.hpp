@@ -12,7 +12,6 @@
 #include <boost/any.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <map>
 #include <set>
@@ -109,7 +108,7 @@ public:
    [[nodiscard]] auto description() const -> const std::string &;
 
    /// Semantic of option's value
-   [[nodiscard]] auto semantic() const -> boost::shared_ptr<const value_semantic>;
+   [[nodiscard]] auto semantic() const -> std::shared_ptr<const value_semantic>;
 
    /// Returns the option name, formatted suitably for usage message.
    [[nodiscard]] auto format_name() const -> std::string;
@@ -139,7 +138,7 @@ private:
 
    // shared_ptr is needed to simplify memory management in
    // copy ctor and destructor.
-   boost::shared_ptr<const value_semantic> m_value_semantic;
+   std::shared_ptr<const value_semantic> m_value_semantic;
 };
 
 class options_description;
@@ -187,7 +186,7 @@ public:
    /** Adds new variable description. Throws duplicate_variable_error if
        either short or long name matches that of already present one.
    */
-   void add(boost::shared_ptr<option_description> desc);
+   void add(std::shared_ptr<option_description> desc);
    /** Adds a group of option description. This has the same
        effect as adding all option_descriptions in 'desc'
        individually, except that output operator will show
@@ -215,7 +214,7 @@ public:
    [[nodiscard]] auto find_nothrow(const std::string &name, bool approx, bool long_ignore_case = false,
                                    bool short_ignore_case = false) const -> const option_description *;
 
-   [[nodiscard]] auto options() const -> const std::vector<boost::shared_ptr<option_description>> &;
+   [[nodiscard]] auto options() const -> const std::vector<std::shared_ptr<option_description>> &;
 
    /** Produces a human readable output of 'desc', listing options,
        their descriptions and allowed parameters. Other options_description
@@ -244,7 +243,7 @@ private:
    // Data organization is chosen because:
    // - there could be two names for one option
    // - option_add_proxy needs to know the last added option
-   std::vector<boost::shared_ptr<option_description>> m_options;
+   std::vector<std::shared_ptr<option_description>> m_options;
 
    // Whether the option comes from one of declared groups.
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, BOOST_TESTED_AT(313))
@@ -255,7 +254,7 @@ private:
    std::vector<bool> belong_to_group;
 #endif
 
-   std::vector<boost::shared_ptr<options_description>> groups;
+   std::vector<std::shared_ptr<options_description>> groups;
 };
 
 /** Class thrown when duplicate option description is found. */

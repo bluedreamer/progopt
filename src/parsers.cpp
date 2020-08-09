@@ -98,7 +98,7 @@ auto parse_config_file(std::basic_istream<charT> &is, const options_description 
 {
    set<string> allowed_options;
 
-   const vector<boost::shared_ptr<option_description>> &options = desc.options();
+   const vector<std::shared_ptr<option_description>> &options = desc.options();
    for(const auto &option : options)
    {
       const option_description &d = *option;

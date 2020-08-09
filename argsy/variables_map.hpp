@@ -6,8 +6,7 @@
 #include "argsy/config.hpp"
 
 #include <boost/any.hpp>
-#include <boost/shared_ptr.hpp>
-
+#include <memory>
 #include <map>
 #include <set>
 #include <string>
@@ -87,7 +86,7 @@ private:
    // they are known only after all sources are stored. By that
    // time options_description for the first source might not
    // be easily accessible, so we need to store semantic here.
-   boost::shared_ptr<const value_semantic> m_value_semantic;
+   std::shared_ptr<const value_semantic> m_value_semantic;
 
    friend BOOST_PROGRAM_OPTIONS_DECL void store(const basic_parsed_options<char> &options, variables_map &m, bool);
 
