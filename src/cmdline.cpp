@@ -81,13 +81,7 @@ cmdline::cmdline(const vector<string> &args)
 
 cmdline::cmdline(int argc, const char *const *argv)
 {
-#if defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
-   vector<string> args;
-   copy(argv + 1, argv + argc + !argc, inserter(args, args.end()));
-   init(args);
-#else
    init(vector<string>(argv + 1, argv + argc + !argc));
-#endif
 }
 
 void cmdline::init(const vector<string> &args)
@@ -122,7 +116,7 @@ void cmdline::check_style(int style) const
    const char *error = nullptr;
    if(allow_some_long && !(style & long_allow_adjacent) && !(style & long_allow_next))
    {
-      error = "boost::argsy misconfiguration: "
+      error = "argsy misconfiguration: "
               "choose one or other of 'command_line_style::long_allow_next' "
               "(whitespace separated arguments) or "
               "'command_line_style::long_allow_adjacent' ('=' separated arguments) for "
@@ -131,7 +125,7 @@ void cmdline::check_style(int style) const
 
    if(!error && (style & allow_short) && !(style & short_allow_adjacent) && !(style & short_allow_next))
    {
-      error = "boost::argsy misconfiguration: "
+      error = "argsy misconfiguration: "
               "choose one or other of 'command_line_style::short_allow_next' "
               "(whitespace separated arguments) or "
               "'command_line_style::short_allow_adjacent' ('=' separated arguments) for "
@@ -140,7 +134,7 @@ void cmdline::check_style(int style) const
 
    if(!error && (style & allow_short) && !(style & allow_dash_for_short) && !(style & allow_slash_for_short))
    {
-      error = "boost::argsy misconfiguration: "
+      error = "argsy misconfiguration: "
               "choose one or other of 'command_line_style::allow_slash_for_short' "
               "(slashes) or 'command_line_style::allow_dash_for_short' (dashes) for "
               "short options.";
