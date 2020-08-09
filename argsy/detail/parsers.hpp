@@ -13,9 +13,8 @@ namespace argsy
 {
 template<class charT>
 basic_command_line_parser<charT>::basic_command_line_parser(const std::vector<std::basic_string<charT>> &xargs)
-   : detail::cmdline({})
+   : detail::cmdline(xargs)
 {
-   // TODO bug waiting to happen - removed xargs from above cmdline ctor
 }
 
 template<class charT>
