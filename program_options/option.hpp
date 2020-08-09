@@ -2,9 +2,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#ifndef BOOST_OPTION_HPP_VP_2004_02_25
-#define BOOST_OPTION_HPP_VP_2004_02_25
+#pragma once
 
 #include "program_options/config.hpp"
 
@@ -67,5 +65,3 @@ namespace boost { namespace program_options {
     typedef basic_option<wchar_t> woption;
 
 }}
-
-#endif

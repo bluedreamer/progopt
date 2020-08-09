@@ -3,10 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-
-#ifndef BOOST_OPTION_DESCRIPTION_VP_2003_05_19
-#define BOOST_OPTION_DESCRIPTION_VP_2003_05_19
+#pragma once
 
 #include "program_options/config.hpp"
 #include "program_options/errors.hpp"
@@ -25,12 +22,6 @@
 #include <utility>
 
 #include <iosfwd>
-
-#if defined(BOOST_MSVC)
-#   pragma warning (push)
-#   pragma warning (disable:4251) // class 'boost::shared_ptr<T>' needs to have dll-interface to be used by clients of class 'boost::program_options::option_description'
-#endif
-
 
 /** Boost namespace */
 namespace boost { 
@@ -293,9 +284,3 @@ namespace program_options {
         duplicate_option_error(const std::string& xwhat) : error(xwhat) {}
     };
 }}
-
-#if defined(BOOST_MSVC)
-#   pragma warning (pop)
-#endif
-
-#endif

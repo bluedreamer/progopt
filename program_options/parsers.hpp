@@ -3,9 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-
-#ifndef BOOST_PARSERS_VP_2003_05_19
-#define BOOST_PARSERS_VP_2003_05_19
+#pragma once
 
 #include "program_options/config.hpp"
 #include "program_options/option.hpp"
@@ -16,11 +14,6 @@
 #include <iosfwd>
 #include <vector>
 #include <utility>
-
-#if defined(BOOST_MSVC)
-#   pragma warning (push)
-#   pragma warning (disable:4251) // class 'std::vector<_Ty>' needs to have dll-interface to be used by clients of class 'boost::program_options::basic_parsed_options<wchar_t>'
-#endif
 
 namespace boost { namespace program_options {
 
@@ -286,12 +279,6 @@ namespace boost { namespace program_options {
 
 }}
 
-#if defined(BOOST_MSVC)
-#   pragma warning (pop)
-#endif
-
 #undef DECL
-
 #include "program_options/detail/parsers.hpp"
 
-#endif

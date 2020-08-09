@@ -2,30 +2,20 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
+#pragma once
 
-
-#ifndef BOOST_CMDLINE_VP_2003_05_19
-#define BOOST_CMDLINE_VP_2003_05_19
-
-#include <boost/program_options/config.hpp>
-#include <boost/program_options/errors.hpp>
-#include <boost/program_options/cmdline.hpp>
-#include <boost/program_options/option.hpp>
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/positional_options.hpp>
-
+#include "program_options/config.hpp"
+#include "program_options/errors.hpp"
+#include "program_options/cmdline.hpp"
+#include "program_options/option.hpp"
+#include "program_options/options_description.hpp"
+#include "program_options/positional_options.hpp"
 
 #include <boost/detail/workaround.hpp>
-
 #include <boost/function.hpp>
 
 #include <string>
 #include <vector>
-
-#if defined(BOOST_MSVC)
-#   pragma warning (push)
-#   pragma warning (disable:4251) // class 'std::vector<_Ty>' needs to have dll-interface to be used by clients of class 'boost::program_options::positional_options_description'
-#endif
 
 namespace boost { namespace program_options { namespace detail {
 
@@ -150,10 +140,4 @@ namespace boost { namespace program_options { namespace detail {
     void test_cmdline_detail();
     
 }}}
-
-#if defined(BOOST_MSVC)
-#   pragma warning (pop)
-#endif
-
-#endif
 

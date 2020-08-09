@@ -6,6 +6,8 @@
 // This file defines template functions that are declared in
 // ../value_semantic.hpp.
 
+#pragma once
+
 #include <boost/throw_exception.hpp>
 
 // forward declaration

@@ -2,10 +2,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-
-#ifndef BOOST_ERRORS_VP_2003_01_02
-#define BOOST_ERRORS_VP_2003_01_02
+#pragma once
 
 #include "program_options/config.hpp"
 
@@ -13,13 +10,6 @@
 #include <stdexcept>
 #include <vector>
 #include <map>
-
-
-#if defined(BOOST_MSVC)
-#   pragma warning (push)
-#   pragma warning (disable:4275) // non dll-interface class 'std::logic_error' used as base for dll-interface class 'boost::program_options::error'
-#   pragma warning (disable:4251) // class 'std::vector<_Ty>' needs to have dll-interface to be used by clients of class 'boost::program_options::ambiguous_option'
-#endif
 
 namespace boost { namespace program_options {
 
@@ -416,9 +406,3 @@ namespace boost { namespace program_options {
     
 
 }}
-
-#if defined(BOOST_MSVC)
-#   pragma warning (pop)
-#endif
-
-#endif

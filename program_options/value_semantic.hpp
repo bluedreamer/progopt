@@ -2,9 +2,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#ifndef BOOST_VALUE_SEMANTIC_HPP_VP_2004_02_24
-#define BOOST_VALUE_SEMANTIC_HPP_VP_2004_02_24
+#pragma once
 
 #include "program_options/config.hpp"
 #include "program_options/errors.hpp"
@@ -419,6 +417,3 @@ namespace boost { namespace program_options {
 }}
 
 #include "program_options/detail/value_semantic.hpp"
-
-#endif
-

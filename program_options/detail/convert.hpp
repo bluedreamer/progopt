@@ -2,11 +2,9 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
+#pragma once
 
-#ifndef BOOST_CONVERT_HPP_VP_2004_04_28
-#define BOOST_CONVERT_HPP_VP_2004_04_28
-
-#include <boost/program_options/config.hpp>
+#include "program_options/config.hpp"
 
 #if !defined(BOOST_NO_STD_WSTRING)
 
@@ -103,5 +101,4 @@ namespace boost{
         }
    }
 }
-#endif
 #endif

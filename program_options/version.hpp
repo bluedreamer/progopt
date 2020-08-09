@@ -2,9 +2,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#ifndef BOOST_PROGRAM_OPTIONS_VERSION_HPP_VP_2004_04_05
-#define BOOST_PROGRAM_OPTIONS_VERSION_HPP_VP_2004_04_05
+#pragma once
 
 /** The version of the source interface.
     The value will be incremented whenever a change is made which might
@@ -18,5 +16,3 @@
 // Signal that implicit options will use values from next
 // token, if available.
 #define BOOST_PROGRAM_OPTIONS_IMPLICIT_VALUE_NEXT_TOKEN 1
-
-#endif

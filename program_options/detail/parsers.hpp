@@ -3,10 +3,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_PARSERS_HPP_VP_2004_05_06
-#define BOOST_PARSERS_HPP_VP_2004_05_06
+#pragma once
 
-#include <boost/program_options/detail/convert.hpp>
+#include "program_options/detail/convert.hpp"
 
 #include <iterator>
 
@@ -131,5 +130,3 @@ namespace boost { namespace program_options {
 
 
 }}
-
-#endif

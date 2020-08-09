@@ -4,11 +4,9 @@
 // copyright notice appears in all copies. This software is provided "as is"
 // without express or implied warranty, and with no claim as to its suitability
 // for any purpose.
+#pragma once
 
-#ifndef BOOST_PROGRAM_OPTIONS_UTF8_CODECVT_FACET_HPP
-#define BOOST_PROGRAM_OPTIONS_UTF8_CODECVT_FACET_HPP
-
-#include <boost/program_options/config.hpp>
+#include "program_options/config.hpp"
 
 #define BOOST_UTF8_BEGIN_NAMESPACE \
      namespace boost { namespace program_options { namespace detail {
@@ -21,5 +19,3 @@
 #undef BOOST_UTF8_BEGIN_NAMESPACE
 #undef BOOST_UTF8_END_NAMESPACE
 #undef BOOST_UTF8_DECL
-
-#endif

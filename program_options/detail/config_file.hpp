@@ -2,10 +2,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-
-#ifndef BOOST_CONFIG_FILE_VP_2003_01_02
-#define BOOST_CONFIG_FILE_VP_2003_01_02
+#pragma once
 
 #include <iosfwd>
 #include <string>
@@ -186,9 +183,3 @@ namespace boost { namespace program_options { namespace detail {
     
 
 }}}
-
-#ifdef BOOST_MSVC
-# pragma warning(pop)
-#endif
-
-#endif
