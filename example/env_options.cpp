@@ -14,9 +14,13 @@ auto mapper(std::string env_var) -> std::string
    std::transform(env_var.begin(), env_var.end(), env_var.begin(), ::toupper);
 
    if(env_var == "PATH")
+   {
       return "path";
+   }
    if(env_var == "EXAMPLE_VERBOSE")
+   {
       return "verbosity";
+   }
    return "";
 }
 

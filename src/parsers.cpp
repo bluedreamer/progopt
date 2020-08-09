@@ -86,7 +86,9 @@ basic_parsed_options<wchar_t>::basic_parsed_options(const parsed_options &po)
    , m_options_prefix(po.m_options_prefix)
 {
    for(const auto &option : po.options)
+   {
       options.push_back(woption_from_option(option));
+   }
 }
 #endif
 
@@ -102,7 +104,9 @@ auto parse_config_file(std::basic_istream<charT> &is, const options_description 
       const option_description &d = *option;
 
       if(d.long_name().empty())
+      {
          boost::throw_exception(error("abbreviated option names are not permitted in options configuration files"));
+      }
 
       allowed_options.insert(d.long_name());
    }

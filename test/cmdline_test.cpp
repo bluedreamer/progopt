@@ -133,18 +133,24 @@ void test_cmdline(const char *syntax, command_line_style::style_t style, const t
             if(opt.position_key != -1)
             {
                if(!result.empty())
+               {
                   result += " ";
+               }
                result += opt.value[0];
             }
             else
             {
                if(!result.empty())
+               {
                   result += " ";
+               }
                result += opt.string_key + ":";
                for(size_t k = 0; k < opt.value.size(); ++k)
                {
                   if(k != 0)
+                  {
                      result += "-";
+                  }
                   result += opt.value[k];
                }
             }
@@ -352,17 +358,25 @@ void test_prefix()
 auto at_option_parser(string const &s) -> pair<string, string>
 {
    if('@' == s[0])
+   {
       return std::make_pair(string("response-file"), s.substr(1));
+   }
    else
+   {
       return pair<string, string>();
+   }
 }
 
 auto at_option_parser_broken(string const &s) -> pair<string, string>
 {
    if('@' == s[0])
+   {
       return std::make_pair(string("some garbage"), s.substr(1));
+   }
    else
+   {
       return pair<string, string>();
+   }
 }
 
 void test_additional_parser()

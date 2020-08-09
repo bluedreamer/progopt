@@ -38,25 +38,37 @@ auto untyped_value::name() const -> std::string
 auto untyped_value::min_tokens() const -> unsigned
 {
    if(m_zero_tokens)
+   {
       return 0;
+   }
    else
+   {
       return 1;
+   }
 }
 
 auto untyped_value::max_tokens() const -> unsigned
 {
    if(m_zero_tokens)
+   {
       return 0;
+   }
    else
+   {
       return 1;
+   }
 }
 
 void untyped_value::xparse(boost::any &value_store, const std::vector<std::string> &new_tokens) const
 {
    if(!value_store.empty())
+   {
       boost::throw_exception(multiple_occurrences());
+   }
    if(new_tokens.size() > 1)
+   {
       boost::throw_exception(multiple_values());
+   }
    value_store = new_tokens.empty() ? std::string("") : new_tokens.front();
 }
 
@@ -86,14 +98,22 @@ BOOST_PROGRAM_OPTIONS_DECL void validate(any &v, const vector<string> &xs, bool 
    string s(get_single_string(xs, true));
 
    for(char &i : s)
+   {
       i = char(tolower(i));
+   }
 
    if(s.empty() || s == "on" || s == "yes" || s == "1" || s == "true")
+   {
       v = any(true);
+   }
    else if(s == "off" || s == "no" || s == "0" || s == "false")
+   {
       v = any(false);
+   }
    else
+   {
       boost::throw_exception(invalid_bool_value(s));
+   }
 }
 
 BOOST_PROGRAM_OPTIONS_DECL
@@ -109,7 +129,9 @@ BOOST_PROGRAM_OPTIONS_DECL
 void check_first_occurrence(const boost::any &value)
 {
    if(!value.empty())
+   {
       boost::throw_exception(multiple_occurrences());
+   }
 }
 } // namespace validators
 
@@ -155,7 +177,9 @@ void error_with_option_name::replace_token(const string &from, const string &to)
       std::size_t pos = m_message.find(from.c_str(), 0, from.length());
       // not found: all replaced
       if(pos == std::string::npos)
+      {
          return;
+      }
       m_message.replace(pos, from.length(), to);
    }
 }
@@ -183,18 +207,24 @@ auto error_with_option_name::get_canonical_option_prefix() const -> string
 auto error_with_option_name::get_canonical_option_name() const -> string
 {
    if(!m_substitutions.find("option")->second.length())
+   {
       return m_substitutions.find("original_token")->second;
+   }
 
    string original_token = strip_prefixes(m_substitutions.find("original_token")->second);
    string option_name    = strip_prefixes(m_substitutions.find("option")->second);
 
    //  For long options, use option name
    if(m_option_style == command_line_style::allow_long || m_option_style == command_line_style::allow_long_disguise)
+   {
       return get_canonical_option_prefix() + option_name;
+   }
 
    //  For short options use first letter of original_token
    if(m_option_style && original_token.length())
+   {
       return get_canonical_option_prefix() + original_token[0];
+   }
 
    // no prefix
    return option_name;
@@ -214,7 +244,9 @@ void error_with_option_name::substitute_placeholders(const string &error_templat
    {
       // missing parameter: use default
       if(substitutions.count(m_substitution_default.first) == 0 || substitutions[m_substitution_default.first].length() == 0)
+      {
          replace_token(m_substitution_default.second.first, m_substitution_default.second.second);
+      }
    }
 
    //
@@ -222,7 +254,9 @@ void error_with_option_name::substitute_placeholders(const string &error_templat
    //  placeholder are denoted by surrounding '%'
    //
    for(auto &substitution : substitutions)
+   {
       replace_token('%' + substitution.first + '%', substitution.second);
+   }
 }
 
 void ambiguous_option::substitute_placeholders(const string &original_error_template) const
@@ -246,13 +280,17 @@ void ambiguous_option::substitute_placeholders(const string &original_error_temp
    if(alternatives_vec.size() > 1)
    {
       for(unsigned i = 0; i < alternatives_vec.size() - 1; ++i)
+      {
          error_template += "'%prefix%" + alternatives_vec[i] + "', ";
+      }
       error_template += "and ";
    }
 
    // there is a programming error if multiple options have the same name...
    if(m_alternatives.size() > 1 && alternatives_vec.size() == 1)
+   {
       error_template += "different versions of ";
+   }
 
    error_template += "'%prefix%" + alternatives_vec.back() + "'";
 

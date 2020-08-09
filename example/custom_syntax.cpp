@@ -27,9 +27,13 @@ auto reg_foo(const string &s) -> pair<string, string>
    if(s.find("-f") == 0)
    {
       if(s.substr(2, 3) == "no-")
+      {
          return make_pair(s.substr(5), string("false"));
+      }
       else
+      {
          return make_pair(s.substr(2), string("true"));
+      }
    }
    else
    {

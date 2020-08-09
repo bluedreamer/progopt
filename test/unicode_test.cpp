@@ -82,7 +82,9 @@ auto sv(const wchar_t *array[], unsigned size) -> vector<wstring>
 {
    vector<wstring> r;
    for(unsigned i = 0; i < size; ++i)
+   {
       r.emplace_back(array[i]);
+   }
    return r;
 }
 

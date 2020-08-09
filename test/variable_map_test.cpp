@@ -23,7 +23,9 @@ auto sv(const char *array[], unsigned size) -> vector<string>
 {
    vector<string> r;
    for(unsigned i = 0; i < size; ++i)
+   {
       r.emplace_back(array[i]);
+   }
    return r;
 }
 

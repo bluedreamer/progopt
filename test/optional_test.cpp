@@ -15,7 +15,9 @@ auto sv(const char *array[], unsigned size) -> std::vector<std::string>
 {
    std::vector<std::string> r;
    for(unsigned i = 0; i < size; ++i)
+   {
       r.emplace_back(array[i]);
+   }
    return r;
 }
 

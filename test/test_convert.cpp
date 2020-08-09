@@ -55,14 +55,18 @@ auto from_8_bit_2(const std::string &s, const codecvt<wchar_t, char, mbstate_t> 
       std::codecvt_base::result r = cvt.in(state, from, from_end, from, buffer, buffer + 32, to_next);
 
       if(r == std::codecvt_base::error)
+      {
          throw logic_error("character conversion failed");
+      }
       // 'partial' is not an error, it just means not all source characters
       // we converted. However, we need to check that at least one new target
       // character was produced. If not, it means the source data is
       // incomplete, and since we don't have extra data to add to source, it's
       // error.
       if(to_next == buffer)
+      {
          throw logic_error("character conversion failed");
+      }
 
       // Add converted characters
       result.append(buffer, to_next);
@@ -79,13 +83,17 @@ void test_convert(const std::string &input, const std::string &expected_output)
    {
       boost::progress_timer t;
       for(int i = 0; i < 10000; ++i)
+      {
          output = from_8_bit_2(input, facet);
+      }
    }
 
    {
       boost::progress_timer t;
       for(int i = 0; i < 10000; ++i)
+      {
          output = from_8_bit_2(input, facet);
+      }
    }
 
    BOOST_CHECK(output.size() * 2 == expected_output.size());

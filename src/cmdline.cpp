@@ -107,7 +107,9 @@ void cmdline::init(const vector<string> &args)
 void cmdline::style(int style)
 {
    if(style == 0)
+   {
       style = default_style;
+   }
 
    check_style(style);
    this->m_style = style_t(style);
@@ -124,27 +126,35 @@ void cmdline::check_style(int style) const
 
    const char *error = nullptr;
    if(allow_some_long && !(style & long_allow_adjacent) && !(style & long_allow_next))
+   {
       error = "boost::argsy misconfiguration: "
               "choose one or other of 'command_line_style::long_allow_next' "
               "(whitespace separated arguments) or "
               "'command_line_style::long_allow_adjacent' ('=' separated arguments) for "
               "long options.";
+   }
 
    if(!error && (style & allow_short) && !(style & short_allow_adjacent) && !(style & short_allow_next))
+   {
       error = "boost::argsy misconfiguration: "
               "choose one or other of 'command_line_style::short_allow_next' "
               "(whitespace separated arguments) or "
               "'command_line_style::short_allow_adjacent' ('=' separated arguments) for "
               "short options.";
+   }
 
    if(!error && (style & allow_short) && !(style & allow_dash_for_short) && !(style & allow_slash_for_short))
+   {
       error = "boost::argsy misconfiguration: "
               "choose one or other of 'command_line_style::allow_slash_for_short' "
               "(slashes) or 'command_line_style::allow_dash_for_short' (dashes) for "
               "short options.";
+   }
 
    if(error)
+   {
       boost::throw_exception(invalid_command_line_style(error));
+   }
 
    // Need to check that if guessing and long disguise are enabled
    // -f will mean the same as -foo
@@ -168,16 +178,24 @@ void cmdline::set_positional_options(const positional_options_description &posit
 auto cmdline::get_canonical_option_prefix() -> int
 {
    if(m_style & allow_long)
+   {
       return allow_long;
+   }
 
    if(m_style & allow_long_disguise)
+   {
       return allow_long_disguise;
+   }
 
    if((m_style & allow_short) && (m_style & allow_dash_for_short))
+   {
       return allow_dash_for_short;
+   }
 
    if((m_style & allow_short) && (m_style & allow_slash_for_short))
+   {
       return allow_slash_for_short;
+   }
 
    return 0;
 }
@@ -201,22 +219,34 @@ auto cmdline::run() -> vector<option>
    vector<style_parser> style_parsers;
 
    if(m_style_parser)
+   {
       style_parsers.push_back(m_style_parser);
+   }
 
    if(m_additional_parser)
+   {
       style_parsers.emplace_back(boost::bind(&cmdline::handle_additional_parser, this, _1));
+   }
 
    if(m_style & allow_long)
+   {
       style_parsers.emplace_back(boost::bind(&cmdline::parse_long_option, this, _1));
+   }
 
    if((m_style & allow_long_disguise))
+   {
       style_parsers.emplace_back(boost::bind(&cmdline::parse_disguised_long_option, this, _1));
+   }
 
    if((m_style & allow_short) && (m_style & allow_dash_for_short))
+   {
       style_parsers.emplace_back(boost::bind(&cmdline::parse_short_option, this, _1));
+   }
 
    if((m_style & allow_short) && (m_style & allow_slash_for_short))
+   {
       style_parsers.emplace_back(boost::bind(&cmdline::parse_dos_option, this, _1));
+   }
 
    style_parsers.emplace_back(boost::bind(&cmdline::parse_terminator, this, _1));
 
@@ -244,7 +274,9 @@ auto cmdline::run() -> vector<option>
             // if appropriate.
             finish_option(next.back(), args, style_parsers);
             for(const auto &j : next)
+            {
                result.push_back(j);
+            }
          }
 
          if(args.size() != current_size)
@@ -274,7 +306,9 @@ auto cmdline::run() -> vector<option>
       option &opt = result2.back();
 
       if(opt.string_key.empty())
+      {
          continue;
+      }
 
       const option_description *xd;
       try
@@ -290,7 +324,9 @@ auto cmdline::run() -> vector<option>
       }
 
       if(!xd)
+      {
          continue;
+      }
 
       unsigned min_tokens = xd->semantic()->min_tokens();
       unsigned max_tokens = xd->semantic()->max_tokens();
@@ -306,7 +342,9 @@ auto cmdline::run() -> vector<option>
          {
             option &opt2 = result[j];
             if(!opt2.string_key.empty())
+            {
                break;
+            }
 
             if(opt2.position_key == INT_MAX)
             {
@@ -334,7 +372,9 @@ auto cmdline::run() -> vector<option>
    for(auto &i : result)
    {
       if(i.string_key.empty())
+      {
          i.position_key = position_key++;
+      }
    }
 
    if(m_positional)
@@ -375,14 +415,18 @@ auto cmdline::run() -> vector<option>
 void cmdline::finish_option(option &opt, vector<string> &other_tokens, const vector<style_parser> &style_parsers)
 {
    if(opt.string_key.empty())
+   {
       return;
+   }
 
    //
    // Be defensive:
    // will have no original token if option created by handle_additional_parser()
    std::string original_token_for_exceptions = opt.string_key;
    if(opt.original_tokens.size())
+   {
       original_token_for_exceptions = opt.original_tokens[0];
+   }
 
    try
    {
@@ -454,7 +498,9 @@ void cmdline::finish_option(option &opt, vector<string> &other_tokens, const vec
                   m_desc->find_nothrow(other_tokens[0], is_style_active(allow_guessing), is_style_active(long_case_insensitive),
                                        is_style_active(short_case_insensitive));
                if(od)
+               {
                   boost::throw_exception(invalid_command_line_syntax(invalid_command_line_syntax::missing_parameter));
+               }
             }
             opt.value.push_back(other_tokens[0]);
             opt.original_tokens.push_back(other_tokens[0]);
@@ -490,8 +536,10 @@ auto cmdline::parse_long_option(vector<string> &args) -> vector<option>
          name     = tok.substr(2, p - 2);
          adjacent = tok.substr(p + 1);
          if(adjacent.empty())
+         {
             boost::throw_exception(invalid_command_line_syntax(invalid_command_line_syntax::empty_adjacent_parameter, name, name,
                                                                get_canonical_option_prefix()));
+         }
       }
       else
       {
@@ -500,7 +548,9 @@ auto cmdline::parse_long_option(vector<string> &args) -> vector<option>
       option opt;
       opt.string_key = name;
       if(!adjacent.empty())
+      {
          opt.value.push_back(adjacent);
+      }
       opt.original_tokens.push_back(tok);
       result.push_back(opt);
       args.erase(args.begin());
@@ -561,7 +611,9 @@ auto cmdline::parse_short_option(vector<string> &args) -> vector<option>
             opt.string_key = name;
             opt.original_tokens.push_back(tok);
             if(!adjacent.empty())
+            {
                opt.value.push_back(adjacent);
+            }
             result.push_back(opt);
             args.erase(args.begin());
             break;
@@ -584,7 +636,9 @@ auto cmdline::parse_dos_option(vector<string> &args) -> vector<option>
       option opt;
       opt.string_key = name;
       if(!adjacent.empty())
+      {
          opt.value.push_back(adjacent);
+      }
       opt.original_tokens.push_back(tok);
       result.push_back(opt);
       args.erase(args.begin());
@@ -604,7 +658,9 @@ auto cmdline::parse_disguised_long_option(vector<string> &args) -> vector<option
          {
             args[0].insert(0, "-");
             if(args[0][1] == '/')
+            {
                args[0][1] = '-';
+            }
             return parse_long_option(args);
          }
       }
@@ -646,7 +702,9 @@ auto cmdline::handle_additional_parser(vector<string> &args) -> vector<option>
       option next;
       next.string_key = r.first;
       if(!r.second.empty())
+      {
          next.value.push_back(r.second);
+      }
       result.push_back(next);
       args.erase(args.begin());
    }

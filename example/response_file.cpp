@@ -32,9 +32,13 @@ using namespace std;
 auto at_option_parser(string const &s) -> pair<string, string>
 {
    if('@' == s[0])
+   {
       return std::make_pair(string("response-file"), s.substr(1));
+   }
    else
+   {
       return pair<string, string>();
+   }
 }
 
 auto main(int ac, char *av[]) -> int

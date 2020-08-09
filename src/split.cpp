@@ -27,7 +27,9 @@ auto split_unix(const std::basic_string<charT> &cmdline, const std::basic_string
    for(typename tokenizerT::iterator cur_token(tok.begin()), end_token(tok.end()); cur_token != end_token; ++cur_token)
    {
       if(!cur_token->empty())
+      {
          result.push_back(*cur_token);
+      }
    }
    return result;
 }

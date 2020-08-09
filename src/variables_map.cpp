@@ -50,7 +50,9 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
          option_name = options.options[i].string_key;
          // Skip positional options without name
          if(option_name.empty())
+         {
             continue;
+         }
 
          // Ignore unregistered option. The 'unregistered'
          // field can be true only if user has explicitly asked
@@ -58,11 +60,15 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
          // to variables map (lacking any information about paring),
          // so just ignore them.
          if(options.options[i].unregistered)
+         {
             continue;
+         }
 
          // If option has final value, skip this assignment
          if(xm.m_final.count(option_name))
+         {
             continue;
+         }
 
          original_token              = options.options[i].original_tokens.size() ? options.options[i].original_tokens[0] : "";
          const option_description &d = desc.find(option_name, false, false, false);
@@ -84,7 +90,9 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
          // so that several assignment inside *this* 'store' call
          // are allowed.
          if(!d.semantic()->is_composing())
+         {
             new_final.insert(option_name);
+         }
       }
    }
 #ifndef BOOST_NO_EXCEPTIONS
@@ -131,7 +139,9 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
          //  Precedence is set conveniently by a single call to length()
          string canonical_name = d.canonical_display_name(options.m_options_prefix);
          if(canonical_name.length() > xm.m_required[key].length())
+         {
             xm.m_required[key] = canonical_name;
+         }
       }
    }
 }
@@ -162,14 +172,20 @@ auto abstract_variables_map::operator[](const std::string &name) const -> const 
 {
    const variable_value &v = get(name);
    if(v.empty() && m_next)
+   {
       return (*m_next)[name];
+   }
    else if(v.defaulted() && m_next)
    {
       const variable_value &v2 = (*m_next)[name];
       if(!v2.empty() && !v2.defaulted())
+      {
          return v2;
+      }
       else
+      {
          return v;
+      }
    }
    else
    {
@@ -201,9 +217,13 @@ auto variables_map::get(const std::string &name) const -> const variable_value &
    static variable_value empty;
    auto                  i = this->find(name);
    if(i == this->end())
+   {
       return empty;
+   }
    else
+   {
       return i->second;
+   }
 }
 
 void variables_map::notify()
@@ -232,7 +252,9 @@ void variables_map::notify()
              https://svn.boost.org/trac/boost/ticket/2782
       */
       if(k.second.m_value_semantic)
+      {
          k.second.m_value_semantic->notify(k.second.value());
+      }
    }
 }
 

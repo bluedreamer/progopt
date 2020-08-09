@@ -76,7 +76,9 @@ auto option_description::match(const std::string &option, bool approx, bool long
             // The name ends with '*'. Any specified name with the given
             // prefix is OK.
             if(local_option.find(local_long_name.substr(0, local_long_name.length() - 1)) == 0)
+            {
                result = approximate_match;
+            }
          }
 
          if(local_long_name == local_option)
@@ -115,17 +117,23 @@ auto option_description::key(const std::string &option) const -> const std::stri
    {
       const std::string &first_long_name = *m_long_names.begin();
       if(first_long_name.find('*') != string::npos)
+      {
          // The '*' character means we're long_name
          // matches only part of the input. So, returning
          // long name will remove some of the information,
          // and we have to return the option as specified
          // in the source.
          return option;
+      }
       else
+      {
          return first_long_name;
+      }
    }
    else
+   {
       return m_short_name;
+   }
 }
 
 auto option_description::canonical_display_name(int prefix_style) const -> std::string
@@ -134,22 +142,34 @@ auto option_description::canonical_display_name(int prefix_style) const -> std::
    if(!m_long_names.empty())
    {
       if(prefix_style == command_line_style::allow_long)
+      {
          return "--" + *m_long_names.begin();
+      }
       if(prefix_style == command_line_style::allow_long_disguise)
+      {
          return "-" + *m_long_names.begin();
+      }
    }
    // sanity check: m_short_name[0] should be '-' or '/'
    if(m_short_name.length() == 2)
    {
       if(prefix_style == command_line_style::allow_slash_for_short)
+      {
          return string("/") + m_short_name[1];
+      }
       if(prefix_style == command_line_style::allow_dash_for_short)
+      {
          return string("-") + m_short_name[1];
+      }
    }
    if(!m_long_names.empty())
+   {
       return *m_long_names.begin();
+   }
    else
+   {
       return m_short_name;
+   }
 }
 
 auto option_description::long_name() const -> const std::string &
@@ -221,9 +241,13 @@ auto option_description::format_name() const -> std::string
 auto option_description::format_parameter() const -> std::string
 {
    if(m_value_semantic->max_tokens() != 0)
+   {
       return m_value_semantic->name();
+   }
    else
+   {
       return "";
+   }
 }
 
 options_description_easy_init::options_description_easy_init(options_description *owner)
@@ -307,7 +331,9 @@ auto options_description::find(const std::string &name, bool approx, bool long_i
 {
    const option_description *d = find_nothrow(name, approx, long_ignore_case, short_ignore_case);
    if(!d)
+   {
       boost::throw_exception(unknown_option());
+   }
    return *d;
 }
 
@@ -332,7 +358,9 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
       option_description::match_result r = m_option->match(name, approx, long_ignore_case, short_ignore_case);
 
       if(r == option_description::no_match)
+      {
          continue;
+      }
 
       if(r == option_description::full_match)
       {
@@ -346,11 +374,15 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
          // be the best approach.
          approximate_matches.push_back(m_option->key(name));
          if(!had_full_match)
+         {
             found = m_option;
+         }
       }
    }
    if(full_matches.size() > 1)
+   {
       boost::throw_exception(ambiguous_option(full_matches));
+   }
 
    // If we have a full match, and an approximate match,
    // ignore approximate match instead of reporting error.
@@ -358,7 +390,9 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
    // "--all" on the command line should select the first one,
    // without ambiguity.
    if(full_matches.empty() && approximate_matches.size() > 1)
+   {
       boost::throw_exception(ambiguous_option(approximate_matches));
+   }
 
    return found.get();
 }
@@ -586,7 +620,9 @@ auto options_description::get_option_column_width() const -> unsigned
 
    /* Get width of groups as well*/
    for(const auto &group : groups)
+   {
       width = max(width, group->get_option_column_width());
+   }
 
    /* this is the column were description should start, if first
       column is longer, we go to a new line */
@@ -602,16 +638,22 @@ auto options_description::get_option_column_width() const -> unsigned
 void options_description::print(std::ostream &os, unsigned width) const
 {
    if(!m_caption.empty())
+   {
       os << m_caption << ":\n";
+   }
 
    if(!width)
+   {
       width = get_option_column_width();
+   }
 
    /* The options formatting style is stolen from Subversion. */
    for(unsigned i = 0; i < m_options.size(); ++i)
    {
       if(belong_to_group[i])
+      {
          continue;
+      }
 
       const option_description &opt = *m_options[i];
 

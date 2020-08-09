@@ -49,16 +49,22 @@ void test_each_exception_message(const string &test_description, const vector<co
                                  string exception_msg, istream &is = cin)
 {
    if(exception_msg.length() == 0)
+   {
       return;
+   }
    variables_map vm;
    unsigned      argc = argv.size();
 
    try
    {
       if(style == -1)
+      {
          store(parse_config_file(is, desc), vm);
+      }
       else
+      {
          store(parse_command_line(argv.size(), &argv[0], desc, style), vm);
+      }
       notify(vm);
    }
    catch(EXCEPTION &e)
@@ -72,9 +78,13 @@ void test_each_exception_message(const string &test_description, const vector<co
       // concatenate argv without boost::algorithm::join
       string argv_txt;
       for(unsigned ii = 0; ii < argc - 1; ++ii)
+      {
          argv_txt += argv[ii] + string(" ");
+      }
       if(argc)
+      {
          argv_txt += argv[argc - 1];
+      }
 
       BOOST_ERROR("\n<<" + test_description + string(">>\n  Unexpected exception type!\n  Actual text  =\"") + e.what() +
                   "\"\n  argv         =\"" + argv_txt + "\"\n  Expected text=\"" + exception_msg + "\"\n");
