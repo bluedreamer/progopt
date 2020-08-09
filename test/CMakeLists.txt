@@ -1,3 +1,4 @@
+enable_testing()
 
 add_executable(cmdline_test cmdline_test.cpp)
 add_test(test_cmdline_test cmdline_test)
@@ -20,7 +21,7 @@ add_test(test_options_description_test options_description_test)
 target_link_libraries(options_description_test libprogopt)
 
 add_executable(parsers_test parsers_test.cpp)
-add_test(test_parsers_test parsers_test config_test.cfg)
+add_test(NAME test_parsers_test COMMAND parsers_test config_test.cfg WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(parsers_test libprogopt)
 
 add_executable(positional_options_test positional_options_test.cpp)
@@ -32,7 +33,7 @@ add_test(NAME test_quick COMMAND quick --path=initial)
 target_link_libraries(quick libprogopt)
 
 add_executable(required_test required_test.cpp)
-add_test(test_required_test required_test required_test.cfg)
+add_test(NAME test_required_test COMMAND required_test required_test.cfg WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(required_test libprogopt)
 
 add_executable(split_test split_test.cpp)
