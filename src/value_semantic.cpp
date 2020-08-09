@@ -15,7 +15,7 @@
 namespace argsy
 {
 using namespace std;
-void value_semantic_codecvt_helper<char>::parse(boost::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const
+void value_semantic_codecvt_helper<char>::parse(std::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const
 {
    if(utf8)
    {
@@ -59,9 +59,9 @@ auto untyped_value::max_tokens() const -> unsigned
    }
 }
 
-void untyped_value::xparse(boost::any &value_store, const std::vector<std::string> &new_tokens) const
+void untyped_value::xparse(std::any &value_store, const std::vector<std::string> &new_tokens) const
 {
-   if(!value_store.empty())
+   if(value_store.has_value())
    {
       boost::throw_exception(multiple_occurrences());
    }
@@ -92,7 +92,7 @@ BOOST_PROGRAM_OPTIONS_DECL auto bool_switch(bool *v) -> typed_value<bool> *
     Case is ignored. The 'xs' vector can either be empty, in which
     case the value is 'true', or can contain explicit value.
 */
-BOOST_PROGRAM_OPTIONS_DECL void validate(boost::any &v, const vector<string> &xs, bool * /*unused*/, int /*unused*/)
+BOOST_PROGRAM_OPTIONS_DECL void validate(std::any &v, const vector<string> &xs, bool * /*unused*/, int /*unused*/)
 {
    check_first_occurrence(v);
    string s(get_single_string(xs, true));
@@ -104,11 +104,11 @@ BOOST_PROGRAM_OPTIONS_DECL void validate(boost::any &v, const vector<string> &xs
 
    if(s.empty() || s == "on" || s == "yes" || s == "1" || s == "true")
    {
-      v = boost::any(true);
+      v = std::any(true);
    }
    else if(s == "off" || s == "no" || s == "0" || s == "false")
    {
-      v = boost::any(false);
+      v = std::any(false);
    }
    else
    {
@@ -117,18 +117,18 @@ BOOST_PROGRAM_OPTIONS_DECL void validate(boost::any &v, const vector<string> &xs
 }
 
 BOOST_PROGRAM_OPTIONS_DECL
-void validate(boost::any &v, const vector<string> &xs, std::string * /*unused*/, int /*unused*/)
+void validate(std::any &v, const vector<string> &xs, std::string * /*unused*/, int /*unused*/)
 {
    check_first_occurrence(v);
-   v = boost::any(get_single_string(xs));
+   v = std::any(get_single_string(xs));
 }
 
 namespace validators
 {
 BOOST_PROGRAM_OPTIONS_DECL
-void check_first_occurrence(const boost::any &value)
+void check_first_occurrence(const std::any &value)
 {
-   if(!value.empty())
+   if(value.has_value())
    {
       boost::throw_exception(multiple_occurrences());
    }

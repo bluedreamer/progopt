@@ -122,7 +122,7 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
       }
       if(m.count(key) == 0)
       {
-         boost::any def;
+         std::any def;
          if(d.semantic()->apply_default(def))
          {
             m[key]                  = variable_value(def, true);

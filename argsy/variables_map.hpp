@@ -5,7 +5,7 @@
 #pragma once
 #include "argsy/config.hpp"
 
-#include <boost/any.hpp>
+#include <any>
 #include <memory>
 #include <map>
 #include <set>
@@ -47,7 +47,7 @@ class BOOST_PROGRAM_OPTIONS_DECL variable_value
 {
 public:
    variable_value() {}
-   variable_value(boost::any xv, bool xdefaulted)
+   variable_value(std::any xv, bool xdefaulted)
       : v(std::move(xv))
       , m_defaulted(xdefaulted)
    {
@@ -58,13 +58,13 @@ public:
    template<class T>
    auto as() const -> const T &
    {
-      return boost::any_cast<const T &>(v);
+      return std::any_cast<const T &>(v);
    }
    /** @overload */
    template<class T>
    auto as() -> T &
    {
-      return boost::any_cast<T &>(v);
+      return std::any_cast<T &>(v);
    }
 
    /// Returns true if no value is stored.
@@ -73,13 +73,13 @@ public:
        given, but has default value. */
    [[nodiscard]] auto defaulted() const -> bool;
    /** Returns the contained value. */
-   [[nodiscard]] auto value() const -> const boost::any &;
+   [[nodiscard]] auto value() const -> const std::any &;
 
    /** Returns the contained value. */
-   auto value() -> boost::any &;
+   auto value() -> std::any &;
 
 private:
-   boost::any v;
+   std::any v;
    bool       m_defaulted{false};
    // Internal reference to value semantic. We need to run
    // notifications when *final* values of options are known, and
@@ -174,7 +174,7 @@ private:
 
 inline auto variable_value::empty() const -> bool
 {
-   return v.empty();
+   return !v.has_value();
 }
 
 inline auto variable_value::defaulted() const -> bool
@@ -182,12 +182,12 @@ inline auto variable_value::defaulted() const -> bool
    return m_defaulted;
 }
 
-inline auto variable_value::value() const -> const boost::any &
+inline auto variable_value::value() const -> const std::any &
 {
    return v;
 }
 
-inline auto variable_value::value() -> boost::any &
+inline auto variable_value::value() -> std::any &
 {
    return v;
 }

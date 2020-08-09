@@ -46,7 +46,7 @@ public:
    This has no practical meaning, meant only to show how
    regex can be used to validate values.
 */
-void validate(boost::any &v, const std::vector<std::string> &values, magic_number *, int)
+void validate(std::any &v, const std::vector<std::string> &values, magic_number * /*unused*/, int /*unused*/)
 {
    static std::regex r(R"(\d\d\d-(\d\d\d))");
 

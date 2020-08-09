@@ -9,7 +9,7 @@
 #include "argsy/errors.hpp"
 #include "argsy/value_semantic.hpp"
 
-#include <boost/any.hpp>
+#include <any>
 #include <boost/detail/workaround.hpp>
 #include <boost/function.hpp>
 

@@ -7,7 +7,7 @@
 #include "argsy/config.hpp"
 #include "argsy/errors.hpp"
 
-#include <boost/any.hpp>
+#include <any>
 #include <boost/function/function1.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -53,16 +53,16 @@ public:
        is desired. May be be called several times if value of the same
        option is specified more than once.
    */
-   virtual void parse(boost::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const = 0;
+   virtual void parse(std::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const = 0;
 
    /** Called to assign default value to 'value_store'. Returns
        true if default value is assigned, and false if no default
        value exists. */
-   virtual auto apply_default(boost::any &value_store) const -> bool = 0;
+   virtual auto apply_default(std::any &value_store) const -> bool = 0;
 
    /** Called when final value of an option is determined.
     */
-   virtual void notify(const boost::any &value_store) const = 0;
+   virtual void notify(const std::any &value_store) const = 0;
 
    virtual ~value_semantic() = default;
 };
@@ -87,10 +87,10 @@ template<>
 class BOOST_PROGRAM_OPTIONS_DECL value_semantic_codecvt_helper<char> : public value_semantic
 {
 private: // base overrides
-   void parse(boost::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const override;
+   void parse(std::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const override;
 
 protected: // interface for derived classes.
-   virtual void xparse(boost::any &value_store, const std::vector<std::string> &new_tokens) const = 0;
+   virtual void xparse(std::any &value_store, const std::vector<std::string> &new_tokens) const = 0;
 };
 
 /** Helper conversion class for values that accept ascii
@@ -104,11 +104,11 @@ template<>
 class BOOST_PROGRAM_OPTIONS_DECL value_semantic_codecvt_helper<wchar_t> : public value_semantic
 {
 private: // base overrides
-   void parse(boost::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const override;
+   void parse(std::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const override;
 
 protected: // interface for derived classes.
 #if !defined(BOOST_NO_STD_WSTRING)
-   virtual void xparse(boost::any &value_store, const std::vector<std::wstring> &new_tokens) const = 0;
+   virtual void xparse(std::any &value_store, const std::vector<std::wstring> &new_tokens) const = 0;
 #endif
 };
 
@@ -136,13 +136,13 @@ public:
        the first string from 'new_tokens' to 'value_store', without
        any modifications.
     */
-   void xparse(boost::any &value_store, const std::vector<std::string> &new_tokens) const override;
+   void xparse(std::any &value_store, const std::vector<std::string> &new_tokens) const override;
 
    /** Does nothing. */
-   auto apply_default(boost::any &) const -> bool override { return false; }
+   auto apply_default(std::any & /*value_store*/) const -> bool override { return false; }
 
    /** Does nothing. */
-   void notify(const boost::any &) const override {}
+   void notify(const std::any & /*value_store*/) const override {}
 
 private:
    bool m_zero_tokens;
@@ -194,7 +194,7 @@ public:
    */
    auto default_value(const T &v) -> typed_value *
    {
-      m_default_value         = boost::any(v);
+      m_default_value         = std::any(v);
       m_default_value_as_text = boost::lexical_cast<std::string>(v);
       return this;
    }
@@ -207,7 +207,7 @@ public:
    */
    auto default_value(const T &v, const std::string &textual) -> typed_value *
    {
-      m_default_value         = boost::any(v);
+      m_default_value         = std::any(v);
       m_default_value_as_text = textual;
       return this;
    }
@@ -218,7 +218,7 @@ public:
    */
    auto implicit_value(const T &v) -> typed_value *
    {
-      m_implicit_value         = boost::any(v);
+      m_implicit_value         = std::any(v);
       m_implicit_value_as_text = boost::lexical_cast<std::string>(v);
       return this;
    }
@@ -242,7 +242,7 @@ public:
    */
    auto implicit_value(const T &v, const std::string &textual) -> typed_value *
    {
-      m_implicit_value         = boost::any(v);
+      m_implicit_value         = std::any(v);
       m_implicit_value_as_text = textual;
       return this;
    }
@@ -299,7 +299,7 @@ public: // value semantic overrides
 
    [[nodiscard]] auto min_tokens() const -> unsigned
    {
-      if(m_zero_tokens || !m_implicit_value.empty())
+      if(m_zero_tokens || m_implicit_value.has_value())
       {
          return 0;
       }
@@ -329,15 +329,15 @@ public: // value semantic overrides
 
    /** Creates an instance of the 'validator' class and calls
        its operator() to perform the actual conversion. */
-   void xparse(boost::any &value_store, const std::vector<std::basic_string<charT>> &new_tokens) const;
+   void xparse(std::any &value_store, const std::vector<std::basic_string<charT>> &new_tokens) const;
 
    /** If default value was specified via previous call to
        'default_value', stores that value into 'value_store'.
        Returns true if default value was stored.
    */
-   virtual auto apply_default(boost::any &value_store) const -> bool
+   virtual auto apply_default(std::any &value_store) const -> bool
    {
-      if(m_default_value.empty())
+      if(!m_default_value.has_value())
       {
          return false;
       }
@@ -351,7 +351,7 @@ public: // value semantic overrides
    /** If an address of variable to store value was specified
        when creating *this, stores the value there. Otherwise,
        does nothing. */
-   void notify(const boost::any &value_store) const;
+   void notify(const std::any &value_store) const;
 
 public: // typed_value_base overrides
 #ifndef BOOST_NO_RTTI
@@ -361,12 +361,12 @@ public: // typed_value_base overrides
 private:
    T *m_store_to;
 
-   // Default value is stored as boost::any and not
+   // Default value is stored as std::any and not
    // as boost::optional to avoid unnecessary instantiations.
    std::string                       m_value_name;
-   boost::any                        m_default_value;
+   std::any                        m_default_value;
    std::string                       m_default_value_as_text;
-   boost::any                        m_implicit_value;
+   std::any                        m_implicit_value;
    std::string                       m_implicit_value_as_text;
    bool                              m_composing, m_implicit, m_multitoken, m_zero_tokens, m_required;
    boost::function1<void, const T &> m_notifier;
