@@ -28,7 +28,7 @@ void value_semantic_codecvt_helper<char>::parse(std::any &value_store, const std
    }
 }
 
-BOOST_PROGRAM_OPTIONS_DECL std::string arg("arg");
+std::string arg("arg");
 
 auto untyped_value::name() const -> std::string
 {
@@ -72,12 +72,12 @@ void untyped_value::xparse(std::any &value_store, const std::vector<std::string>
    value_store = new_tokens.empty() ? std::string("") : new_tokens.front();
 }
 
-BOOST_PROGRAM_OPTIONS_DECL auto bool_switch() -> typed_value<bool> *
+auto bool_switch() -> typed_value<bool> *
 {
    return bool_switch(nullptr);
 }
 
-BOOST_PROGRAM_OPTIONS_DECL auto bool_switch(bool *v) -> typed_value<bool> *
+auto bool_switch(bool *v) -> typed_value<bool> *
 {
    auto *r = new typed_value<bool>(v);
    r->default_value(false);
@@ -92,7 +92,7 @@ BOOST_PROGRAM_OPTIONS_DECL auto bool_switch(bool *v) -> typed_value<bool> *
     Case is ignored. The 'xs' vector can either be empty, in which
     case the value is 'true', or can contain explicit value.
 */
-BOOST_PROGRAM_OPTIONS_DECL void validate(std::any &v, const vector<string> &xs, bool * /*unused*/, int /*unused*/)
+void validate(std::any &v, const vector<string> &xs, bool * /*unused*/, int /*unused*/)
 {
    check_first_occurrence(v);
    string s(get_single_string(xs, true));
@@ -116,7 +116,6 @@ BOOST_PROGRAM_OPTIONS_DECL void validate(std::any &v, const vector<string> &xs, 
    }
 }
 
-BOOST_PROGRAM_OPTIONS_DECL
 void validate(std::any &v, const vector<string> &xs, std::string * /*unused*/, int /*unused*/)
 {
    check_first_occurrence(v);
@@ -125,7 +124,6 @@ void validate(std::any &v, const vector<string> &xs, std::string * /*unused*/, i
 
 namespace validators
 {
-BOOST_PROGRAM_OPTIONS_DECL
 void check_first_occurrence(const std::any &value)
 {
    if(value.has_value())

@@ -57,7 +57,7 @@ namespace argsy::detail
      TODO: maybe, we should just accept a pointer to options_description
      class.
  */
-class BOOST_PROGRAM_OPTIONS_DECL common_config_file_iterator : public boost::eof_iterator<common_config_file_iterator, option>
+class common_config_file_iterator : public boost::eof_iterator<common_config_file_iterator, option>
 {
 public:
    common_config_file_iterator() { found_eof(); }

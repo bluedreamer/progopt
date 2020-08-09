@@ -77,7 +77,7 @@ const std::basic_string<charT> &get_single_string(const std::vector<std::basic_s
 }
 
 /* Throws multiple_occurrences if 'value' is not empty. */
-BOOST_PROGRAM_OPTIONS_DECL void check_first_occurrence(const std::any &value);
+void check_first_occurrence(const std::any &value);
 } // namespace validators
 
 using namespace validators;
@@ -104,19 +104,19 @@ void validate(std::any &v, const std::vector<std::basic_string<charT>> &xs, T *,
    }
 }
 
-BOOST_PROGRAM_OPTIONS_DECL void validate(std::any &v, const std::vector<std::string> &xs, bool *, int);
+void validate(std::any &v, const std::vector<std::string> &xs, bool *, int);
 
 #if !defined(BOOST_NO_STD_WSTRING)
-BOOST_PROGRAM_OPTIONS_DECL void validate(std::any &v, const std::vector<std::wstring> &xs, bool *, int);
+void validate(std::any &v, const std::vector<std::wstring> &xs, bool *, int);
 #endif
 // For some reason, this declaration, which is require by the standard,
 // cause msvc 7.1 to not generate code to specialization defined in
 // value_semantic.cpp
 #if !(BOOST_WORKAROUND(BOOST_MSVC, == 1310))
-BOOST_PROGRAM_OPTIONS_DECL void validate(std::any &v, const std::vector<std::string> &xs, std::string *, int);
+void validate(std::any &v, const std::vector<std::string> &xs, std::string *, int);
 
    #if !defined(BOOST_NO_STD_WSTRING)
-BOOST_PROGRAM_OPTIONS_DECL void validate(std::any &v, const std::vector<std::wstring> &xs, std::string *, int);
+void validate(std::any &v, const std::vector<std::wstring> &xs, std::string *, int);
    #endif
 #endif
 

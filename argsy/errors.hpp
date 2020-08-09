@@ -29,7 +29,7 @@ inline auto strip_prefixes(const std::string &text) -> std::string
 }
 
 /** Base class for all errors in the library. */
-class BOOST_PROGRAM_OPTIONS_DECL error : public std::logic_error
+class error : public std::logic_error
 {
 public:
    error(const std::string &xwhat)
@@ -41,7 +41,7 @@ public:
 /** Class thrown when there are too many positional options.
     This is a programming error.
 */
-class BOOST_PROGRAM_OPTIONS_DECL too_many_positional_options_error : public error
+class too_many_positional_options_error : public error
 {
 public:
    too_many_positional_options_error()
@@ -51,7 +51,7 @@ public:
 };
 
 /** Class thrown when there are programming error related to style */
-class BOOST_PROGRAM_OPTIONS_DECL invalid_command_line_style : public error
+class invalid_command_line_style : public error
 {
 public:
    invalid_command_line_style(const std::string &msg)
@@ -61,7 +61,7 @@ public:
 };
 
 /** Class thrown if config file can not be read */
-class BOOST_PROGRAM_OPTIONS_DECL reading_file : public error
+class reading_file : public error
 {
 public:
    reading_file(const char *filename)
@@ -93,7 +93,7 @@ public:
  *      or without a prefix (from a configuration file)
  *
  *   */
-class BOOST_PROGRAM_OPTIONS_DECL error_with_option_name : public error
+class error_with_option_name : public error
 {
 protected:
    /** can be
@@ -190,7 +190,7 @@ protected:
 
 /** Class thrown when there are several option values, but
     user called a method which cannot return them all. */
-class BOOST_PROGRAM_OPTIONS_DECL multiple_values : public error_with_option_name
+class multiple_values : public error_with_option_name
 {
 public:
    multiple_values()
@@ -204,7 +204,7 @@ public:
 /** Class thrown when there are several occurrences of an
     option, but user called a method which cannot return
     them all. */
-class BOOST_PROGRAM_OPTIONS_DECL multiple_occurrences : public error_with_option_name
+class multiple_occurrences : public error_with_option_name
 {
 public:
    multiple_occurrences()
@@ -216,7 +216,7 @@ public:
 };
 
 /** Class thrown when a required/mandatory option is missing */
-class BOOST_PROGRAM_OPTIONS_DECL required_option : public error_with_option_name
+class required_option : public error_with_option_name
 {
 public:
    // option name is constructed by the option_descriptor and never on the fly
@@ -239,7 +239,7 @@ public:
  *      a lot easier, even if the name indicates some sort of conceptual dissonance!
  *
  *   */
-class BOOST_PROGRAM_OPTIONS_DECL error_with_no_option_name : public error_with_option_name
+class error_with_no_option_name : public error_with_option_name
 {
 public:
    error_with_no_option_name(const std::string &template_, const std::string &original_token = "")
@@ -254,7 +254,7 @@ public:
 };
 
 /** Class thrown when option name is not recognized. */
-class BOOST_PROGRAM_OPTIONS_DECL unknown_option : public error_with_no_option_name
+class unknown_option : public error_with_no_option_name
 {
 public:
    unknown_option(const std::string &original_token = "")
@@ -266,7 +266,7 @@ public:
 };
 
 /** Class thrown when there's ambiguity amoung several possible options. */
-class BOOST_PROGRAM_OPTIONS_DECL ambiguous_option : public error_with_no_option_name
+class ambiguous_option : public error_with_no_option_name
 {
 public:
    ambiguous_option(std::vector<std::string> xalternatives)
@@ -291,7 +291,7 @@ private:
 /** Class thrown when there's syntax error either for command
  *  line or config file options. See derived children for
  *  concrete classes. */
-class BOOST_PROGRAM_OPTIONS_DECL invalid_syntax : public error_with_option_name
+class invalid_syntax : public error_with_option_name
 {
 public:
    enum kind_t
@@ -324,7 +324,7 @@ protected:
    kind_t m_kind;
 };
 
-class BOOST_PROGRAM_OPTIONS_DECL invalid_config_file_syntax : public invalid_syntax
+class invalid_config_file_syntax : public invalid_syntax
 {
 public:
    invalid_config_file_syntax(const std::string &invalid_line, kind_t kind)
@@ -340,7 +340,7 @@ public:
 };
 
 /** Class thrown when there are syntax errors in given command line */
-class BOOST_PROGRAM_OPTIONS_DECL invalid_command_line_syntax : public invalid_syntax
+class invalid_command_line_syntax : public invalid_syntax
 {
 public:
    invalid_command_line_syntax(kind_t kind, const std::string &option_name = "", const std::string &original_token = "",
@@ -352,7 +352,7 @@ public:
 };
 
 /** Class thrown when value of option is incorrect. */
-class BOOST_PROGRAM_OPTIONS_DECL validation_error : public error_with_option_name
+class validation_error : public error_with_option_name
 {
 public:
    enum kind_t
@@ -382,7 +382,7 @@ protected:
 };
 
 /** Class thrown if there is an invalid option value given */
-class BOOST_PROGRAM_OPTIONS_DECL invalid_option_value : public validation_error
+class invalid_option_value : public validation_error
 {
 public:
    invalid_option_value(const std::string &value);
@@ -392,7 +392,7 @@ public:
 };
 
 /** Class thrown if there is an invalid bool value given */
-class BOOST_PROGRAM_OPTIONS_DECL invalid_bool_value : public validation_error
+class invalid_bool_value : public validation_error
 {
 public:
    invalid_bool_value(const std::string &value);

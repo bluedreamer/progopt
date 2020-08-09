@@ -397,7 +397,6 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
    return found.get();
 }
 
-BOOST_PROGRAM_OPTIONS_DECL
 auto operator<<(std::ostream &os, const options_description &desc) -> std::ostream &
 {
    desc.print(os);

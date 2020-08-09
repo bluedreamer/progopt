@@ -14,7 +14,6 @@
 #define BOOST_UTF8_END_NAMESPACE                                                                                                           \
    }                                                                                                                                       \
    }
-#define BOOST_UTF8_DECL BOOST_PROGRAM_OPTIONS_DECL
 
 #include <boost/detail/utf8_codecvt_facet.ipp>
 

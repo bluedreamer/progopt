@@ -21,7 +21,7 @@ namespace argsy
 /** Class which specifies how the option's value is to be parsed
     and converted into C++ types.
 */
-class BOOST_PROGRAM_OPTIONS_DECL value_semantic
+class value_semantic
 {
 public:
    /** Returns the name of the option. The name is only meaningful
@@ -84,7 +84,7 @@ class value_semantic_codecvt_helper
     or with UTF8->ascii conversion.
 */
 template<>
-class BOOST_PROGRAM_OPTIONS_DECL value_semantic_codecvt_helper<char> : public value_semantic
+class value_semantic_codecvt_helper<char> : public value_semantic
 {
 private: // base overrides
    void parse(std::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const override;
@@ -101,7 +101,7 @@ protected: // interface for derived classes.
     pass it unmodified.
 */
 template<>
-class BOOST_PROGRAM_OPTIONS_DECL value_semantic_codecvt_helper<wchar_t> : public value_semantic
+class value_semantic_codecvt_helper<wchar_t> : public value_semantic
 {
 private: // base overrides
    void parse(std::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const override;
@@ -114,7 +114,7 @@ protected: // interface for derived classes.
 
 /** Class which specifies a simple handling of a value: the value will
     have string type and only one token is allowed. */
-class BOOST_PROGRAM_OPTIONS_DECL untyped_value : public value_semantic_codecvt_helper<char>
+class untyped_value : public value_semantic_codecvt_helper<char>
 {
 public:
    untyped_value(bool zero_tokens = false)
@@ -402,11 +402,11 @@ auto wvalue(T *v) -> typed_value<T, wchar_t> *;
     value_semantic won't accept any explicit value. So, if the option
     is present on the command line, the value will be 'true'.
 */
-BOOST_PROGRAM_OPTIONS_DECL auto bool_switch() -> typed_value<bool> *;
+auto bool_switch() -> typed_value<bool> *;
 
 /** @overload
  */
-BOOST_PROGRAM_OPTIONS_DECL auto bool_switch(bool *v) -> typed_value<bool> *;
+auto bool_switch(bool *v) -> typed_value<bool> *;
 
 } // namespace argsy
 

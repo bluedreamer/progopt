@@ -32,7 +32,7 @@ namespace argsy
     never use second kind of properties \-- they are side effect free.
     @sa options_description
 */
-class BOOST_PROGRAM_OPTIONS_DECL option_description
+class option_description
 {
 public:
    option_description();
@@ -145,7 +145,7 @@ class options_description;
 
 /** Class which provides convenient creation syntax to option_description.
  */
-class BOOST_PROGRAM_OPTIONS_DECL options_description_easy_init
+class options_description_easy_init
 {
 public:
    options_description_easy_init(options_description *owner);
@@ -167,7 +167,7 @@ private:
     See @ref a_adding_options "here" for option adding interface discussion.
     @sa option_description
 */
-class BOOST_PROGRAM_OPTIONS_DECL options_description
+class options_description
 {
 public:
    static const unsigned m_default_line_length;
@@ -219,7 +219,7 @@ public:
    /** Produces a human readable output of 'desc', listing options,
        their descriptions and allowed parameters. Other options_description
        instances previously passed to add will be output separately. */
-   friend BOOST_PROGRAM_OPTIONS_DECL auto operator<<(std::ostream &os, const options_description &desc) -> std::ostream &;
+   friend auto operator<<(std::ostream &os, const options_description &desc) -> std::ostream &;
 
    /** Outputs 'desc' to the specified stream, calling 'f' to output each
        option_description element. */
@@ -258,7 +258,7 @@ private:
 };
 
 /** Class thrown when duplicate option description is found. */
-class BOOST_PROGRAM_OPTIONS_DECL duplicate_option_error : public error
+class duplicate_option_error : public error
 {
 public:
    duplicate_option_error(const std::string &xwhat)

@@ -26,7 +26,6 @@ class variables_map;
     If 'm' already has a non-defaulted value of an option, that value
     is not changed, even if 'options' specify some value.
 */
-BOOST_PROGRAM_OPTIONS_DECL
 void store(const basic_parsed_options<char> &options, variables_map &m, bool utf8 = false);
 
 /** Stores in 'm' all options that are defined in 'options'.
@@ -34,16 +33,15 @@ void store(const basic_parsed_options<char> &options, variables_map &m, bool utf
     is not changed, even if 'options' specify some value.
     This is wide character variant.
 */
-BOOST_PROGRAM_OPTIONS_DECL
 void store(const basic_parsed_options<wchar_t> &options, variables_map &m);
 
 /** Runs all 'notify' function for options in 'm'. */
-BOOST_PROGRAM_OPTIONS_DECL void notify(variables_map &m);
+void notify(variables_map &m);
 
 /** Class holding value of option. Contains details about how the
     value is set and allows to conveniently obtain the value.
 */
-class BOOST_PROGRAM_OPTIONS_DECL variable_value
+class variable_value
 {
 public:
    variable_value() {}
@@ -88,14 +86,14 @@ private:
    // be easily accessible, so we need to store semantic here.
    std::shared_ptr<const value_semantic> m_value_semantic;
 
-   friend BOOST_PROGRAM_OPTIONS_DECL void store(const basic_parsed_options<char> &options, variables_map &m, bool);
+   friend void store(const basic_parsed_options<char> &options, variables_map &m, bool);
 
-   friend class BOOST_PROGRAM_OPTIONS_DECL variables_map;
+   friend class variables_map;
 };
 
 /** Implements string->string mapping with convenient value casting
     facilities. */
-class BOOST_PROGRAM_OPTIONS_DECL abstract_variables_map
+class abstract_variables_map
 {
 public:
    abstract_variables_map();
@@ -136,7 +134,7 @@ private:
     This class is derived from std::map<std::string, variable_value>,
     so you can use all map operators to examine its content.
 */
-class BOOST_PROGRAM_OPTIONS_DECL variables_map : public abstract_variables_map, public std::map<std::string, variable_value>
+class variables_map : public abstract_variables_map, public std::map<std::string, variable_value>
 {
 public:
    variables_map();
@@ -159,7 +157,7 @@ private:
        be changed by subsequence assignments. */
    std::set<std::string> m_final;
 
-   friend BOOST_PROGRAM_OPTIONS_DECL void store(const basic_parsed_options<char> &options, variables_map &xm, bool utf8);
+   friend void store(const basic_parsed_options<char> &options, variables_map &xm, bool utf8);
 
    /** Names of required options, filled by parser which has
        access to options_description.

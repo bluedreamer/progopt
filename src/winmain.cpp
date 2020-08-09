@@ -20,7 +20,6 @@ namespace argsy
 // The rules are pretty funny, see
 //    http://article.gmane.org/gmane.comp.lib.boost.user/3005
 //    http://msdn.microsoft.com/library/en-us/vccelng/htm/progs_12.asp
-BOOST_PROGRAM_OPTIONS_DECL
 std::vector<std::string> split_winmain(const std::string &input)
 {
    std::vector<std::string> result;
@@ -101,7 +100,7 @@ std::vector<std::string> split_winmain(const std::string &input)
 }
 
    #ifndef BOOST_NO_STD_WSTRING
-BOOST_PROGRAM_OPTIONS_DECL std::vector<std::wstring> split_winmain(const std::wstring &cmdline)
+std::vector<std::wstring> split_winmain(const std::wstring &cmdline)
 {
    std::vector<std::wstring> result;
    std::vector<std::string>  aux = split_winmain(to_internal(cmdline));

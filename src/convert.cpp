@@ -86,7 +86,7 @@ namespace boost { namespace detail {
 namespace boost {
 
    #ifndef BOOST_NO_STD_WSTRING
-    BOOST_PROGRAM_OPTIONS_DECL std::wstring 
+    std::wstring
     from_8_bit(const std::string& s, 
                const std::codecvt<wchar_t, char, std::mbstate_t>& cvt)
     {
@@ -97,7 +97,7 @@ namespace boost {
                         _1, _2, _3, _4, _5, _6, _7));
     }
 
-    BOOST_PROGRAM_OPTIONS_DECL std::string 
+    std::string
     to_8_bit(const std::wstring& s, 
              const std::codecvt<wchar_t, char, std::mbstate_t>& cvt)
     {
@@ -342,23 +342,23 @@ namespace
 boost::argsy::detail::utf8_codecvt_facet utf8_facet;
 }
 
-BOOST_PROGRAM_OPTIONS_DECL std::wstring from_utf8(const std::string& s)
+std::wstring from_utf8(const std::string& s)
 {
    return from_8_bit(s, utf8_facet);
 }
 
-BOOST_PROGRAM_OPTIONS_DECL std::string to_utf8(const std::wstring& s)
+std::string to_utf8(const std::wstring& s)
 {
    return to_8_bit(s, utf8_facet);
 }
 
-BOOST_PROGRAM_OPTIONS_DECL std::wstring from_local_8_bit(const std::string& s)
+std::wstring from_local_8_bit(const std::string& s)
 {
    typedef codecvt<wchar_t, char, mbstate_t> facet_type;
    return from_8_bit(s, BOOST_USE_FACET(facet_type, locale()));
 }
 
-BOOST_PROGRAM_OPTIONS_DECL std::string to_local_8_bit(const std::wstring& s)
+std::string to_local_8_bit(const std::wstring& s)
 {
    typedef codecvt<wchar_t, char, mbstate_t> facet_type;
    return to_8_bit(s, BOOST_USE_FACET(facet_type, locale()));
@@ -368,13 +368,13 @@ BOOST_PROGRAM_OPTIONS_DECL std::string to_local_8_bit(const std::wstring& s)
 
 namespace argsy
 {
-BOOST_PROGRAM_OPTIONS_DECL std::string to_internal(const std::string& s)
+std::string to_internal(const std::string& s)
 {
    return s;
 }
 
    #ifndef BOOST_NO_STD_WSTRING
-BOOST_PROGRAM_OPTIONS_DECL std::string to_internal(const std::wstring& s)
+std::string to_internal(const std::wstring& s)
 {
    return to_utf8(s);
 }

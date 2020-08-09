@@ -18,7 +18,6 @@ using namespace std;
 
 // First, performs semantic actions for 'oa'.
 // Then, stores in 'm' all options that are defined in 'desc'.
-BOOST_PROGRAM_OPTIONS_DECL
 void store(const parsed_options &options, variables_map &xm, bool utf8)
 {
    // TODO: what if we have different definition
@@ -146,13 +145,11 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
    }
 }
 
-BOOST_PROGRAM_OPTIONS_DECL
 void store(const wparsed_options &options, variables_map &m)
 {
    store(options.utf8_encoded_options, m, true);
 }
 
-BOOST_PROGRAM_OPTIONS_DECL
 void notify(variables_map &vm)
 {
    vm.notify();

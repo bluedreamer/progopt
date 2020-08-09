@@ -46,7 +46,7 @@ namespace argsy::detail
 
     @todo mininal match length for guessing?
 */
-class BOOST_PROGRAM_OPTIONS_DECL cmdline
+class cmdline
 {
 public:
    using style_t = ::argsy::command_line_style::style_t;

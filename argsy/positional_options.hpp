@@ -25,7 +25,7 @@ namespace argsy
     options should be given the name X1, following M options should be given
     the name X2 and so on.
 */
-class BOOST_PROGRAM_OPTIONS_DECL positional_options_description
+class positional_options_description
 {
 public:
    positional_options_description();

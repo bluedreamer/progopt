@@ -119,11 +119,11 @@ auto parse_config_file(std::basic_istream<charT> &is, const options_description 
    return basic_parsed_options<charT>(result);
 }
 
-template BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<char> parse_config_file(std::basic_istream<char> & is,
+template basic_parsed_options<char> parse_config_file(std::basic_istream<char> & is,
                                                                                  const options_description &desc, bool allow_unregistered);
 
 #ifndef BOOST_NO_STD_WSTRING
-template BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<wchar_t>
+template basic_parsed_options<wchar_t>
                                     parse_config_file(std::basic_istream<wchar_t> &is, const options_description &desc, bool allow_unregistered);
 #endif
 
@@ -147,11 +147,11 @@ auto parse_config_file(const char *filename, const options_description &desc, bo
    return result;
 }
 
-template BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<char> parse_config_file(const char *filename, const options_description &desc,
+template basic_parsed_options<char> parse_config_file(const char *filename, const options_description &desc,
                                                                                  bool allow_unregistered);
 
 #ifndef BOOST_NO_STD_WSTRING
-template BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<wchar_t> parse_config_file(const char *filename, const options_description &desc,
+template basic_parsed_options<wchar_t> parse_config_file(const char *filename, const options_description &desc,
                                                                                     bool allow_unregistered);
 #endif
 
@@ -159,7 +159,7 @@ template BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<wchar_t> parse_config_f
 // in the hope that nobody will need it and we cant drop it altogether.
 // Besides, probably the right way to handle all options is the '*' name.
 #if 0
-    BOOST_PROGRAM_OPTIONS_DECL parsed_options
+    parsed_options
     parse_config_file(std::istream& is)
     {
         detail::config_file_iterator cf(is, false);
@@ -170,7 +170,7 @@ template BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<wchar_t> parse_config_f
     }
 #endif
 
-BOOST_PROGRAM_OPTIONS_DECL auto parse_environment(const options_description &                       desc,
+auto parse_environment(const options_description &                       desc,
                                                   const boost::function1<std::string, std::string> &name_mapper) -> parsed_options
 {
    parsed_options result(&desc);
@@ -221,12 +221,12 @@ private:
 };
 } // namespace detail
 
-BOOST_PROGRAM_OPTIONS_DECL auto parse_environment(const options_description &desc, const std::string &prefix) -> parsed_options
+auto parse_environment(const options_description &desc, const std::string &prefix) -> parsed_options
 {
    return parse_environment(desc, detail::prefix_name_mapper(prefix));
 }
 
-BOOST_PROGRAM_OPTIONS_DECL auto parse_environment(const options_description &desc, const char *prefix) -> parsed_options
+auto parse_environment(const options_description &desc, const char *prefix) -> parsed_options
 {
    return parse_environment(desc, string(prefix));
 }

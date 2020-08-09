@@ -60,7 +60,7 @@ public:
     - stores the passed char-based options for later use.
 */
 template<>
-class BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<wchar_t>
+class basic_parsed_options<wchar_t>
 {
 public:
    /** Constructs wrapped options from options in UTF8 encoding. */
@@ -169,9 +169,6 @@ auto parse_command_line(int argc, const charT *const argv[], const options_descr
     Read from given stream.
 */
 template<class charT>
-#if !BOOST_WORKAROUND(__ICL, BOOST_TESTED_AT(700))
-BOOST_PROGRAM_OPTIONS_DECL
-#endif
    auto
    parse_config_file(std::basic_istream<charT> &, const options_description &, bool allow_unregistered = false)
       -> basic_parsed_options<charT>;
@@ -181,14 +178,7 @@ BOOST_PROGRAM_OPTIONS_DECL
     Read from file with the given name. The character type is
     passed to the file stream.
 */
-#ifdef BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS
-template<class charT>
-#else
 template<class charT = char>
-#endif
-#if !BOOST_WORKAROUND(__ICL, BOOST_TESTED_AT(700))
-BOOST_PROGRAM_OPTIONS_DECL
-#endif
    auto
    parse_config_file(const char *filename, const options_description &, bool allow_unregistered = false) -> basic_parsed_options<charT>;
 
@@ -219,7 +209,7 @@ auto collect_unrecognized(const std::vector<basic_option<charT>> &options, enum 
     This is done since naming of environment variables is typically
     different from the naming of command line options.
 */
-BOOST_PROGRAM_OPTIONS_DECL auto parse_environment(const options_description &,
+auto parse_environment(const options_description &,
                                                   const boost::function1<std::string, std::string> &name_mapper) -> parsed_options;
 
 /** Parse environment.
@@ -228,14 +218,14 @@ BOOST_PROGRAM_OPTIONS_DECL auto parse_environment(const options_description &,
     name is obtained from variable name by removing the prefix and
     converting the remaining string into lower case.
 */
-BOOST_PROGRAM_OPTIONS_DECL auto parse_environment(const options_description &, const std::string &prefix) -> parsed_options;
+auto parse_environment(const options_description &, const std::string &prefix) -> parsed_options;
 
 /** @overload
     This function exists to resolve ambiguity between the two above
     functions when second argument is of 'char*' type. There's implicit
     conversion to both function1 and string.
 */
-BOOST_PROGRAM_OPTIONS_DECL auto parse_environment(const options_description &, const char *prefix) -> parsed_options;
+auto parse_environment(const options_description &, const char *prefix) -> parsed_options;
 
 /** Splits a given string to a collection of single strings which
     can be passed to command_line_parser. The second parameter is
@@ -244,12 +234,12 @@ BOOST_PROGRAM_OPTIONS_DECL auto parse_environment(const options_description &, c
     Splitting is done in a unix style way, with respect to quotes '"'
     and escape characters '\'
 */
-BOOST_PROGRAM_OPTIONS_DECL auto split_unix(const std::string &cmdline, const std::string &seperator = " \t",
+auto split_unix(const std::string &cmdline, const std::string &seperator = " \t",
                                            const std::string &quote = "'\"", const std::string &escape = "\\") -> std::vector<std::string>;
 
 #ifndef BOOST_NO_STD_WSTRING
 /** @overload */
-BOOST_PROGRAM_OPTIONS_DECL auto split_unix(const std::wstring &cmdline, const std::wstring &seperator = L" \t",
+auto split_unix(const std::wstring &cmdline, const std::wstring &seperator = L" \t",
                                            const std::wstring &quote = L"'\"", const std::wstring &escape = L"\\")
    -> std::vector<std::wstring>;
 #endif
@@ -261,11 +251,11 @@ BOOST_PROGRAM_OPTIONS_DECL auto split_unix(const std::wstring &cmdline, const st
     runtime library and if it always exists.
     This function is available only on Windows.
 */
-BOOST_PROGRAM_OPTIONS_DECL std::vector<std::string> split_winmain(const std::string &cmdline);
+std::vector<std::string> split_winmain(const std::string &cmdline);
 
    #ifndef BOOST_NO_STD_WSTRING
 /** @overload */
-BOOST_PROGRAM_OPTIONS_DECL std::vector<std::wstring> split_winmain(const std::wstring &cmdline);
+std::vector<std::wstring> split_winmain(const std::wstring &cmdline);
    #endif
 #endif
 
