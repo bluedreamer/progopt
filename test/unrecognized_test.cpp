@@ -3,44 +3,40 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-
 #include "argsy/cmdline.hpp"
+#include "argsy/detail/cmdline.hpp"
 #include "argsy/options_description.hpp"
 #include "argsy/parsers.hpp"
-#include "argsy/detail/cmdline.hpp"
 using namespace boost::argsy;
 using boost::argsy::detail::cmdline;
 
+#include <cassert>
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include <cassert>
 using namespace std;
 
 #include "minitest.hpp"
-
 
 // Test free function collect_unrecognized()
 //
 //  it collects the tokens of all not registered options. It can be used
 //  to pass them to an own parser implementation
 
-
-
-void test_unrecognize_cmdline() 
+void test_unrecognize_cmdline()
 {
    options_description desc;
-   
-   string content = "prg --input input.txt --optimization 4 --opt option";   
-   vector< string > tokens =  split_unix(content);
+
+   string         content = "prg --input input.txt --optimization 4 --opt option";
+   vector<string> tokens  = split_unix(content);
 
    cmdline cmd(tokens);
    cmd.set_options_description(desc);
    cmd.allow_unregistered();
 
-   vector< option > opts = cmd.run();
-   vector< string > result = collect_unrecognized(opts, include_positional);
-   
+   vector<option> opts   = cmd.run();
+   vector<string> result = collect_unrecognized(opts, include_positional);
+
    BOOST_CHECK_EQUAL(result.size(), 7);
    BOOST_CHECK_EQUAL(result[0], "prg");
    BOOST_CHECK_EQUAL(result[1], "--input");
@@ -51,23 +47,18 @@ void test_unrecognize_cmdline()
    BOOST_CHECK_EQUAL(result[6], "option");
 }
 
-
-
-void test_unrecognize_config() 
+void test_unrecognize_config()
 {
-
    options_description desc;
-   
-   string content  =
-    " input = input.txt\n"
-    " optimization = 4\n"
-    " opt = option\n"
-    ;
 
-   stringstream ss(content);
-   vector< option > opts = parse_config_file(ss, desc, true).options;
-   vector< string > result = collect_unrecognized(opts, include_positional);
-   
+   string content = " input = input.txt\n"
+                    " optimization = 4\n"
+                    " opt = option\n";
+
+   stringstream   ss(content);
+   vector<option> opts   = parse_config_file(ss, desc, true).options;
+   vector<string> result = collect_unrecognized(opts, include_positional);
+
    BOOST_CHECK_EQUAL(result.size(), 6);
    BOOST_CHECK_EQUAL(result[0], "input");
    BOOST_CHECK_EQUAL(result[1], "input.txt");
@@ -77,9 +68,7 @@ void test_unrecognize_config()
    BOOST_CHECK_EQUAL(result[5], "option");
 }
 
-
-
-int main(int /*ac*/, char** /*av*/)
+auto main(int /*ac*/, char * * /*av*/) -> int
 {
    test_unrecognize_cmdline();
    test_unrecognize_config();

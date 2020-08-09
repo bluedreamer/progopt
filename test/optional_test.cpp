@@ -11,43 +11,38 @@ namespace po = boost::argsy;
 
 #include "minitest.hpp"
 
-std::vector<std::string> sv(const char* array[], unsigned size)
+auto sv(const char *array[], unsigned size) -> std::vector<std::string>
 {
-    std::vector<std::string> r;
-    for (unsigned i = 0; i < size; ++i)
-        r.push_back(array[i]);
-    return r;
+   std::vector<std::string> r;
+   for(unsigned i = 0; i < size; ++i)
+      r.emplace_back(array[i]);
+   return r;
 }
 
 void test_optional()
 {
-    boost::optional<int> foo, bar, baz;
+   boost::optional<int> foo, bar, baz;
 
-    po::options_description desc;
-    desc.add_options()
-        ("foo,f", po::value(&foo), "")
-        ("bar,b", po::value(&bar), "")
-        ("baz,z", po::value(&baz), "")
-        ;
+   po::options_description desc;
+   desc.add_options()("foo,f", po::value(&foo), "")("bar,b", po::value(&bar), "")("baz,z", po::value(&baz), "");
 
-    const char* cmdline1_[] = { "--foo=12", "--bar", "1"};
-    std::vector<std::string> cmdline1 = sv(cmdline1_,
-                                           sizeof(cmdline1_)/sizeof(const char*));
-    po::variables_map vm;
-    po::store(po::command_line_parser(cmdline1).options(desc).run(), vm);
-    po::notify(vm);
+   const char *             cmdline1_[] = {"--foo=12", "--bar", "1"};
+   std::vector<std::string> cmdline1    = sv(cmdline1_, sizeof(cmdline1_) / sizeof(const char *));
+   po::variables_map        vm;
+   po::store(po::command_line_parser(cmdline1).options(desc).run(), vm);
+   po::notify(vm);
 
-    BOOST_REQUIRE(!!foo);
-    BOOST_CHECK(*foo == 12);
+   BOOST_REQUIRE(!!foo);
+   BOOST_CHECK(*foo == 12);
 
-    BOOST_REQUIRE(!!bar);
-    BOOST_CHECK(*bar == 1);
+   BOOST_REQUIRE(!!bar);
+   BOOST_CHECK(*bar == 1);
 
-    BOOST_CHECK(!baz);
+   BOOST_CHECK(!baz);
 }
 
-int main(int, char*[])
+auto main(int, char *[]) -> int
 {
-    test_optional();
-    return 0;
+   test_optional();
+   return 0;
 }

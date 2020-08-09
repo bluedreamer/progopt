@@ -4,71 +4,69 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #if defined(_WIN32)
-#include <string>
-#include <vector>
-#include <cctype>
-#include <iostream>
-#include <stdlib.h>
+   #include <cctype>
+   #include <iostream>
+   #include <stdlib.h>
+   #include <string>
+   #include <vector>
 
 using namespace std;
 
-#include "argsy/parsers.hpp"
+   #include "argsy/parsers.hpp"
 using namespace boost::argsy;
 
-void check_equal(const std::vector<string>& actual, char **expected, int n)
+void check_equal(const std::vector<string> &actual, char **expected, int n)
 {
-    if (actual.size() != n)
-    {
-        std::cerr << "Size mismatch between expected and actual data\n";
-        abort();
-    }
-    for (int i = 0; i < n; ++i)
-    {
-        if (actual[i] != expected[i])
-        {
-            std::cerr << "Unexpected content\n";
-            abort();
-        }
-    }
+   if(actual.size() != n)
+   {
+      std::cerr << "Size mismatch between expected and actual data\n";
+      abort();
+   }
+   for(int i = 0; i < n; ++i)
+   {
+      if(actual[i] != expected[i])
+      {
+         std::cerr << "Unexpected content\n";
+         abort();
+      }
+   }
 }
 
-#include <boost/preprocessor/cat.hpp>
+   #include <boost/preprocessor/cat.hpp>
 
 void test_winmain()
 {
+   #define C ,
+   #define TEST(input, expected)                                                                                                           \
+      char *         BOOST_PP_CAT(e, __LINE__)[] = expected;                                                                               \
+      vector<string> BOOST_PP_CAT(v, __LINE__)   = split_winmain(input);                                                                   \
+      check_equal(BOOST_PP_CAT(v, __LINE__), BOOST_PP_CAT(e, __LINE__), sizeof(BOOST_PP_CAT(e, __LINE__)) / sizeof(char *));
 
-#define C ,
-#define TEST(input, expected) \
-    char* BOOST_PP_CAT(e, __LINE__)[] = expected;\
-    vector<string> BOOST_PP_CAT(v, __LINE__) = split_winmain(input);\
-    check_equal(BOOST_PP_CAT(v, __LINE__), BOOST_PP_CAT(e, __LINE__),\
-                sizeof(BOOST_PP_CAT(e, __LINE__))/sizeof(char*));    
+   // The following expectations were obtained in Win2000 shell:
+   TEST("1 ", {"1"});
+   TEST("1\"2\" ", {"12"});
+   TEST("1\"2  ", {"12  "});
+   TEST("1\"\\\"2\" ", {"1\"2"});
+   TEST("\"1\" \"2\" ", {"1" C "2"});
+   TEST("1\\\" ", {"1\""});
+   TEST("1\\\\\" ", {"1\\ "});
+   TEST("1\\\\\\\" ", {"1\\\""});
+   TEST("1\\\\\\\\\" ", {"1\\\\ "});
 
-// The following expectations were obtained in Win2000 shell:
-    TEST("1 ", {"1"});
-    TEST("1\"2\" ", {"12"});
-    TEST("1\"2  ", {"12  "});
-    TEST("1\"\\\"2\" ", {"1\"2"});
-    TEST("\"1\" \"2\" ", {"1" C "2"});
-    TEST("1\\\" ", {"1\""});
-    TEST("1\\\\\" ", {"1\\ "});
-    TEST("1\\\\\\\" ", {"1\\\""});
-    TEST("1\\\\\\\\\" ", {"1\\\\ "});
-
-    TEST("1\" 1 ", {"1 1 "});
-    TEST("1\\\" 1 ", {"1\"" C "1"});
-    TEST("1\\1 ", {"1\\1"});
-    TEST("1\\\\1 ", {"1\\\\1"});    
+   TEST("1\" 1 ", {"1 1 "});
+   TEST("1\\\" 1 ", {"1\"" C "1"});
+   TEST("1\\1 ", {"1\\1"});
+   TEST("1\\\\1 ", {"1\\\\1"});
 }
 
-int main(int, char*[])
+int main(int, char *[])
 {
-    test_winmain();
-    return 0;
+   test_winmain();
+   return 0;
 }
 #else
-int main(int, char*[])
+auto main(int, char *[]) -> int
 {
-    return 0;
+   return 0;
 }
 #endif
