@@ -5,9 +5,9 @@
 #pragma once
 
 #include <iosfwd>
+#include <memory>
 #include <set>
 #include <string>
-#include <memory>
 
 #include "argsy/config.hpp"
 #include "argsy/eof_iterator.hpp"

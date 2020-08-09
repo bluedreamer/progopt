@@ -6,7 +6,7 @@
 #include "argsy/options_description.hpp"
 using namespace argsy;
 
-#include <boost/function.hpp>
+#include <functional>
 using namespace boost;
 
 #include <sstream>

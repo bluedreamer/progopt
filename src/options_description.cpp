@@ -346,9 +346,9 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
    -> const option_description *
 {
    std::shared_ptr<option_description> found;
-   bool                                  had_full_match = false;
-   vector<string>                        approximate_matches;
-   vector<string>                        full_matches;
+   bool                                had_full_match = false;
+   vector<string>                      approximate_matches;
+   vector<string>                      full_matches;
 
    // We use linear search because matching specified option
    // name with the declared option name need to take care about

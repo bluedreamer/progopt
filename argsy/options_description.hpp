@@ -10,8 +10,8 @@
 #include "argsy/value_semantic.hpp"
 
 #include <any>
-#include <boost/detail/workaround.hpp>
-#include <boost/function.hpp>
+//#include <boost/detail/workaround.hpp>
+#include <functional>
 
 #include <map>
 #include <set>

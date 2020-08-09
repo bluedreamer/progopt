@@ -138,7 +138,7 @@ void validate(std::any &v, const std::vector<std::basic_string<charT>> &s, std::
          /* We call validate so that if user provided
             a validator for class T, we use it even
             when parsing vector<T>.  */
-         std::any                            a;
+         std::any                              a;
          std::vector<std::basic_string<charT>> cv;
          cv.push_back(s[i]);
          validate(a, cv, (T *)0, 0);

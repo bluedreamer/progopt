@@ -11,7 +11,7 @@ using namespace boost::argsy;
 // We'll use po::value everywhere to workaround vc6 bug.
 namespace po = boost::argsy;
 
-#include <boost/function.hpp>
+#include <functional>
 using namespace boost;
 
 #include <sstream>

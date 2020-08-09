@@ -91,7 +91,7 @@ using wparsed_options = basic_parsed_options<wchar_t>;
 /** Augments basic_parsed_options<wchar_t> with conversion from
     'parsed_options' */
 
-typedef boost::function1<std::pair<std::string, std::string>, const std::string &> ext_parser;
+typedef std::function<std::pair<std::string, std::string>(const std::string &)> ext_parser;
 
 /** Command line parser.
 
@@ -161,7 +161,7 @@ using wcommand_line_parser = basic_command_line_parser<wchar_t>;
  */
 template<class charT>
 auto parse_command_line(int argc, const charT *const argv[], const options_description & /*desc*/, int style = 0,
-                        boost::function1<std::pair<std::string, std::string>, const std::string &> ext = ext_parser())
+                        std::function<std::pair<std::string, std::string>(const std::string &)> ext = ext_parser())
    -> basic_parsed_options<charT>;
 
 /** Parse a config file.
@@ -169,9 +169,8 @@ auto parse_command_line(int argc, const charT *const argv[], const options_descr
     Read from given stream.
 */
 template<class charT>
-   auto
-   parse_config_file(std::basic_istream<charT> &, const options_description &, bool allow_unregistered = false)
-      -> basic_parsed_options<charT>;
+auto parse_config_file(std::basic_istream<charT> &, const options_description &, bool allow_unregistered = false)
+   -> basic_parsed_options<charT>;
 
 /** Parse a config file.
 
@@ -179,8 +178,7 @@ template<class charT>
     passed to the file stream.
 */
 template<class charT = char>
-   auto
-   parse_config_file(const char *filename, const options_description &, bool allow_unregistered = false) -> basic_parsed_options<charT>;
+auto parse_config_file(const char *filename, const options_description &, bool allow_unregistered = false) -> basic_parsed_options<charT>;
 
 /** Controls if the 'collect_unregistered' function should
     include positional options, or not. */
@@ -209,8 +207,7 @@ auto collect_unrecognized(const std::vector<basic_option<charT>> &options, enum 
     This is done since naming of environment variables is typically
     different from the naming of command line options.
 */
-auto parse_environment(const options_description &,
-                                                  const boost::function1<std::string, std::string> &name_mapper) -> parsed_options;
+auto parse_environment(const options_description &, const std::function<std::string(std::string)> &name_mapper) -> parsed_options;
 
 /** Parse environment.
 
@@ -234,14 +231,13 @@ auto parse_environment(const options_description &, const char *prefix) -> parse
     Splitting is done in a unix style way, with respect to quotes '"'
     and escape characters '\'
 */
-auto split_unix(const std::string &cmdline, const std::string &seperator = " \t",
-                                           const std::string &quote = "'\"", const std::string &escape = "\\") -> std::vector<std::string>;
+auto split_unix(const std::string &cmdline, const std::string &seperator = " \t", const std::string &quote = "'\"",
+                const std::string &escape = "\\") -> std::vector<std::string>;
 
 #ifndef BOOST_NO_STD_WSTRING
 /** @overload */
-auto split_unix(const std::wstring &cmdline, const std::wstring &seperator = L" \t",
-                                           const std::wstring &quote = L"'\"", const std::wstring &escape = L"\\")
-   -> std::vector<std::wstring>;
+auto split_unix(const std::wstring &cmdline, const std::wstring &seperator = L" \t", const std::wstring &quote = L"'\"",
+                const std::wstring &escape = L"\\") -> std::vector<std::wstring>;
 #endif
 
 #ifdef _WIN32

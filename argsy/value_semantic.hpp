@@ -249,7 +249,7 @@ public:
 
    /** Specifies a function to be called when the final value
        is determined. */
-   auto notifier(boost::function1<void, const T &> f) -> typed_value *
+   auto notifier(std::function<void(const T &)> f) -> typed_value *
    {
       m_notifier = f;
       return this;
@@ -363,13 +363,13 @@ private:
 
    // Default value is stored as std::any and not
    // as boost::optional to avoid unnecessary instantiations.
-   std::string                       m_value_name;
-   std::any                        m_default_value;
-   std::string                       m_default_value_as_text;
-   std::any                        m_implicit_value;
-   std::string                       m_implicit_value_as_text;
-   bool                              m_composing, m_implicit, m_multitoken, m_zero_tokens, m_required;
-   boost::function1<void, const T &> m_notifier;
+   std::string                    m_value_name;
+   std::any                       m_default_value;
+   std::string                    m_default_value_as_text;
+   std::any                       m_implicit_value;
+   std::string                    m_implicit_value_as_text;
+   bool                           m_composing, m_implicit, m_multitoken, m_zero_tokens, m_required;
+   std::function<void(const T &)> m_notifier;
 };
 
 /** Creates a typed_value<T> instance. This function is the primary

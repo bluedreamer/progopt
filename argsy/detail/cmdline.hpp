@@ -12,7 +12,7 @@
 #include "argsy/positional_options.hpp"
 
 #include <boost/detail/workaround.hpp>
-#include <boost/function.hpp>
+#include <functional>
 
 #include <string>
 #include <vector>
@@ -51,9 +51,9 @@ class cmdline
 public:
    using style_t = ::argsy::command_line_style::style_t;
 
-   typedef boost::function1<std::pair<std::string, std::string>, const std::string &> additional_parser;
+   typedef std::function<std::pair<std::string, std::string>(const std::string &)> additional_parser;
 
-   typedef boost::function1<std::vector<option>, std::vector<std::string> &> style_parser;
+   typedef std::function<std::vector<option>(std::vector<std::string> &)> style_parser;
 
    /** Constructs a command line parser for (argc, argv) pair. Uses
        style options passed in 'style', which should be binary or'ed values

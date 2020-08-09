@@ -31,7 +31,7 @@ void get_env_options()
                                                       "set verbosity: DEBUG, INFO, WARN, ERROR, FATAL");
 
    po::variables_map vm;
-   store(po::parse_environment(config, boost::function1<std::string, std::string>(mapper)), vm);
+   store(po::parse_environment(config, std::function<std::string(std::string)>(mapper)), vm);
    notify(vm);
 
    if(vm.count("path"))

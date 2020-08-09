@@ -84,7 +84,7 @@ basic_parsed_options<charT> basic_command_line_parser<charT>::run()
 
 template<class charT>
 basic_parsed_options<charT> parse_command_line(int argc, const charT *const argv[], const options_description &desc, int style,
-                                               boost::function1<std::pair<std::string, std::string>, const std::string &> ext)
+                                               std::function<std::pair<std::string, std::string>(const std::string &)> ext)
 {
    return basic_command_line_parser<charT>(argc, argv).options(desc).style(style).extra_parser(ext).run();
 }

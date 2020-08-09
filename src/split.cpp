@@ -40,15 +40,15 @@ namespace argsy
 {
 // Take a command line string and splits in into tokens, according
 // to the given collection of seperators chars.
-auto split_unix(const std::string &cmdline, const std::string &seperator, const std::string &quote,
-                                           const std::string &escape) -> std::vector<std::string>
+auto split_unix(const std::string &cmdline, const std::string &seperator, const std::string &quote, const std::string &escape)
+   -> std::vector<std::string>
 {
    return detail::split_unix<char>(cmdline, seperator, quote, escape);
 }
 
 #ifndef BOOST_NO_STD_WSTRING
-auto split_unix(const std::wstring &cmdline, const std::wstring &seperator, const std::wstring &quote,
-                                           const std::wstring &escape) -> std::vector<std::wstring>
+auto split_unix(const std::wstring &cmdline, const std::wstring &seperator, const std::wstring &quote, const std::wstring &escape)
+   -> std::vector<std::wstring>
 {
    return detail::split_unix<wchar_t>(cmdline, seperator, quote, escape);
 }

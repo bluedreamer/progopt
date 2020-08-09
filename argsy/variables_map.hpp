@@ -6,8 +6,8 @@
 #include "argsy/config.hpp"
 
 #include <any>
-#include <memory>
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
 #include <utility>
@@ -78,7 +78,7 @@ public:
 
 private:
    std::any v;
-   bool       m_defaulted{false};
+   bool     m_defaulted{false};
    // Internal reference to value semantic. We need to run
    // notifications when *final* values of options are known, and
    // they are known only after all sources are stored. By that

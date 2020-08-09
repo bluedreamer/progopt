@@ -119,12 +119,12 @@ auto parse_config_file(std::basic_istream<charT> &is, const options_description 
    return basic_parsed_options<charT>(result);
 }
 
-template basic_parsed_options<char> parse_config_file(std::basic_istream<char> & is,
-                                                                                 const options_description &desc, bool allow_unregistered);
+template basic_parsed_options<char> parse_config_file(std::basic_istream<char> &is, const options_description &desc,
+                                                      bool allow_unregistered);
 
 #ifndef BOOST_NO_STD_WSTRING
-template basic_parsed_options<wchar_t>
-                                    parse_config_file(std::basic_istream<wchar_t> &is, const options_description &desc, bool allow_unregistered);
+template basic_parsed_options<wchar_t> parse_config_file(std::basic_istream<wchar_t> &is, const options_description &desc,
+                                                         bool allow_unregistered);
 #endif
 
 template<class charT>
@@ -147,12 +147,10 @@ auto parse_config_file(const char *filename, const options_description &desc, bo
    return result;
 }
 
-template basic_parsed_options<char> parse_config_file(const char *filename, const options_description &desc,
-                                                                                 bool allow_unregistered);
+template basic_parsed_options<char> parse_config_file(const char *filename, const options_description &desc, bool allow_unregistered);
 
 #ifndef BOOST_NO_STD_WSTRING
-template basic_parsed_options<wchar_t> parse_config_file(const char *filename, const options_description &desc,
-                                                                                    bool allow_unregistered);
+template basic_parsed_options<wchar_t> parse_config_file(const char *filename, const options_description &desc, bool allow_unregistered);
 #endif
 
 // This versio, which accepts any options without validation, is disabled,
@@ -170,8 +168,7 @@ template basic_parsed_options<wchar_t> parse_config_file(const char *filename, c
     }
 #endif
 
-auto parse_environment(const options_description &                       desc,
-                                                  const boost::function1<std::string, std::string> &name_mapper) -> parsed_options
+auto parse_environment(const options_description &desc, const std::function<std::string(std::string)> &name_mapper) -> parsed_options
 {
    parsed_options result(&desc);
 
