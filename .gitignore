@@ -1,4 +1,5 @@
 cmake-build-debug/
+build/
 cmake-build-debug-remote/
 cmake-build-release/
 .idea/

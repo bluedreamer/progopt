@@ -4,24 +4,23 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <fstream>
-#include <locale.h>
-#include <locale>
-#include <iostream>
-#include <string>
-#include <locale>
-#include <stdexcept>
+   #include <fstream>
+   #include <iostream>
+   #include <locale.h>
+   #include <locale>
+   #include <stdexcept>
+   #include <string>
 
-#include <boost/config.hpp>
+   #include <boost/config.hpp>
 
-#define BOOST_PROGRAM_OPTIONS_SOURCE
-#include "argsy/config.hpp"
-#include "argsy/detail/convert.hpp"
-#include "argsy/detail/utf8_codecvt_facet.hpp"
+   #define BOOST_PROGRAM_OPTIONS_SOURCE
+   #include "argsy/config.hpp"
+   #include "argsy/detail/convert.hpp"
+   #include "argsy/detail/utf8_codecvt_facet.hpp"
 
-#include <boost/throw_exception.hpp>
+   #include <boost/throw_exception.hpp>
 
-#include <boost/bind.hpp>
+   #include <boost/bind.hpp>
 
 using namespace std;
 
@@ -86,7 +85,7 @@ namespace boost { namespace detail {
 
 namespace boost {
 
-#ifndef BOOST_NO_STD_WSTRING
+   #ifndef BOOST_NO_STD_WSTRING
     BOOST_PROGRAM_OPTIONS_DECL std::wstring 
     from_8_bit(const std::string& s, 
                const std::codecvt<wchar_t, char, std::mbstate_t>& cvt)
@@ -208,13 +207,13 @@ int boost::argsy::detail::get_cont_octet_out_count_impl<4>(wchar_t word){
    // can cause problems if warnings are being treated as errors, so we guard
    // against that.  Including <boost/detail/utf8_codecvt_facet.hpp> as we do
    // should be enough to get WCHAR_MAX defined.
-#if !defined(WCHAR_MAX)
-#   error WCHAR_MAX not defined!
-#endif
+      #if !defined(WCHAR_MAX)
+         #error WCHAR_MAX not defined!
+      #endif
    // cope with VC++ 7.1 or earlier having invalid WCHAR_MAX
-#if defined(_MSC_VER) && _MSC_VER <= 1310 // 7.1 or earlier
+      #if defined(_MSC_VER) && _MSC_VER <= 1310 // 7.1 or earlier
    return 2;
-#elif WCHAR_MAX > 0x10000
+      #elif WCHAR_MAX > 0x10000
 
    if (word < 0x10000) {
       return 2;
@@ -227,9 +226,9 @@ int boost::argsy::detail::get_cont_octet_out_count_impl<4>(wchar_t word){
    }
    return 5;
 
-#else
+      #else
    return 2;
-#endif
+      #endif
 }
 
 
@@ -297,9 +296,9 @@ boost::argsy::detail::utf8_codecvt_facet::do_out(std::mbstate_t& /*state*/, cons
 // How many char objects can I process to get <= max_limit
 // wchar_t objects?
 int boost::argsy::detail::utf8_codecvt_facet::do_length(std::mbstate_t&, const char* from, const char* from_end, std::size_t max_limit) const
-#if BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))
+      #if BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))
 throw()
-#endif
+      #endif
 {
    // RG - this code is confusing!  I need a better way to express it.
    // and test cases.
@@ -365,7 +364,7 @@ BOOST_PROGRAM_OPTIONS_DECL std::string to_local_8_bit(const std::wstring& s)
    return to_8_bit(s, BOOST_USE_FACET(facet_type, locale()));
 }
 
-#endif
+   #endif
 
 namespace argsy
 {
@@ -374,13 +373,13 @@ BOOST_PROGRAM_OPTIONS_DECL std::string to_internal(const std::string& s)
    return s;
 }
 
-#ifndef BOOST_NO_STD_WSTRING
+   #ifndef BOOST_NO_STD_WSTRING
 BOOST_PROGRAM_OPTIONS_DECL std::string to_internal(const std::wstring& s)
 {
    return to_utf8(s);
 }
 
-#endif
-}
-}
    #endif
+}
+}
+#endif

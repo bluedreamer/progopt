@@ -12,42 +12,36 @@
 
 #include <cassert>
 
-namespace boost { namespace argsy {
+namespace boost::argsy
+{
+positional_options_description::positional_options_description() = default;
 
-    positional_options_description::positional_options_description()
-    {}
+auto positional_options_description::add(const char *name, int max_count) -> positional_options_description &
+{
+   assert(max_count != -1 || m_trailing.empty());
 
-    positional_options_description&
-    positional_options_description::add(const char* name, int max_count)
-    {
-        assert(max_count != -1 || m_trailing.empty());
+   if(max_count == -1)
+      m_trailing = name;
+   else
+   {
+      m_names.resize(m_names.size() + max_count, name);
+   }
+   return *this;
+}
 
-        if (max_count == -1)
-            m_trailing = name;
-        else {
-            m_names.resize(m_names.size() + max_count, name);
-        }
-        return *this;
-    }
+auto positional_options_description::max_total_count() const -> unsigned
+{
+   return m_trailing.empty() ? static_cast<unsigned>(m_names.size()) : (std::numeric_limits<unsigned>::max)();
+}
 
-    unsigned
-    positional_options_description::max_total_count() const
-    {
-        return m_trailing.empty() ? 
-          static_cast<unsigned>(m_names.size()) : (std::numeric_limits<unsigned>::max)();
-    }
-    
-    const std::string& 
-    positional_options_description::name_for_position(unsigned position) const
-    {
-        assert(position < max_total_count());
+auto positional_options_description::name_for_position(unsigned position) const -> const std::string &
+{
+   assert(position < max_total_count());
 
-        if (position < m_names.size())
-            return m_names[position];
-        else
-            return m_trailing;
-    }
+   if(position < m_names.size())
+      return m_names[position];
+   else
+      return m_trailing;
+}
 
-
-}}
-
+} // namespace boost::argsy

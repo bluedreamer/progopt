@@ -3,28 +3,28 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-#pragma once
+   #pragma once
 
-#include "argsy/config.hpp"
+   #include "argsy/config.hpp"
 
-#if !defined(BOOST_NO_STD_WSTRING)
+   #if !defined(BOOST_NO_STD_WSTRING)
 
-#include <boost/detail/workaround.hpp>
+      #include <boost/detail/workaround.hpp>
 
-#include <string>
-#include <vector>
-#include <locale>
+      #include <locale>
+      #include <string>
+      #include <vector>
 // for mbstate_t
-#include <cwchar>
-#include <stdexcept>
+      #include <cwchar>
+      #include <stdexcept>
 
-#if defined(BOOST_NO_STDC_NAMESPACE)
-#include <wchar.h>
+      #if defined(BOOST_NO_STDC_NAMESPACE)
+         #include <wchar.h>
 namespace std
 {
     using ::mbstate_t;
-}    
-#endif
+}
+      #endif
 
 namespace boost {
 
@@ -85,9 +85,9 @@ namespace boost {
   
 }
 
-#else
-#include <vector>
-#include <string>
+   #else
+      #include <string>
+      #include <vector>
 namespace boost{
    namespace argsy{
         BOOST_PROGRAM_OPTIONS_DECL std::string to_internal(const std::string&);
@@ -102,6 +102,6 @@ namespace boost{
         }
    }
 }
-#endif
-
    #endif
+
+#endif
