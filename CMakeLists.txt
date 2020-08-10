@@ -18,7 +18,7 @@ add_library(${LIBRARY_NAME} src/cmdline.cpp
         src/value_semantic.cpp
         src/variables_map.cpp
         src/winmain.cpp
-        program_options.hpp
+        argsy.h
         argsy/cmdline.hpp
         argsy/config.hpp
         argsy/environment_iterator.hpp

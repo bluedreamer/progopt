@@ -5,7 +5,7 @@
 
 /* Shows how to use both command line and config file. */
 
-#include "program_options.hpp"
+#include "argsy.h"
 
 #include <fstream>
 #include <iostream>

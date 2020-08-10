@@ -6,7 +6,7 @@
 /* The simplest usage of the library.
  */
 
-#include "program_options.hpp"
+#include "argsy.h"
 
 #include <iostream>
 #include <iterator>

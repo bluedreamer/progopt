@@ -8,7 +8,7 @@
 
 // See library home page at http://www.boost.org/libs/program_options
 
-#include "program_options.hpp"
+#include "argsy.h"
 #include <boost/core/lightweight_test.hpp>
 
 namespace po = argsy;

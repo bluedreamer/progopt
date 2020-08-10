@@ -25,23 +25,6 @@
       assert(a == b);                                                                                                                      \
    }
 
-// Uncomment for Debugging, removes asserts so we can see more failures!
-//#define BOOST_ERROR(description) std::cerr << description; std::cerr << "\n";
-
-// 8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-//
-//  Uncomment to print out the complete set of diagnostic messages for the different test cases
-/*
-#define CHECK_EQUAL(description, a, b) if (a != b) {std::cerr << "\n\nError:  " << \
-    description << "\n  Expecting\n" << b << "\n  Found\n" << a << "\n\n"; } \
-    else {std::cout << description<< "\t" << b << "\n";}
-*/
-
-// 8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-
-//
-//  test exception for each specified command line style, e.g. short dash or config file
-//
 template<typename EXCEPTION>
 void test_each_exception_message(const std::string &test_description, const std::vector<const char *> &argv,
                                  argsy::options_description &desc, int style, std::string exception_msg, std::istream &is = std::cin)

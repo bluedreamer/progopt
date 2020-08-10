@@ -19,7 +19,7 @@
 //
 // and the second invocation should issue an error message.
 
-#include "program_options.hpp"
+#include "argsy.h"
 
 #include <iostream>
 #include <regex>

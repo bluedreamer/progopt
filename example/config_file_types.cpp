@@ -6,7 +6,7 @@
 // This example shows a config file (in ini format) being parsed by the
 // argsy library. It includes a numebr of different value types.
 
-#include "program_options.hpp"
+#include "argsy.h"
 
 #include <cassert>
 #include <iostream>

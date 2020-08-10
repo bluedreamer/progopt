@@ -2,7 +2,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "program_options.hpp"
+#include "argsy.h"
 namespace po = argsy;
 
 #include <boost/optional.hpp>
