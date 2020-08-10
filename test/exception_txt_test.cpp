@@ -43,17 +43,15 @@
 //  test exception for each specified command line style, e.g. short dash or config file
 //
 template<typename EXCEPTION>
-void test_each_exception_message(const std::string &test_description, const std::vector<const char *> &argv, argsy::options_description &desc,
-   int
-style,
-                                 std::string exception_msg, std::istream &is = std::cin)
+void test_each_exception_message(const std::string &test_description, const std::vector<const char *> &argv,
+                                 argsy::options_description &desc, int style, std::string exception_msg, std::istream &is = std::cin)
 {
    if(exception_msg.length() == 0)
    {
       return;
    }
    argsy::variables_map vm;
-   unsigned      argc = argv.size();
+   unsigned             argc = argv.size();
 
    try
    {
@@ -99,14 +97,15 @@ style,
 //      try each command line style in turn
 const int unix_style = argsy::command_line_style::unix_style;
 const int short_dash = argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::allow_short |
-   argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::allow_sticky;
-const int short_slash =
-             argsy::command_line_style::allow_slash_for_short | argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_adjacent;
-const int long_dash = argsy::command_line_style::allow_long | argsy::command_line_style::long_allow_adjacent | argsy::command_line_style::allow_guessing;
+                       argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::allow_sticky;
+const int short_slash = argsy::command_line_style::allow_slash_for_short | argsy::command_line_style::allow_short |
+                        argsy::command_line_style::short_allow_adjacent;
+const int long_dash =
+   argsy::command_line_style::allow_long | argsy::command_line_style::long_allow_adjacent | argsy::command_line_style::allow_guessing;
 
 template<typename EXCEPTION>
-void test_exception_message(const std::vector<std::vector<const char *>> &argv, argsy::options_description &desc, const std::string &error_description,
-                            const char *expected_message_template[5])
+void test_exception_message(const std::vector<std::vector<const char *>> &argv, argsy::options_description &desc,
+                            const std::string &error_description, const char *expected_message_template[5])
 {
    std::string expected_message;
 
@@ -148,7 +147,7 @@ void test_invalid_option_value_exception_msg()
    desc.add_options()("int-option,d", argsy::value<int>(), "An option taking an integer");
 
    std::vector<std::vector<const char *>> argv;
-   const char *                 argv0[] = {"program", "-d", "A_STRING"};
+   const char *                           argv0[] = {"program", "-d", "A_STRING"};
    VEC_STR_PUSH_BACK(argv, argv0);
    const char *argv1[] = {"program", "--int", "A_STRING"};
    VEC_STR_PUSH_BACK(argv, argv1);
@@ -176,9 +175,10 @@ void test_invalid_option_value_exception_msg()
 void test_missing_value_exception_msg()
 {
    argsy::options_description desc;
-   desc.add_options()("cfgfile,e", argsy::value<std::string>(), "the config file")("output,o", argsy::value<std::string>(), "the output file");
+   desc.add_options()("cfgfile,e", argsy::value<std::string>(), "the config file")("output,o", argsy::value<std::string>(),
+                                                                                   "the output file");
    std::vector<std::vector<const char *>> argv;
-   const char *                 argv0[] = {"program", "-e", "-e", "output.txt"};
+   const char *                           argv0[] = {"program", "-e", "-e", "output.txt"};
    VEC_STR_PUSH_BACK(argv, argv0);
    const char *argv1[] = {"program", "--cfgfile"};
    VEC_STR_PUSH_BACK(argv, argv1);
@@ -208,11 +208,12 @@ void test_missing_value_exception_msg()
 void test_ambiguous_option_exception_msg()
 {
    argsy::options_description desc;
-   desc.add_options()("cfgfile1,c", argsy::value<std::string>(), "the config file")("cfgfile2,o", argsy::value<std::string>(), "the config file")(
-      "good,g", "good option")("output,c", argsy::value<std::string>(), "the output file")("output", argsy::value<std::string>(), "the output file");
+   desc.add_options()("cfgfile1,c", argsy::value<std::string>(), "the config file")("cfgfile2,o", argsy::value<std::string>(),
+                                                                                    "the config file")("good,g", "good option")(
+      "output,c", argsy::value<std::string>(), "the output file")("output", argsy::value<std::string>(), "the output file");
 
    std::vector<std::vector<const char *>> argv;
-   const char *                 argv0[] = {"program", "-ggc", "file", "-o", "anotherfile"};
+   const char *                           argv0[] = {"program", "-ggc", "file", "-o", "anotherfile"};
    VEC_STR_PUSH_BACK(argv, argv0);
    const char *argv1[] = {"program", "--cfgfile", "file", "--cfgfile", "anotherfile"};
    VEC_STR_PUSH_BACK(argv, argv1);
@@ -243,7 +244,7 @@ void test_multiple_occurrences_exception_msg()
    desc.add_options()("cfgfile,c", argsy::value<std::string>(), "the configfile");
 
    std::vector<std::vector<const char *>> argv;
-   const char *                 argv0[] = {"program", "-c", "file", "-c", "anotherfile"};
+   const char *                           argv0[] = {"program", "-c", "file", "-c", "anotherfile"};
    VEC_STR_PUSH_BACK(argv, argv0);
    const char *argv1[] = {"program", "--cfgfi", "file", "--cfgfi", "anotherfile"};
    VEC_STR_PUSH_BACK(argv, argv1);
@@ -272,7 +273,7 @@ void test_unknown_option_exception_msg()
    desc.add_options()("good,g", "good option");
 
    std::vector<std::vector<const char *>> argv;
-   const char *                 argv0[] = {"program", "-ggc", "file"};
+   const char *                           argv0[] = {"program", "-ggc", "file"};
    VEC_STR_PUSH_BACK(argv, argv0);
    const char *argv1[] = {"program", "--cfgfile", "file"};
    VEC_STR_PUSH_BACK(argv, argv1);
@@ -300,7 +301,7 @@ void test_invalid_bool_value_exception_msg()
    desc.add_options()("bool_option,b", argsy::value<bool>(), "bool_option");
 
    std::vector<std::vector<const char *>> argv;
-   const char *                 argv0[] = {"program", "-b", "file"};
+   const char *                           argv0[] = {"program", "-b", "file"};
    VEC_STR_PUSH_BACK(argv, argv0);
    const char *argv1[] = {"program", "--bool_optio", "file"};
    VEC_STR_PUSH_BACK(argv, argv1);
@@ -333,11 +334,11 @@ void test_invalid_bool_value_exception_msg()
 void test_multiple_values_not_allowed_exception_msg()
 {
    argsy::options_description desc;
-   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(), "the config file")("good,g", "good option")("output,o", argsy::value<std::string>(),
-                                                                                                              "the output file");
+   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(),
+                      "the config file")("good,g", "good option")("output,o", argsy::value<std::string>(), "the output file");
 
    std::vector<std::vector<const char *>> argv;
-   const char *                 argv0[] = {"program", "-c", "file", "c", "-o", "fritz", "hugo"};
+   const char *                           argv0[] = {"program", "-c", "file", "c", "-o", "fritz", "hugo"};
    VEC_STR_PUSH_BACK(argv, argv0);
    const char *argv1[] = {"program", "--cfgfil", "file", "c", "--outpu", "fritz", "hugo"};
    VEC_STR_PUSH_BACK(argv, argv1);
@@ -373,7 +374,7 @@ void test_at_least_one_value_required_exception_msg()
    desc.add_options()("cfgfile,c", argsy::value<int>()->zero_tokens(), "the config file")("other,o", argsy::value<std::string>(), "other");
 
    std::vector<std::vector<const char *>> argv;
-   const char *                 argv0[] = {"program", "-c"};
+   const char *                           argv0[] = {"program", "-c"};
    VEC_STR_PUSH_BACK(argv, argv0);
    const char *argv1[] = {"program", "--cfg", "--o", "name"};
    VEC_STR_PUSH_BACK(argv, argv1);
@@ -405,7 +406,7 @@ void test_required_option_exception_msg()
                       "the config file")("good,g", "good option")("output,o", argsy::value<std::string>()->required(), "the output file");
 
    std::vector<std::vector<const char *>> argv;
-   const char *                 argv0[] = {"program", "-g"};
+   const char *                           argv0[] = {"program", "-g"};
    VEC_STR_PUSH_BACK(argv, argv0);
    const char *argv1[] = {"program", "--g"};
    VEC_STR_PUSH_BACK(argv, argv1);
@@ -504,7 +505,7 @@ void abbreviated_options_in_config_file(argsy::options_description &desc, argsy:
 //________________________________________________________________________________________
 void too_many_positional_options(argsy::options_description &desc, argsy::variables_map &vm)
 {
-   const char *                   argv[] = {"program", "1", "2", "3"};
+   const char *                          argv[] = {"program", "1", "2", "3"};
    argsy::positional_options_description positional_args;
    positional_args.add("two_positional_arguments", 2);
    store(argsy::command_line_parser(4, argv).options(desc).positional(positional_args).run(), vm);
@@ -518,7 +519,7 @@ void too_many_positional_options(argsy::options_description &desc, argsy::variab
 
 void test_invalid_command_line_style_exception_msg()
 {
-   std::string test_name = "invalid_command_line_style";
+   std::string                test_name = "invalid_command_line_style";
    argsy::options_description desc;
    desc.add_options()("output,o", argsy::value<std::string>(), "the output file");
 
@@ -542,7 +543,7 @@ void test_invalid_command_line_style_exception_msg()
                                     "'command_line_style::long_allow_adjacent' ('=' "
                                     "separated arguments) for long options.");
 
-   const char *  argv[] = {"program"};
+   const char *         argv[] = {"program"};
    argsy::variables_map vm;
    for(unsigned ii = 0; ii < 3; ++ii)
    {
@@ -559,7 +560,8 @@ void test_invalid_command_line_style_exception_msg()
       }
       catch(std::exception &e)
       {
-         BOOST_ERROR(std::string(test_name + ":\nUnexpected exception. ") + e.what() + "\nExpected text:\n" + invalid_diagnostics[ii] + "\n");
+         BOOST_ERROR(std::string(test_name + ":\nUnexpected exception. ") + e.what() + "\nExpected text:\n" + invalid_diagnostics[ii] +
+                     "\n");
          exception_thrown = true;
       }
       if(!exception_thrown)
@@ -575,11 +577,11 @@ void test_empty_value_inner(argsy::options_description &opts, argsy::variables_m
    opts.add_options()("foo", argsy::value<uint32_t>()->value_name("<time>")->required());
    popts.add("foo", 1);
    std::vector<std::string> tokens(1, "");
-   argsy::parsed_options parsed = argsy::command_line_parser(tokens)
-                              .style(argsy::command_line_style::default_style & ~argsy::command_line_style::allow_guessing)
-                              .options(opts)
-                              .positional(popts)
-                              .run();
+   argsy::parsed_options    parsed = argsy::command_line_parser(tokens)
+                                     .style(argsy::command_line_style::default_style & ~argsy::command_line_style::allow_guessing)
+                                     .options(opts)
+                                     .positional(popts)
+                                     .run();
    store(parsed, vm);
 }
 

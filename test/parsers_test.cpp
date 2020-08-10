@@ -7,11 +7,11 @@
 #include "argsy/parsers.hpp"
 #include "argsy/variables_map.hpp"
 
+#include <cstdlib> // for putenv
 #include <functional>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
-   #include <cstdlib> // for putenv
 
 #include "minitest.hpp"
 
@@ -94,10 +94,10 @@ void test_many_different_options()
 {
    argsy::options_description desc;
    desc.add_options()("foo,f", new argsy::untyped_value(), "")( // Explicit qualification is a workaround for vc6
-      "bar,b", argsy::value<std::string>(),
-      "")("car,voiture", new argsy::untyped_value())("dog,dawg", new argsy::untyped_value())("baz", new argsy::untyped_value())("plug*", new argsy::untyped_value());
-   const char *   cmdline3_[] = {"--foo=12", "-f4", "--bar=11", "-b4", "--voiture=15", "--dawg=16", "--dog=17", "--plug3=10"};
-   std::vector<std::string> cmdline3    = sv(cmdline3_, sizeof(cmdline3_) / sizeof(const char *));
+      "bar,b", argsy::value<std::string>(), "")("car,voiture", new argsy::untyped_value())("dog,dawg", new argsy::untyped_value())(
+      "baz", new argsy::untyped_value())("plug*", new argsy::untyped_value());
+   const char *               cmdline3_[] = {"--foo=12", "-f4", "--bar=11", "-b4", "--voiture=15", "--dawg=16", "--dog=17", "--plug3=10"};
+   std::vector<std::string>   cmdline3    = sv(cmdline3_, sizeof(cmdline3_) / sizeof(const char *));
    std::vector<argsy::option> a3          = argsy::command_line_parser(cmdline3).options(desc).run().options;
    BOOST_CHECK_EQUAL(a3.size(), 8u);
    check_value(a3[0], "foo", "12");
@@ -111,7 +111,8 @@ void test_many_different_options()
 
    // Regression test: check that '0' as style is interpreted as
    // 'default_style'
-   std::vector<argsy::option> a4 = parse_command_line(sizeof(cmdline3_) / sizeof(const char *), cmdline3_, desc, 0, additional_parser).options;
+   std::vector<argsy::option> a4 =
+      parse_command_line(sizeof(cmdline3_) / sizeof(const char *), cmdline3_, desc, 0, additional_parser).options;
    // The default style is unix-style, where the first argument on the command-line
    // is the name of a binary, not an option value, so that should be ignored
    BOOST_CHECK_EQUAL(a4.size(), 7u);
@@ -127,7 +128,7 @@ void test_many_different_options()
 void test_not_crashing_with_empty_string_values()
 {
    // Check that we don't crash on empty values of type 'string'
-   const char *        cmdline4[] = {"", "--open", ""};
+   const char *               cmdline4[] = {"", "--open", ""};
    argsy::options_description desc2;
    desc2.add_options()("open", argsy::value<std::string>());
    argsy::variables_map vm;
@@ -136,9 +137,10 @@ void test_not_crashing_with_empty_string_values()
 
 void test_multitoken()
 {
-   const char *        cmdline5[] = {"", "-p7", "-o", "1", "2", "3", "-x8"};
+   const char *               cmdline5[] = {"", "-p7", "-o", "1", "2", "3", "-x8"};
    argsy::options_description desc3;
-   desc3.add_options()(",p", argsy::value<std::string>())(",o", argsy::value<std::string>()->multitoken())(",x", argsy::value<std::string>());
+   desc3.add_options()(",p", argsy::value<std::string>())(",o", argsy::value<std::string>()->multitoken())(",x",
+                                                                                                           argsy::value<std::string>());
    std::vector<argsy::option> a5 =
       parse_command_line(sizeof(cmdline5) / sizeof(const char *), const_cast<char **>(cmdline5), desc3, 0, additional_parser).options;
    BOOST_CHECK_EQUAL(a5.size(), 3u);
@@ -153,9 +155,10 @@ void test_multitoken()
 
 void test_multitoken_and_multiname()
 {
-   const char *        cmdline[] = {"program", "-fone", "-b", "two", "--foo", "three", "four", "-zfive", "--fee", "six"};
+   const char *               cmdline[] = {"program", "-fone", "-b", "two", "--foo", "three", "four", "-zfive", "--fee", "six"};
    argsy::options_description desc;
-   desc.add_options()("bar,b", argsy::value<std::string>())("foo,fee,f", argsy::value<std::string>()->multitoken())("fizbaz,baz,z", argsy::value<std::string>());
+   desc.add_options()("bar,b", argsy::value<std::string>())("foo,fee,f", argsy::value<std::string>()->multitoken())(
+      "fizbaz,baz,z", argsy::value<std::string>());
 
    std::vector<argsy::option> parsed_options =
       parse_command_line(sizeof(cmdline) / sizeof(const char *), const_cast<char **>(cmdline), desc, 0, additional_parser).options;
@@ -193,12 +196,12 @@ void test_multitoken_vector_option()
                        "values")("file", argsy::value<std::string>(), "the file to process");
    argsy::positional_options_description p;
    p.add("file", 1);
-   const char *   cmdline6[] = {"", "-m", "token1", "token2", "--", "some_file"};
-   std::vector<argsy::option> a6         = argsy::command_line_parser(sizeof(cmdline6) / sizeof(const char *), const_cast<char **>(cmdline6))
-                          .options(desc4)
-                          .positional(p)
-                          .run()
-                          .options;
+   const char *               cmdline6[] = {"", "-m", "token1", "token2", "--", "some_file"};
+   std::vector<argsy::option> a6 = argsy::command_line_parser(sizeof(cmdline6) / sizeof(const char *), const_cast<char **>(cmdline6))
+                                      .options(desc4)
+                                      .positional(p)
+                                      .run()
+                                      .options;
    BOOST_CHECK_EQUAL(a6.size(), 2u);
    BOOST_REQUIRE(a6[0].value.size() == 2);
    BOOST_CHECK_EQUAL(a6[0].string_key, "multitoken");
@@ -227,8 +230,9 @@ void test_command_line()
 void test_config_file(const char *config_file)
 {
    argsy::options_description desc;
-   desc.add_options()("gv1", new argsy::untyped_value)("gv2", new argsy::untyped_value)("empty_value", new argsy::untyped_value)("plug*", new argsy::untyped_value)(
-      "m1.v1", new argsy::untyped_value)("m1.v2", new argsy::untyped_value)("m1.v3,alias3", new argsy::untyped_value)("b", argsy::bool_switch());
+   desc.add_options()("gv1", new argsy::untyped_value)("gv2", new argsy::untyped_value)("empty_value", new argsy::untyped_value)(
+      "plug*", new argsy::untyped_value)("m1.v1", new argsy::untyped_value)("m1.v2", new argsy::untyped_value)(
+      "m1.v3,alias3", new argsy::untyped_value)("b", argsy::bool_switch());
 
    const char content1[] = " gv1 = 0#asd\n"
                            "empty_value = \n"
@@ -240,7 +244,7 @@ void test_config_file(const char *config_file)
                            "v2 = 2\n"
                            "v3 = 3\n";
 
-   std::stringstream   ss(content1);
+   std::stringstream          ss(content1);
    std::vector<argsy::option> a1 = parse_config_file(ss, desc).options;
    BOOST_REQUIRE(a1.size() == 7);
    check_value(a1[0], "gv1", "0");
@@ -288,8 +292,8 @@ void test_unregistered()
 {
    argsy::options_description desc;
 
-   const char *   cmdline1_[] = {"--foo=12", "--bar", "1"};
-   std::vector<std::string> cmdline1    = sv(cmdline1_, sizeof(cmdline1_) / sizeof(const char *));
+   const char *               cmdline1_[] = {"--foo=12", "--bar", "1"};
+   std::vector<std::string>   cmdline1    = sv(cmdline1_, sizeof(cmdline1_) / sizeof(const char *));
    std::vector<argsy::option> a1          = argsy::command_line_parser(cmdline1).options(desc).allow_unregistered().run().options;
 
    BOOST_REQUIRE(a1.size() == 3);
@@ -318,7 +322,7 @@ void test_unregistered()
                            "[m1]\n"
                            "v1 = 1\n";
 
-   std::stringstream   ss(content1);
+   std::stringstream          ss(content1);
    std::vector<argsy::option> a3 = parse_config_file(ss, desc, true).options;
    BOOST_REQUIRE(a3.size() == 2);
    std::cout << "XXX" << a3[0].value.front() << "\n";

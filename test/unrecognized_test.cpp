@@ -24,7 +24,7 @@ void test_unrecognize_cmdline()
 {
    argsy::options_description desc;
 
-   std::string         content = "prg --input input.txt --optimization 4 --opt option";
+   std::string              content = "prg --input input.txt --optimization 4 --opt option";
    std::vector<std::string> tokens  = argsy::split_unix(content);
 
    argsy::detail::cmdline cmd(tokens);
@@ -32,7 +32,7 @@ void test_unrecognize_cmdline()
    cmd.allow_unregistered();
 
    std::vector<argsy::option> opts   = cmd.run();
-   std::vector<std::string> result = collect_unrecognized(opts, argsy::include_positional);
+   std::vector<std::string>   result = collect_unrecognized(opts, argsy::include_positional);
 
    BOOST_CHECK_EQUAL(result.size(), 7);
    BOOST_CHECK_EQUAL(result[0], "prg");
@@ -49,12 +49,12 @@ void test_unrecognize_config()
    argsy::options_description desc;
 
    std::string content = " input = input.txt\n"
-                    " optimization = 4\n"
-                    " opt = option\n";
+                         " optimization = 4\n"
+                         " opt = option\n";
 
-   std::stringstream   ss(content);
+   std::stringstream          ss(content);
    std::vector<argsy::option> opts   = parse_config_file(ss, desc, true).options;
-   std::vector<std::string> result = collect_unrecognized(opts, argsy::include_positional);
+   std::vector<std::string>   result = collect_unrecognized(opts, argsy::include_positional);
 
    BOOST_CHECK_EQUAL(result.size(), 6);
    BOOST_CHECK_EQUAL(result[0], "input");

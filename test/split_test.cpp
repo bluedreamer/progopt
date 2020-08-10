@@ -164,8 +164,8 @@ void split_defaults(const argsy::options_description &description)
 auto main(int /*ac*/, char * * /*av*/) -> int
 {
    argsy::options_description desc;
-   desc.add_options()("input,i", argsy::value<std::string>(), "the input file")("optimization,O", argsy::value<unsigned>(),
-                                                                    "optimization level")("opt,o", argsy::value<std::string>(), "misc option");
+   desc.add_options()("input,i", argsy::value<std::string>(), "the input file")(
+      "optimization,O", argsy::value<unsigned>(), "optimization level")("opt,o", argsy::value<std::string>(), "misc option");
 
    split_whitespace(desc);
    split_equalsign(desc);

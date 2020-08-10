@@ -21,8 +21,8 @@
 
 #include "program_options.hpp"
 
-#include <regex>
 #include <iostream>
+#include <regex>
 
 /* Define a completely non-sensical class. */
 struct magic_number

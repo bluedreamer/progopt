@@ -119,7 +119,7 @@ void test_cmdline(const char *syntax, argsy::command_line_style::style_t style, 
       cmd.set_options_description(desc);
 
       std::string result;
-      int    status = 0;
+      int         status = 0;
 
       try
       {
@@ -205,12 +205,14 @@ void test_long_options()
                               {"--bar --foo", s_success, "bar:--foo"},
                               {nullptr, 0, nullptr}};
    test_cmdline("foo bar=", style, test_cases2);
-   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_long | argsy::command_line_style::long_allow_adjacent | argsy::command_line_style::long_allow_next);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_long | argsy::command_line_style::long_allow_adjacent |
+                                           argsy::command_line_style::long_allow_next);
 
    test_case test_cases3[] = {{"--bar=10", s_success, "bar:10"}, {"--bar 11", s_success, "bar:11"}, {nullptr, 0, nullptr}};
    test_cmdline("foo bar=", style, test_cases3);
 
-   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_long | argsy::command_line_style::long_allow_adjacent | argsy::command_line_style::long_allow_next | argsy::command_line_style::case_insensitive);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_long | argsy::command_line_style::long_allow_adjacent |
+                                           argsy::command_line_style::long_allow_next | argsy::command_line_style::case_insensitive);
 
    // Test case insensitive style.
    // Note that option names are normalized to lower case.
@@ -223,7 +225,8 @@ void test_short_options()
 {
    argsy::detail::cmdline::style_t style;
 
-   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_adjacent);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_dash_for_short |
+                                           argsy::command_line_style::short_allow_adjacent);
 
    test_case test_cases1[] = {{"-d d /bar", s_success, "-d: d /bar"},
                               // This is treated as error when long options are disabled
@@ -235,19 +238,24 @@ void test_short_options()
                               {nullptr, 0, nullptr}};
    test_cmdline(",d ,f= ,g", style, test_cases1);
 
-   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_next);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_dash_for_short |
+                                           argsy::command_line_style::short_allow_next);
 
    test_case test_cases2[] = {{"-f 13", s_success, "-f:13"},     {"-f -13", s_success, "-f:-13"},    {"-f", s_missing_parameter, ""},
                               {"-f /foo", s_success, "-f:/foo"}, {"-f -d", s_missing_parameter, ""}, {nullptr, 0, nullptr}};
    test_cmdline(",d ,f=", style, test_cases2);
 
-   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_next | argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_adjacent);
+   style =
+      argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_next |
+                                      argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_adjacent);
 
    test_case test_cases3[] = {
       {"-f10", s_success, "-f:10"}, {"-f 10", s_success, "-f:10"}, {"-f -d", s_missing_parameter, ""}, {nullptr, 0, nullptr}};
    test_cmdline(",d ,f=", style, test_cases3);
 
-   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_next | argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::allow_sticky);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_next |
+                                           argsy::command_line_style::allow_dash_for_short |
+                                           argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::allow_sticky);
 
    test_case test_cases4[] = {{"-de", s_success, "-d: -e:"},
                               {"-df10", s_success, "-d: -f:10"},
@@ -263,13 +271,16 @@ void test_dos_options()
 {
    argsy::detail::cmdline::style_t style;
 
-   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_slash_for_short | argsy::command_line_style::short_allow_adjacent);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_slash_for_short |
+                                           argsy::command_line_style::short_allow_adjacent);
 
    test_case test_cases1[] = {{"/d d -bar", s_success, "-d: d -bar"}, {"--foo", s_success, "--foo"},   {"/d13", s_extra_parameter, ""},
                               {"/f14", s_success, "-f:14"},           {"/f", s_missing_parameter, ""}, {nullptr, 0, nullptr}};
    test_cmdline(",d ,f=", style, test_cases1);
 
-   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_slash_for_short | argsy::command_line_style::short_allow_next | argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::allow_sticky);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_slash_for_short |
+                                           argsy::command_line_style::short_allow_next | argsy::command_line_style::short_allow_adjacent |
+                                           argsy::command_line_style::allow_sticky);
 
    test_case test_cases2[] = {{"/de", s_extra_parameter, ""}, {"/fe", s_success, "-f:e"}, {nullptr, 0, nullptr}};
    test_cmdline(",d ,f= ,e", style, test_cases2);
@@ -279,8 +290,9 @@ void test_disguised_long()
 {
    argsy::detail::cmdline::style_t style;
 
-   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_next | argsy::command_line_style::allow_long_disguise |
-                               argsy::command_line_style::long_allow_adjacent);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_adjacent |
+                                           argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_next |
+                                           argsy::command_line_style::allow_long_disguise | argsy::command_line_style::long_allow_adjacent);
 
    test_case test_cases1[] = {{"-foo -f", s_success, "foo: foo:"},
                               {"-goo=x -gy", s_success, "goo:x goo:y"},
@@ -298,8 +310,9 @@ void test_guessing()
    argsy::detail::cmdline::style_t style;
 
    style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_adjacent |
-      argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::allow_long | argsy::command_line_style::long_allow_adjacent | argsy::command_line_style::allow_guessing |
-                               argsy::command_line_style::allow_long_disguise);
+                                           argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::allow_long |
+                                           argsy::command_line_style::long_allow_adjacent | argsy::command_line_style::allow_guessing |
+                                           argsy::command_line_style::allow_long_disguise);
 
    test_case test_cases1[] = {{"--opt1", s_success, "opt123:"},
                               {"--opt", s_ambiguous_option, ""},
@@ -320,8 +333,9 @@ void test_arguments()
 {
    argsy::detail::cmdline::style_t style;
 
-   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_long |
-      argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::long_allow_adjacent);
+   style = argsy::detail::cmdline::style_t(
+      argsy::command_line_style::allow_short | argsy::command_line_style::allow_long | argsy::command_line_style::allow_dash_for_short |
+      argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::long_allow_adjacent);
 
    test_case test_cases1[] = {
       {"-f file -gx file2", s_success, "-f: file -g:x file2"}, {"-f - -gx - -- -e", s_success, "-f: - -g:x - -e"}, {nullptr, 0, nullptr}};
@@ -331,7 +345,7 @@ void test_arguments()
    // allowed or not.
 
    style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_adjacent |
-      argsy::command_line_style::allow_dash_for_short);
+                                           argsy::command_line_style::allow_dash_for_short);
 
    test_case test_cases2[] = {{"-f - -gx - -- -e", s_success, "-f: - -g:x - -e"}, {nullptr, 0, nullptr}};
    test_cmdline(",f ,g= ,e", style, test_cases2);
@@ -341,7 +355,9 @@ void test_prefix()
 {
    argsy::detail::cmdline::style_t style;
 
-   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_long | argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::long_allow_adjacent);
+   style = argsy::detail::cmdline::style_t(
+      argsy::command_line_style::allow_short | argsy::command_line_style::allow_long | argsy::command_line_style::allow_dash_for_short |
+      argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::long_allow_adjacent);
 
    test_case test_cases1[] = {{"--foo.bar=12", s_success, "foo.bar:12"}, {nullptr, 0, nullptr}};
 
@@ -375,7 +391,8 @@ auto at_option_parser_broken(std::string const &s) -> std::pair<std::string, std
 void test_additional_parser()
 {
    argsy::options_description desc;
-   desc.add_options()("response-file", argsy::value<std::string>(), "response file")("foo", argsy::value<int>(), "foo")("bar,baz", argsy::value<int>(), "bar");
+   desc.add_options()("response-file", argsy::value<std::string>(), "response file")("foo", argsy::value<int>(),
+                                                                                     "foo")("bar,baz", argsy::value<int>(), "bar");
 
    std::vector<std::string> input;
    input.emplace_back("@config");

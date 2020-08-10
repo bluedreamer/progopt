@@ -17,12 +17,12 @@
 #include <cassert>
 #include <cctype>
 #include <climits>
+#include <cstdio>
 #include <cstring>
+#include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
-#include <cstdio>
-#include <iostream>
 
 namespace argsy
 {
@@ -67,7 +67,6 @@ auto invalid_syntax::get_template(kind_t kind) -> std::string
 
 namespace argsy::detail
 {
-
 cmdline::cmdline(const std::vector<std::string> &args)
 {
    init(args);
@@ -233,14 +232,14 @@ auto cmdline::run() -> std::vector<option>
 
    style_parsers.emplace_back(std::bind(&cmdline::parse_terminator, this, std::placeholders::_1));
 
-   std::vector<option>  result;
+   std::vector<option>       result;
    std::vector<std::string> &args = m_args;
    while(!args.empty())
    {
       bool ok = false;
       for(unsigned i = 0; i < style_parsers.size(); ++i)
       {
-         auto           current_size = static_cast<unsigned>(args.size());
+         auto                current_size = static_cast<unsigned>(args.size());
          std::vector<option> next         = style_parsers[i](args);
 
          // Check that option names
@@ -468,7 +467,7 @@ void cmdline::finish_option(option &opt, std::vector<std::string> &other_tokens,
             // check if extra parameter looks like a known option
             // we use style parsers to check if it is syntactically an option,
             // additionally we check if an option_description exists
-            std::vector<option> followed_option;
+            std::vector<option>      followed_option;
             std::vector<std::string> next_token(1, other_tokens[0]);
             for(unsigned i = 0; followed_option.empty() && i < style_parsers.size(); ++i)
             {
@@ -678,7 +677,7 @@ auto cmdline::parse_terminator(std::vector<std::string> &args) -> std::vector<op
 
 auto cmdline::handle_additional_parser(std::vector<std::string> &args) -> std::vector<option>
 {
-   std::vector<option>       result;
+   std::vector<option>                 result;
    std::pair<std::string, std::string> r = m_additional_parser(args[0]);
    if(!r.first.empty())
    {

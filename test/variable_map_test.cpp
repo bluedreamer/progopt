@@ -26,13 +26,12 @@ auto sv(const char *array[], unsigned size) -> std::vector<std::string>
 void test_variable_map()
 {
    argsy::options_description desc;
-   desc.add_options()("foo,f", new argsy::untyped_value)("bar,b", argsy::value<std::string>())("biz,z", argsy::value<std::string>())("baz",
-      new argsy::untyped_value())(
-      "output,o", new argsy::untyped_value(), "");
-   const char *   cmdline3_[] = {"--foo='12'", "--bar=11", "-z3", "-ofoo"};
+   desc.add_options()("foo,f", new argsy::untyped_value)("bar,b", argsy::value<std::string>())("biz,z", argsy::value<std::string>())(
+      "baz", new argsy::untyped_value())("output,o", new argsy::untyped_value(), "");
+   const char *             cmdline3_[] = {"--foo='12'", "--bar=11", "-z3", "-ofoo"};
    std::vector<std::string> cmdline3    = sv(cmdline3_, sizeof(cmdline3_) / sizeof(const char *));
-   argsy::parsed_options a3          = argsy::command_line_parser(cmdline3).options(desc).run();
-   argsy::variables_map  vm;
+   argsy::parsed_options    a3          = argsy::command_line_parser(cmdline3).options(desc).run();
+   argsy::variables_map     vm;
    store(a3, vm);
    notify(vm);
    BOOST_REQUIRE(vm.size() == 4);
@@ -45,9 +44,9 @@ void test_variable_map()
    int i;
    desc.add_options()("zee", argsy::bool_switch(), "")("zak", argsy::value<int>(&i), "")("opt", argsy::bool_switch(), "");
 
-   const char *   cmdline4_[] = {"--zee", "--zak=13"};
+   const char *             cmdline4_[] = {"--zee", "--zak=13"};
    std::vector<std::string> cmdline4    = sv(cmdline4_, sizeof(cmdline4_) / sizeof(const char *));
-   argsy::parsed_options a4          = argsy::command_line_parser(cmdline4).options(desc).run();
+   argsy::parsed_options    a4          = argsy::command_line_parser(cmdline4).options(desc).run();
 
    argsy::variables_map vm2;
    store(a4, vm2);
@@ -59,11 +58,11 @@ void test_variable_map()
    BOOST_CHECK(i == 13);
 
    argsy::options_description desc2;
-   desc2.add_options()("vee", argsy::value<std::string>()->default_value("42"))("voo", argsy::value<std::string>())("iii",
-                                                                                                    argsy::value<int>()->default_value(123));
-   const char *   cmdline5_[] = {"--voo=1"};
+   desc2.add_options()("vee", argsy::value<std::string>()->default_value("42"))("voo", argsy::value<std::string>())(
+      "iii", argsy::value<int>()->default_value(123));
+   const char *             cmdline5_[] = {"--voo=1"};
    std::vector<std::string> cmdline5    = sv(cmdline5_, sizeof(cmdline5_) / sizeof(const char *));
-   argsy::parsed_options a5          = argsy::command_line_parser(cmdline5).options(desc2).run();
+   argsy::parsed_options    a5          = argsy::command_line_parser(cmdline5).options(desc2).run();
 
    argsy::variables_map vm3;
    store(a5, vm3);
@@ -74,13 +73,14 @@ void test_variable_map()
    BOOST_CHECK(vm3["iii"].as<int>() == 123);
 
    argsy::options_description desc3;
-   desc3.add_options()("imp", argsy::value<int>()->implicit_value(100))("iim", argsy::value<int>()->implicit_value(200)->default_value(201))(
+   desc3.add_options()("imp", argsy::value<int>()->implicit_value(100))("iim",
+                                                                        argsy::value<int>()->implicit_value(200)->default_value(201))(
       "mmp,m", argsy::value<int>()->implicit_value(123)->default_value(124))("foo", argsy::value<int>());
    /* The -m option is implicit. It does not have value in inside the token,
       and we should not grab the next token.  */
-   const char *   cmdline6_[] = {"--imp=1", "-m", "--foo=1"};
+   const char *             cmdline6_[] = {"--imp=1", "-m", "--foo=1"};
    std::vector<std::string> cmdline6    = sv(cmdline6_, sizeof(cmdline6_) / sizeof(const char *));
-   argsy::parsed_options a6          = argsy::command_line_parser(cmdline6).options(desc3).run();
+   argsy::parsed_options    a6          = argsy::command_line_parser(cmdline6).options(desc3).run();
 
    argsy::variables_map vm4;
    store(a6, vm4);
@@ -103,9 +103,9 @@ void test_semantic_values()
    desc.add_options()("foo", new argsy::untyped_value())("bar", argsy::value<int>())("biz", argsy::value<std::vector<std::string>>())(
       "baz", argsy::value<std::vector<std::string>>()->multitoken())("int", argsy::value<std::vector<int>>()->notifier(&notifier));
 
-   argsy::parsed_options  parsed(&desc);
+   argsy::parsed_options       parsed(&desc);
    std::vector<argsy::option> &options = parsed.options;
-   std::vector<std::string>  v;
+   std::vector<std::string>    v;
    v.emplace_back("q");
    options.emplace_back("foo", std::vector<std::string>(1, "1"));
    options.emplace_back("biz", std::vector<std::string>(1, "a"));
@@ -122,7 +122,7 @@ void test_semantic_values()
    BOOST_REQUIRE(vm.count("baz") == 1);
    const std::vector<std::string> av     = vm["biz"].as<std::vector<std::string>>();
    const std::vector<std::string> av2    = vm["baz"].as<std::vector<std::string>>();
-   std::string               exp1[] = {"a", "b x"};
+   std::string                    exp1[] = {"a", "b x"};
    BOOST_CHECK(av == std::vector<std::string>(exp1, exp1 + 2));
    std::string exp2[] = {"q", "q", "w"};
    BOOST_CHECK(av2 == std::vector<std::string>(exp2, exp2 + 3));
@@ -163,12 +163,12 @@ void test_priority()
       // This will have values in both sources, and values should be combined
       ("include", argsy::value<std::vector<int>>()->composing());
 
-   const char *   cmdline1_[] = {"--first=1", "--aux=10", "--first=3", "--include=1"};
+   const char *             cmdline1_[] = {"--first=1", "--aux=10", "--first=3", "--include=1"};
    std::vector<std::string> cmdline1    = sv(cmdline1_, sizeof(cmdline1_) / sizeof(const char *));
 
    argsy::parsed_options p1 = argsy::command_line_parser(cmdline1).options(desc).run();
 
-   const char *   cmdline2_[] = {"--first=12", "--second=7", "--include=7"};
+   const char *             cmdline2_[] = {"--first=12", "--second=7", "--include=7"};
    std::vector<std::string> cmdline2    = sv(cmdline2_, sizeof(cmdline2_) / sizeof(const char *));
 
    argsy::parsed_options p2 = argsy::command_line_parser(cmdline2).options(desc).run();

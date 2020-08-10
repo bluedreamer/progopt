@@ -40,8 +40,8 @@ void test_approximation()
    BOOST_CHECK_EQUAL(desc.find("all-ch", true).long_name(), "all-chroots");
 
    argsy::options_description desc2;
-   desc2.add_options()("help", "display this message")("config", argsy::value<std::string>(), "config file name")("config-value", argsy::value<std::string>(),
-                                                                                                      "single config value");
+   desc2.add_options()("help", "display this message")("config", argsy::value<std::string>(), "config file name")(
+      "config-value", argsy::value<std::string>(), "single config value");
 
    BOOST_CHECK_EQUAL(desc2.find("config", true).long_name(), "config");
    BOOST_CHECK_EQUAL(desc2.find("config-value", true).long_name(), "config-value");
@@ -56,9 +56,9 @@ void test_approximation()
 void test_approximation_with_multiname_options()
 {
    argsy::options_description desc;
-   desc.add_options()("foo", new argsy::untyped_value())("fee", new argsy::untyped_value())("fe,baz", new argsy::untyped_value())("chroots,all-chroots",
-                                                                                                             new argsy::untyped_value())(
-      "sessions,all-sessions", new argsy::untyped_value())("everything,all", new argsy::untyped_value())("qux,fo", new argsy::untyped_value());
+   desc.add_options()("foo", new argsy::untyped_value())("fee", new argsy::untyped_value())("fe,baz", new argsy::untyped_value())(
+      "chroots,all-chroots", new argsy::untyped_value())("sessions,all-sessions", new argsy::untyped_value())(
+      "everything,all", new argsy::untyped_value())("qux,fo", new argsy::untyped_value());
 
    BOOST_CHECK_EQUAL(desc.find("fo", true).long_name(), "qux");
 
@@ -80,8 +80,9 @@ void test_approximation_with_multiname_options()
 void test_long_names_for_option_description()
 {
    argsy::options_description desc;
-   desc.add_options()("foo", new argsy::untyped_value())("fe,baz", new argsy::untyped_value())("chroots,all-chroots", new argsy::untyped_value())(
-      "sessions,all-sessions", new argsy::untyped_value())("everything,all", new argsy::untyped_value())("qux,fo,q", new argsy::untyped_value());
+   desc.add_options()("foo", new argsy::untyped_value())("fe,baz", new argsy::untyped_value())(
+      "chroots,all-chroots", new argsy::untyped_value())("sessions,all-sessions", new argsy::untyped_value())(
+      "everything,all", new argsy::untyped_value())("qux,fo,q", new argsy::untyped_value());
 
    BOOST_CHECK_EQUAL(desc.find("foo", false, false, false).long_names().second, 1u);
    BOOST_CHECK_EQUAL(desc.find("foo", false, false, false).long_names().first[0], "foo");
@@ -154,7 +155,8 @@ void test_multiname_option_formatting()
 void test_formatting_description_length()
 {
    {
-      argsy::options_description desc("", argsy::options_description::m_default_line_length, argsy::options_description::m_default_line_length / 2U);
+      argsy::options_description desc("", argsy::options_description::m_default_line_length,
+                                      argsy::options_description::m_default_line_length / 2U);
       desc.add_options()("an-option-that-sets-the-max", new argsy::untyped_value(), // > 40 available for desc
                          "this description sits on the same line, but wrapping should still work correctly")(
          "a-long-option-that-would-leave-very-little-space-for-description", new argsy::untyped_value(),
@@ -179,7 +181,7 @@ void test_formatting_description_length()
       // option column; this shows that the min_description_length does not
       // breach that.
       argsy::options_description desc("", argsy::options_description::m_default_line_length,
-                               argsy::options_description::m_default_line_length - 10U); // leaves < 23 (default option space)
+                                      argsy::options_description::m_default_line_length - 10U); // leaves < 23 (default option space)
       desc.add_options()("an-option-that-encroaches-description", new argsy::untyped_value(),
                          "this description should always be placed on the next line, and wrapping should continue as normal");
 

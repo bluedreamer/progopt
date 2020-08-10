@@ -126,7 +126,8 @@ private:
    {
       command_line_options.add_options()("help,h", "display this help message")("version,v", "show program version")(
          "config,c", argsy::value<std::vector<std::string>>(), "config files to parse (always parses default.cfg)");
-      hidden_command_line_options.add_options()("master-file", argsy::value<std::string>())("file", argsy::value<std::vector<std::string>>());
+      hidden_command_line_options.add_options()("master-file", argsy::value<std::string>())("file",
+                                                                                            argsy::value<std::vector<std::string>>());
       positional_options.add("master-file", 1);
       positional_options.add("file", -1);
    }
@@ -143,7 +144,7 @@ private:
       config_only_options.add_options()("log-dir", argsy::value<std::string>()->default_value("log"))(
          "gui.height", argsy::value<unsigned int>()->default_value(100))("gui.width", argsy::value<unsigned int>()->default_value(100))(
          "network.ip", argsy::value<std::string>()->default_value("127.0.0.1"))("network.port",
-                                                                             argsy::value<unsigned short>()->default_value(12345));
+                                                                                argsy::value<unsigned short>()->default_value(12345));
       // Run a parser here (with no command line options) to add these defaults into
       // results, this way they will be enabled even if no config files are parsed.
       store(argsy::command_line_parser(0, nullptr).options(config_only_options).run(), results);
@@ -240,7 +241,7 @@ private:
    }
    void ParseDefaultConfigFile() { LoadAConfigFile("default.cfg"); }
 
-   std::map<std::string, std::string> env_to_option;
+   std::map<std::string, std::string>    env_to_option;
    argsy::options_description            config_only_options;
    argsy::options_description            common_options;
    argsy::options_description            command_line_options;

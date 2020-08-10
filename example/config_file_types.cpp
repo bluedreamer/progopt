@@ -81,16 +81,17 @@ auto set_options() -> argsy::options_description
    argsy::options_description opts;
    opts.add_options()("global_string", argsy::value<std::string>())
 
-      ("strings.word", argsy::value<std::string>())("strings.phrase", argsy::value<std::string>())("strings.quoted", argsy::value<std::string>())
+      ("strings.word", argsy::value<std::string>())("strings.phrase", argsy::value<std::string>())("strings.quoted",
+                                                                                                   argsy::value<std::string>())
 
-         ("ints.positive", argsy::value<int>())("ints.negative", argsy::value<int>())("ints.hex", argsy::value<int>())("ints.oct", argsy::value<int>())(
-            "ints.bin", argsy::value<int>())
+         ("ints.positive", argsy::value<int>())("ints.negative", argsy::value<int>())("ints.hex", argsy::value<int>())(
+            "ints.oct", argsy::value<int>())("ints.bin", argsy::value<int>())
 
             ("floats.positive", argsy::value<float>())("floats.negative", argsy::value<float>())("floats.double", argsy::value<double>())(
                "floats.int", argsy::value<float>())("floats.int_dot", argsy::value<float>())("floats.dot", argsy::value<float>())(
-               "floats.exp_lower", argsy::value<float>())("floats.exp_upper", argsy::value<float>())("floats.exp_decimal", argsy::value<float>())(
-               "floats.exp_negative", argsy::value<float>())("floats.exp_negative_val", argsy::value<float>())("floats.exp_negative_negative_val",
-                                                                                                         argsy::value<float>())
+               "floats.exp_lower", argsy::value<float>())("floats.exp_upper", argsy::value<float>())(
+               "floats.exp_decimal", argsy::value<float>())("floats.exp_negative", argsy::value<float>())(
+               "floats.exp_negative_val", argsy::value<float>())("floats.exp_negative_negative_val", argsy::value<float>())
 
       // Load booleans as value<bool>, so they will require a --option=value on the command line
       //("booleans.number_true", argsy::value<bool>())
@@ -106,10 +107,11 @@ auto set_options() -> argsy::options_description
 
       // Load booleans as bool_switch, so that a --option will set it true on the command line
       // The difference between these two types does not show up when parsing a file
-      ("booleans.number_true", argsy::bool_switch())("booleans.number_false", argsy::bool_switch())("booleans.yn_true", argsy::bool_switch())(
-         "booleans.yn_false", argsy::bool_switch())("booleans.tf_true", argsy::bool_switch())("booleans.tf_false", argsy::bool_switch())(
-         "booleans.onoff_true", argsy::bool_switch())("booleans.onoff_false", argsy::bool_switch())(
-         "booleans.present_equal_true", argsy::bool_switch())("booleans.present_no_equal_true", argsy::bool_switch());
+      ("booleans.number_true", argsy::bool_switch())("booleans.number_false", argsy::bool_switch())(
+         "booleans.yn_true", argsy::bool_switch())("booleans.yn_false", argsy::bool_switch())("booleans.tf_true", argsy::bool_switch())(
+         "booleans.tf_false", argsy::bool_switch())("booleans.onoff_true", argsy::bool_switch())(
+         "booleans.onoff_false", argsy::bool_switch())("booleans.present_equal_true",
+                                                       argsy::bool_switch())("booleans.present_no_equal_true", argsy::bool_switch());
    return opts;
 }
 
@@ -210,10 +212,10 @@ void check_results(argsy::variables_map &vm, std::vector<std::string> unregister
 
 auto main(int ac, char *av[]) -> int
 {
-   auto              file = make_file();
-   auto              opts = set_options();
+   auto                 file = make_file();
+   auto                 opts = set_options();
    argsy::variables_map vars;
-   auto              unregistered = parse_file(file, opts, vars);
+   auto                 unregistered = parse_file(file, opts, vars);
    check_results(vars, unregistered);
 
    return 0;

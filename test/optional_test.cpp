@@ -30,7 +30,7 @@ void test_optional()
 
    const char *             cmdline1_[] = {"--foo=12", "--bar", "1"};
    std::vector<std::string> cmdline1    = sv(cmdline1_, sizeof(cmdline1_) / sizeof(const char *));
-   argsy::variables_map        vm;
+   argsy::variables_map     vm;
    argsy::store(argsy::command_line_parser(cmdline1).options(desc).run(), vm);
    argsy::notify(vm);
 

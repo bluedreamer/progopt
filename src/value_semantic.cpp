@@ -7,8 +7,8 @@
 #include "argsy/detail/cmdline.hpp"
 #include "argsy/detail/convert.hpp"
 
-#include <set>
 #include <cctype>
+#include <set>
 
 namespace argsy
 {

@@ -38,8 +38,8 @@ auto main(int argc, char *argv[]) -> int
    {
       std::string ofile;
       std::string macrofile, libmakfile;
-      bool   t_given = false;
-      bool   b_given = false;
+      bool        t_given = false;
+      bool        b_given = false;
       std::string mainpackage;
       std::string depends = "deps_file";
       std::string sources = "src_file";
@@ -52,13 +52,13 @@ auto main(int argc, char *argv[]) -> int
          // The third is description
          ("help,h", "print usage message")("output,o", argsy::value(&ofile), "pathname for output")(
             "macrofile,m", argsy::value(&macrofile), "full pathname of macro.h")("two,t", argsy::bool_switch(&t_given),
-                                                                          "preprocess both header and body")(
+                                                                                 "preprocess both header and body")(
             "body,b", argsy::bool_switch(&b_given), "preprocess body in the header context")("libmakfile,l", argsy::value(&libmakfile),
-                                                                                      "write include makefile for library")(
+                                                                                             "write include makefile for library")(
             "mainpackage,p", argsy::value(&mainpackage), "output dependency information")("depends,d", argsy::value(&depends),
-                                                                                   "write dependencies to <pathname>")(
+                                                                                          "write dependencies to <pathname>")(
             "sources,s", argsy::value(&sources), "write source package list to <pathname>")("root,r", argsy::value(&root),
-                                                                                     "treat <dirname> as project root directory");
+                                                                                            "treat <dirname> as project root directory");
 
       argsy::variables_map vm;
       store(parse_command_line(argc, argv, desc), vm);

@@ -18,8 +18,8 @@
 void test_ambiguous()
 {
    argsy::options_description desc;
-   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(),
-                      "the config file")("output,c", argsy::value<std::string>(), "the output file")("output,o", argsy::value<std::string>(), "the output file");
+   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(), "the config file")(
+      "output,c", argsy::value<std::string>(), "the output file")("output,o", argsy::value<std::string>(), "the output file");
 
    const char *cmdline[] = {"program", "-c", "file", "-o", "anotherfile"};
 
@@ -40,8 +40,8 @@ void test_ambiguous()
 void test_ambiguous_long()
 {
    argsy::options_description desc;
-   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(),
-                      "the config file")("output,c", argsy::value<std::string>(), "the output file")("output,o", argsy::value<std::string>(), "the output file");
+   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(), "the config file")(
+      "output,c", argsy::value<std::string>(), "the output file")("output,o", argsy::value<std::string>(), "the output file");
 
    const char *cmdline[] = {"program", "--cfgfile", "file", "--output", "anotherfile"};
 
@@ -62,8 +62,8 @@ void test_ambiguous_long()
 void test_ambiguous_multiple_long_names()
 {
    argsy::options_description desc;
-   desc.add_options()("cfgfile,foo,c", argsy::value<std::string>()->multitoken(), "the config file")("output,foo,o", argsy::value<std::string>(),
-                                                                                         "the output file");
+   desc.add_options()("cfgfile,foo,c", argsy::value<std::string>()->multitoken(),
+                      "the config file")("output,foo,o", argsy::value<std::string>(), "the output file");
 
    const char *cmdline[] = {"program", "--foo", "file"};
 
@@ -103,7 +103,8 @@ void test_unknown_option()
 void test_multiple_values()
 {
    argsy::options_description desc;
-   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(), "the config file")("output,o", argsy::value<std::string>(), "the output file");
+   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(), "the config file")("output,o", argsy::value<std::string>(),
+                                                                                                 "the output file");
 
    const char *cmdline[] = {"program", "-o", "fritz", "hugo", "--cfgfile", "file", "c", "-o", "text.out"};
 
@@ -191,7 +192,8 @@ void test_multiple_occurrences_with_non_key_names()
 void test_missing_value()
 {
    argsy::options_description desc;
-   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(), "the config file")("output,o", argsy::value<std::string>(), "the output file");
+   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(), "the config file")("output,o", argsy::value<std::string>(),
+                                                                                                 "the output file");
    // missing value for option '-c'
    const char *cmdline[] = {"program", "-c", "-c", "output.txt"};
 

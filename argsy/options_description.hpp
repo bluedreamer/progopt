@@ -10,8 +10,8 @@
 #include "argsy/value_semantic.hpp"
 
 #include <any>
-#include <memory>
 #include <functional>
+#include <memory>
 
 #include <map>
 #include <set>

@@ -106,7 +106,7 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
    for(i = 0; i < all.size(); ++i)
    {
       const option_description &d   = *all[i];
-      std::string                    key = d.key("");
+      std::string               key = d.key("");
       // FIXME: this logic relies on knowledge of option_description
       // internals.
       // The 'key' is empty if options description contains '*'.
@@ -227,7 +227,7 @@ void variables_map::notify()
    {
       const std::string &opt         = r->first;
       const std::string &display_opt = r->second;
-      auto          iter        = find(opt);
+      auto               iter        = find(opt);
       if(iter == end() || iter->second.empty())
       {
          boost::throw_exception(required_option(display_opt));

@@ -344,8 +344,8 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
 {
    std::shared_ptr<option_description> found;
    bool                                had_full_match = false;
-   std::vector<std::string>                      approximate_matches;
-   std::vector<std::string>                      full_matches;
+   std::vector<std::string>            approximate_matches;
+   std::vector<std::string>            full_matches;
 
    // We use linear search because matching specified option
    // name with the declared option name need to take care about
@@ -478,7 +478,7 @@ void format_paragraph(std::ostream &os, std::string par, unsigned indent, unsign
          // Take care to never increment the iterator past
          // the end, since MSVC 8.0 (brokenly), assumes that
          // doing that, even if no access happens, is a bug.
-         auto                   remaining = static_cast<unsigned>(std::distance(line_begin, par_end));
+         auto                        remaining = static_cast<unsigned>(std::distance(line_begin, par_end));
          std::string::const_iterator line_end  = line_begin + ((remaining < line_length) ? remaining : line_length);
 
          // prevent chopped words
@@ -486,8 +486,9 @@ void format_paragraph(std::ostream &os, std::string par, unsigned indent, unsign
          if((*(line_end - 1) != ' ') && ((line_end < par_end) && (*line_end != ' ')))
          {
             // find last ' ' in the second half of the current paragraph line
-            std::string::const_iterator last_space =
-               find(std::reverse_iterator<std::string::const_iterator>(line_end), std::reverse_iterator<std::string::const_iterator>(line_begin), ' ').base();
+            std::string::const_iterator last_space = find(std::reverse_iterator<std::string::const_iterator>(line_end),
+                                                          std::reverse_iterator<std::string::const_iterator>(line_begin), ' ')
+                                                        .base();
 
             if(last_space != line_begin)
             {
@@ -609,7 +610,7 @@ auto options_description::get_option_column_width() const -> unsigned
    for(i = 0; i < m_options.size(); ++i)
    {
       const option_description &opt = *m_options[i];
-      std::stringstream              ss;
+      std::stringstream         ss;
       ss << "  " << opt.format_name() << ' ' << opt.format_parameter();
       width = (std::max)(width, static_cast<unsigned>(ss.str().size()));
    }

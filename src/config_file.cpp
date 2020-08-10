@@ -86,7 +86,7 @@ void common_config_file_iterator::get()
 {
    std::string            s;
    std::string::size_type n;
-   bool              found = false;
+   bool                   found = false;
 
    while(this->getline(s))
    {

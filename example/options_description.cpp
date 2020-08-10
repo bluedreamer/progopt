@@ -21,13 +21,14 @@ auto main(int ac, char *av[]) -> int
 {
    try
    {
-      int                     opt;
-      int                     portnum;
+      int                        opt;
+      int                        portnum;
       argsy::options_description desc("Allowed options");
       desc.add_options()("help", "produce help message")("optimization", argsy::value<int>(&opt)->default_value(10), "optimization level")(
          "verbose,v", argsy::value<int>()->implicit_value(1), "enable verbosity (optionally specify level)")(
-         "listen,l", argsy::value<int>(&portnum)->implicit_value(1001)->default_value(0, "no"), "listen on a port.")(
-         "include-path,I", argsy::value<std::vector<std::string>>(), "include path")("input-file", argsy::value<std::vector<std::string>>(), "input file");
+         "listen,l", argsy::value<int>(&portnum)->implicit_value(1001)->default_value(0, "no"),
+         "listen on a port.")("include-path,I", argsy::value<std::vector<std::string>>(),
+                              "include path")("input-file", argsy::value<std::vector<std::string>>(), "input file");
 
       argsy::positional_options_description p;
       p.add("input-file", -1);

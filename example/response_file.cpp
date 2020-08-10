@@ -44,8 +44,9 @@ auto main(int ac, char *av[]) -> int
    try
    {
       argsy::options_description desc("Allowed options");
-      desc.add_options()("help", "produce a help message")("include-path,I", argsy::value<std::vector<std::string>>()->composing(), "include path")(
-         "magic", argsy::value<int>(), "magic value")("response-file", argsy::value<std::string>(), "can be specified with '@name', too");
+      desc.add_options()("help", "produce a help message")("include-path,I", argsy::value<std::vector<std::string>>()->composing(),
+                                                           "include path")("magic", argsy::value<int>(), "magic value")(
+         "response-file", argsy::value<std::string>(), "can be specified with '@name', too");
 
       argsy::variables_map vm;
       store(argsy::command_line_parser(ac, av).options(desc).extra_parser(at_option_parser).run(), vm);
@@ -67,10 +68,10 @@ auto main(int ac, char *av[]) -> int
          std::stringstream ss;
          ss << ifs.rdbuf();
          // Split the file content
-         boost::char_separator<char>            sep(" \n\r");
-         std::string                          sstr = ss.str();
+         boost::char_separator<char>                   sep(" \n\r");
+         std::string                                   sstr = ss.str();
          boost::tokenizer<boost::char_separator<char>> tok(sstr, sep);
-         std::vector<std::string>                  args;
+         std::vector<std::string>                      args;
          copy(tok.begin(), tok.end(), back_inserter(args));
          // Parse the file and store the options
          store(argsy::command_line_parser(args).options(desc).run(), vm);

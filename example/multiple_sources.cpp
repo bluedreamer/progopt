@@ -23,7 +23,7 @@ auto main(int ac, char *av[]) -> int
 {
    try
    {
-      int    opt;
+      int         opt;
       std::string config_file;
 
       // Declare a group of options that will be
