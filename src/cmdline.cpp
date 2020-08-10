@@ -5,14 +5,11 @@
 
 #include "argsy/config.hpp"
 
-#include <boost/config.hpp>
-
 #include "argsy/detail/cmdline.hpp"
 #include "argsy/errors.hpp"
 #include "argsy/options_description.hpp"
 #include "argsy/positional_options.hpp"
 #include "argsy/value_semantic.hpp"
-#include <boost/throw_exception.hpp>
 
 #include <cassert>
 #include <cctype>

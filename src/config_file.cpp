@@ -4,11 +4,9 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "argsy/config.hpp"
-
 #include "argsy/detail/config_file.hpp"
 #include "argsy/detail/convert.hpp"
 #include "argsy/errors.hpp"
-#include <boost/throw_exception.hpp>
 
 #include <cassert>
 #include <fstream>
@@ -56,9 +54,9 @@ void common_config_file_iterator::add_option(const char *name)
       }
       if(bad_prefixes)
       {
-         boost::throw_exception(error("options '" + std::string(name) + "' and '" + *i +
+         throw error("options '" + std::string(name) + "' and '" + *i +
                                       "*' will both match the same "
-                                      "arguments from the configuration file"));
+                                      "arguments from the configuration file");
       }
       allowed_prefixes.insert(s);
    }
@@ -116,7 +114,7 @@ void common_config_file_iterator::get()
             bool registered = allowed_option(name);
             if(!registered && !m_allow_unregistered)
             {
-               boost::throw_exception(unknown_option(name));
+                throw unknown_option(name);
             }
 
             found                    = true;
@@ -131,7 +129,7 @@ void common_config_file_iterator::get()
          }
          else
          {
-            boost::throw_exception(invalid_config_file_syntax(s, invalid_syntax::unrecognized_line));
+            throw invalid_config_file_syntax(s, invalid_syntax::unrecognized_line);
          }
       }
    }
@@ -158,27 +156,4 @@ auto common_config_file_iterator::allowed_option(const std::string &s) const -> 
    }
    return false;
 }
-
-#if BOOST_WORKAROUND(__COMO_VERSION__, BOOST_TESTED_AT(4303)) ||                                                                           \
-   (defined(__sgi) && BOOST_WORKAROUND(_COMPILER_VERSION, BOOST_TESTED_AT(741)))
-template<>
-bool basic_config_file_iterator<wchar_t>::getline(std::string &s)
-{
-   std::wstring ws;
-   // On Comeau, using two-argument version causes
-   // call to some internal function with std::wstring, and '\n'
-   // (not L'\n') and compile can't resolve that call.
-
-   if(std::getline(*is, ws, L'\n'))
-   {
-      s = to_utf8(ws);
-      return true;
-   }
-   else
-   {
-      return false;
-   }
-}
-#endif
-
 } // namespace argsy::detail

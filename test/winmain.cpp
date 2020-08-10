@@ -29,8 +29,6 @@ void check_equal(const std::vector<string> &actual, char **expected, int n)
    }
 }
 
-   #include <boost/preprocessor/cat.hpp>
-
 void test_winmain()
 {
    #define C ,

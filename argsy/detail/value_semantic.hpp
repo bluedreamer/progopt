@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include <boost/throw_exception.hpp>
-
 namespace argsy
 {
 extern std::string arg;

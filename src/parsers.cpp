@@ -2,9 +2,6 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#include <boost/config.hpp>
-
 #include "argsy/config.hpp"
 #include "argsy/detail/cmdline.hpp"
 #include "argsy/detail/config_file.hpp"
@@ -13,8 +10,6 @@
 #include "argsy/options_description.hpp"
 #include "argsy/parsers.hpp"
 #include "argsy/positional_options.hpp"
-
-#include <boost/throw_exception.hpp>
 
 #include <cctype>
 #include <fstream>

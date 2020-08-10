@@ -11,7 +11,6 @@
 #include "argsy/parsers.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <boost/throw_exception.hpp>
 #include <boost/tokenizer.hpp>
 
 #include <cassert>

@@ -12,12 +12,8 @@
 #include "argsy/config.hpp"
 #include "argsy/eof_iterator.hpp"
 #include "argsy/option.hpp"
-#include <boost/noncopyable.hpp>
 
 #include "argsy/detail/convert.hpp"
-
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_same.hpp>
 
 namespace argsy::detail
 {
