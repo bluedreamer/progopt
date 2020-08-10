@@ -528,16 +528,16 @@ void test_invalid_command_line_style_exception_msg()
    invalid_styles.push_back(argsy::command_line_style::allow_short | argsy::command_line_style::allow_dash_for_short);
    invalid_styles.push_back(argsy::command_line_style::allow_long);
    std::vector<std::string> invalid_diagnostics;
-   invalid_diagnostics.emplace_back("boost::argsy misconfiguration: choose one "
+   invalid_diagnostics.emplace_back("argsy misconfiguration: choose one "
                                     "or other of 'command_line_style::allow_slash_for_short' "
                                     "(slashes) or 'command_line_style::allow_dash_for_short' "
                                     "(dashes) for short options.");
-   invalid_diagnostics.emplace_back("boost::argsy misconfiguration: choose one "
+   invalid_diagnostics.emplace_back("argsy misconfiguration: choose one "
                                     "or other of 'command_line_style::short_allow_next' "
                                     "(whitespace separated arguments) or "
                                     "'command_line_style::short_allow_adjacent' ('=' "
                                     "separated arguments) for short options.");
-   invalid_diagnostics.emplace_back("boost::argsy misconfiguration: choose one "
+   invalid_diagnostics.emplace_back("argsy misconfiguration: choose one "
                                     "or other of 'command_line_style::long_allow_next' "
                                     "(whitespace separated arguments) or "
                                     "'command_line_style::long_allow_adjacent' ('=' "
