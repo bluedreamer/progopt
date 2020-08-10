@@ -21,7 +21,6 @@
 #include <iterator>
 #include <sstream>
 #include <utility>
-using namespace std;
 
 namespace argsy
 {
@@ -114,7 +113,7 @@ auto option_description::key(const std::string &option) const -> const std::stri
    if(!m_long_names.empty())
    {
       const std::string &first_long_name = *m_long_names.begin();
-      if(first_long_name.find('*') != string::npos)
+      if(first_long_name.find('*') != std::string::npos)
       {
          // The '*' character means we're long_name
          // matches only part of the input. So, returning
@@ -153,11 +152,11 @@ auto option_description::canonical_display_name(int prefix_style) const -> std::
    {
       if(prefix_style == command_line_style::allow_slash_for_short)
       {
-         return string("/") + m_short_name[1];
+         return std::string("/") + m_short_name[1];
       }
       if(prefix_style == command_line_style::allow_dash_for_short)
       {
-         return string("-") + m_short_name[1];
+         return std::string("-") + m_short_name[1];
       }
    }
    if(!m_long_names.empty())
@@ -231,9 +230,9 @@ auto option_description::format_name() const -> std::string
 {
    if(!m_short_name.empty())
    {
-      return m_long_names.empty() ? m_short_name : string(m_short_name).append(" [ --").append(*m_long_names.begin()).append(" ]");
+      return m_long_names.empty() ? m_short_name : std::string(m_short_name).append(" [ --").append(*m_long_names.begin()).append(" ]");
    }
-   return string("--").append(*m_long_names.begin());
+   return std::string("--").append(*m_long_names.begin());
 }
 
 auto option_description::format_parameter() const -> std::string
@@ -345,8 +344,8 @@ auto options_description::find_nothrow(const std::string &name, bool approx, boo
 {
    std::shared_ptr<option_description> found;
    bool                                had_full_match = false;
-   vector<string>                      approximate_matches;
-   vector<string>                      full_matches;
+   std::vector<std::string>                      approximate_matches;
+   std::vector<std::string>                      full_matches;
 
    // We use linear search because matching specified option
    // name with the declared option name need to take care about
@@ -423,9 +422,9 @@ void format_paragraph(std::ostream &os, std::string par, unsigned indent, unsign
    // index of tab (if present) is used as additional indent relative
    // to first_column_width if paragrapth is spanned over multiple
    // lines if tab is not on first line it is ignored
-   string::size_type par_indent = par.find('\t');
+   std::string::size_type par_indent = par.find('\t');
 
-   if(par_indent == string::npos)
+   if(par_indent == std::string::npos)
    {
       par_indent = 0;
    }
@@ -457,8 +456,8 @@ void format_paragraph(std::ostream &os, std::string par, unsigned indent, unsign
    }
    else
    {
-      string::const_iterator       line_begin = par.begin();
-      const string::const_iterator par_end    = par.end();
+      std::string::const_iterator       line_begin = par.begin();
+      const std::string::const_iterator par_end    = par.end();
 
       bool first_line = true; // of current paragraph!
 
@@ -480,15 +479,15 @@ void format_paragraph(std::ostream &os, std::string par, unsigned indent, unsign
          // the end, since MSVC 8.0 (brokenly), assumes that
          // doing that, even if no access happens, is a bug.
          auto                   remaining = static_cast<unsigned>(std::distance(line_begin, par_end));
-         string::const_iterator line_end  = line_begin + ((remaining < line_length) ? remaining : line_length);
+         std::string::const_iterator line_end  = line_begin + ((remaining < line_length) ? remaining : line_length);
 
          // prevent chopped words
          // Is line_end between two non-space characters?
          if((*(line_end - 1) != ' ') && ((line_end < par_end) && (*line_end != ' ')))
          {
             // find last ' ' in the second half of the current paragraph line
-            string::const_iterator last_space =
-               find(reverse_iterator<string::const_iterator>(line_end), reverse_iterator<string::const_iterator>(line_begin), ' ').base();
+            std::string::const_iterator last_space =
+               find(std::reverse_iterator<std::string::const_iterator>(line_end), std::reverse_iterator<std::string::const_iterator>(line_begin), ' ').base();
 
             if(last_space != line_begin)
             {
@@ -502,7 +501,7 @@ void format_paragraph(std::ostream &os, std::string par, unsigned indent, unsign
          } // prevent chopped words
 
          // write line to stream
-         copy(line_begin, line_end, ostream_iterator<char>(os));
+         copy(line_begin, line_end, std::ostream_iterator<char>(os));
 
          if(first_line)
          {
@@ -573,7 +572,7 @@ void format_description(std::ostream &os, const std::string &desc, unsigned firs
 
 void format_one(std::ostream &os, const option_description &opt, unsigned first_column_width, unsigned line_length)
 {
-   stringstream ss;
+   std::stringstream ss;
    ss << "  " << opt.format_name() << ' ' << opt.format_parameter();
 
    // Don't use ss.rdbuf() since g++ 2.96 is buggy on it.
@@ -610,22 +609,22 @@ auto options_description::get_option_column_width() const -> unsigned
    for(i = 0; i < m_options.size(); ++i)
    {
       const option_description &opt = *m_options[i];
-      stringstream              ss;
+      std::stringstream              ss;
       ss << "  " << opt.format_name() << ' ' << opt.format_parameter();
-      width = (max)(width, static_cast<unsigned>(ss.str().size()));
+      width = (std::max)(width, static_cast<unsigned>(ss.str().size()));
    }
 
    /* Get width of groups as well*/
    for(const auto &group : groups)
    {
-      width = max(width, group->get_option_column_width());
+      width = std::max(width, group->get_option_column_width());
    }
 
    /* this is the column were description should start, if first
       column is longer, we go to a new line */
    const unsigned start_of_description_column = m_line_length - m_min_description_length;
 
-   width = (min)(width, start_of_description_column - 1);
+   width = (std::min)(width, start_of_description_column - 1);
 
    /* add an additional space to improve readability */
    ++width;

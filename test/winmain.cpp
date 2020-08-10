@@ -10,10 +10,7 @@
    #include <string>
    #include <vector>
 
-using namespace std;
-
    #include "argsy/parsers.hpp"
-using namespace boost::argsy;
 
 void check_equal(const std::vector<string> &actual, char **expected, int n)
 {

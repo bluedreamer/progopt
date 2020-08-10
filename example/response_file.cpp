@@ -18,26 +18,24 @@
 #include "argsy/options_description.hpp"
 #include "argsy/parsers.hpp"
 #include "argsy/variables_map.hpp"
+
 #include <boost/token_functions.hpp>
 #include <boost/tokenizer.hpp>
-using namespace boost;
-using namespace argsy;
 
 #include <fstream>
 #include <iostream>
-using namespace std;
 
 // Additional command line parser which interprets '@something' as a
 // option "config-file" with the value "something"
-auto at_option_parser(string const &s) -> pair<string, string>
+auto at_option_parser(std::string const &s) -> std::pair<std::string, std::string>
 {
    if('@' == s[0])
    {
-      return std::make_pair(string("response-file"), s.substr(1));
+      return std::make_pair(std::string("response-file"), s.substr(1));
    }
    else
    {
-      return pair<string, string>();
+      return std::pair<std::string, std::string>();
    }
 }
 
@@ -45,53 +43,53 @@ auto main(int ac, char *av[]) -> int
 {
    try
    {
-      options_description desc("Allowed options");
-      desc.add_options()("help", "produce a help message")("include-path,I", value<vector<string>>()->composing(), "include path")(
-         "magic", value<int>(), "magic value")("response-file", value<string>(), "can be specified with '@name', too");
+      argsy::options_description desc("Allowed options");
+      desc.add_options()("help", "produce a help message")("include-path,I", argsy::value<std::vector<std::string>>()->composing(), "include path")(
+         "magic", argsy::value<int>(), "magic value")("response-file", argsy::value<std::string>(), "can be specified with '@name', too");
 
-      variables_map vm;
-      store(command_line_parser(ac, av).options(desc).extra_parser(at_option_parser).run(), vm);
+      argsy::variables_map vm;
+      store(argsy::command_line_parser(ac, av).options(desc).extra_parser(at_option_parser).run(), vm);
 
       if(vm.count("help"))
       {
-         cout << desc;
+         std::cout << desc;
       }
       if(vm.count("response-file"))
       {
          // Load the file and tokenize it
-         ifstream ifs(vm["response-file"].as<string>().c_str());
+         std::ifstream ifs(vm["response-file"].as<std::string>().c_str());
          if(!ifs)
          {
-            cout << "Could not open the response file\n";
+            std::cout << "Could not open the response file\n";
             return 1;
          }
          // Read the whole file into a string
-         stringstream ss;
+         std::stringstream ss;
          ss << ifs.rdbuf();
          // Split the file content
-         char_separator<char>            sep(" \n\r");
-         string                          sstr = ss.str();
-         tokenizer<char_separator<char>> tok(sstr, sep);
-         vector<string>                  args;
+         boost::char_separator<char>            sep(" \n\r");
+         std::string                          sstr = ss.str();
+         boost::tokenizer<boost::char_separator<char>> tok(sstr, sep);
+         std::vector<std::string>                  args;
          copy(tok.begin(), tok.end(), back_inserter(args));
          // Parse the file and store the options
-         store(command_line_parser(args).options(desc).run(), vm);
+         store(argsy::command_line_parser(args).options(desc).run(), vm);
       }
 
       if(vm.count("include-path"))
       {
-         const auto &s = vm["include-path"].as<vector<string>>();
-         cout << "Include paths: ";
-         copy(s.begin(), s.end(), ostream_iterator<string>(cout, " "));
-         cout << "\n";
+         const auto &s = vm["include-path"].as<std::vector<std::string>>();
+         std::cout << "Include paths: ";
+         copy(s.begin(), s.end(), std::ostream_iterator<std::string>(std::cout, " "));
+         std::cout << "\n";
       }
       if(vm.count("magic"))
       {
-         cout << "Magic value: " << vm["magic"].as<int>() << "\n";
+         std::cout << "Magic value: " << vm["magic"].as<int>() << "\n";
       }
    }
    catch(std::exception &e)
    {
-      cout << e.what() << "\n";
+      std::cout << e.what() << "\n";
    }
 }

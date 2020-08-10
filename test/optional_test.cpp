@@ -25,14 +25,14 @@ void test_optional()
 {
    std::optional<int> foo, bar, baz;
 
-   po::options_description desc;
-   desc.add_options()("foo,f", po::value(&foo), "")("bar,b", po::value(&bar), "")("baz,z", po::value(&baz), "");
+   argsy::options_description desc;
+   desc.add_options()("foo,f", argsy::value(&foo), "")("bar,b", argsy::value(&bar), "")("baz,z", argsy::value(&baz), "");
 
    const char *             cmdline1_[] = {"--foo=12", "--bar", "1"};
    std::vector<std::string> cmdline1    = sv(cmdline1_, sizeof(cmdline1_) / sizeof(const char *));
-   po::variables_map        vm;
-   po::store(po::command_line_parser(cmdline1).options(desc).run(), vm);
-   po::notify(vm);
+   argsy::variables_map        vm;
+   argsy::store(argsy::command_line_parser(cmdline1).options(desc).run(), vm);
+   argsy::notify(vm);
 
    BOOST_REQUIRE(!!foo);
    BOOST_CHECK(*foo == 12);

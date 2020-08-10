@@ -125,28 +125,28 @@ private:
    void SetCommandLineOptions()
    {
       command_line_options.add_options()("help,h", "display this help message")("version,v", "show program version")(
-         "config,c", po::value<std::vector<std::string>>(), "config files to parse (always parses default.cfg)");
-      hidden_command_line_options.add_options()("master-file", po::value<std::string>())("file", po::value<std::vector<std::string>>());
+         "config,c", argsy::value<std::vector<std::string>>(), "config files to parse (always parses default.cfg)");
+      hidden_command_line_options.add_options()("master-file", argsy::value<std::string>())("file", argsy::value<std::vector<std::string>>());
       positional_options.add("master-file", 1);
       positional_options.add("file", -1);
    }
    void SetCommonOptions()
    {
-      common_options.add_options()("path", po::value<std::string>()->default_value(""),
+      common_options.add_options()("path", argsy::value<std::string>()->default_value(""),
                                    "the execution path to use (imports from environment if not specified)")(
-         "verbosity", po::value<std::string>()->default_value("INFO"), "set verbosity: DEBUG, INFO, WARN, ERROR, FATAL")(
-         "include-path,I", po::value<std::vector<std::string>>()->composing(),
-         "paths to search for include files")("run-gui", po::bool_switch(), "start the GUI");
+         "verbosity", argsy::value<std::string>()->default_value("INFO"), "set verbosity: DEBUG, INFO, WARN, ERROR, FATAL")(
+         "include-path,I", argsy::value<std::vector<std::string>>()->composing(),
+         "paths to search for include files")("run-gui", argsy::bool_switch(), "start the GUI");
    }
    void SetConfigOnlyOptions()
    {
-      config_only_options.add_options()("log-dir", po::value<std::string>()->default_value("log"))(
-         "gui.height", po::value<unsigned int>()->default_value(100))("gui.width", po::value<unsigned int>()->default_value(100))(
-         "network.ip", po::value<std::string>()->default_value("127.0.0.1"))("network.port",
-                                                                             po::value<unsigned short>()->default_value(12345));
+      config_only_options.add_options()("log-dir", argsy::value<std::string>()->default_value("log"))(
+         "gui.height", argsy::value<unsigned int>()->default_value(100))("gui.width", argsy::value<unsigned int>()->default_value(100))(
+         "network.ip", argsy::value<std::string>()->default_value("127.0.0.1"))("network.port",
+                                                                             argsy::value<unsigned short>()->default_value(12345));
       // Run a parser here (with no command line options) to add these defaults into
       // results, this way they will be enabled even if no config files are parsed.
-      store(po::command_line_parser(0, nullptr).options(config_only_options).run(), results);
+      store(argsy::command_line_parser(0, nullptr).options(config_only_options).run(), results);
       notify(results);
    }
    void SetEnvMapping()
@@ -157,9 +157,9 @@ private:
 
    void ParseCommandLine(int argc, char *argv[])
    {
-      po::options_description cmd_opts;
+      argsy::options_description cmd_opts;
       cmd_opts.add(command_line_options).add(hidden_command_line_options).add(common_options);
-      store(po::command_line_parser(argc, argv).options(cmd_opts).positional(positional_options).run(), results);
+      store(argsy::command_line_parser(argc, argv).options(cmd_opts).positional(positional_options).run(), results);
       notify(results);
    }
    void CheckForHelp()
@@ -174,7 +174,7 @@ private:
       std::cout << "Program Options Example" << std::endl;
       std::cout << "Usage: example [OPTION]... MASTER-FILE [FILE]...\n";
       std::cout << "  or   example [OPTION] --run-gui\n";
-      po::options_description help_opts;
+      argsy::options_description help_opts;
       help_opts.add(command_line_options).add(common_options);
       std::cout << help_opts << std::endl;
       throw OptionsExitsProgram();
@@ -193,7 +193,7 @@ private:
    }
    void ParseEnvironment()
    {
-      store(po::parse_environment(
+      store(argsy::parse_environment(
                common_options,
                // The next two lines are the crazy syntax to use EnvironmentMapper as
                // the lookup function for env->config name conversions
@@ -228,7 +228,7 @@ private:
    {
       bool ALLOW_UNREGISTERED = true;
 
-      po::options_description config_opts;
+      argsy::options_description config_opts;
       config_opts.add(config_only_options).add(common_options);
 
       std::ifstream cfg_file(filename.c_str());
@@ -241,12 +241,12 @@ private:
    void ParseDefaultConfigFile() { LoadAConfigFile("default.cfg"); }
 
    std::map<std::string, std::string> env_to_option;
-   po::options_description            config_only_options;
-   po::options_description            common_options;
-   po::options_description            command_line_options;
-   po::options_description            hidden_command_line_options;
-   po::positional_options_description positional_options;
-   po::variables_map                  results;
+   argsy::options_description            config_only_options;
+   argsy::options_description            common_options;
+   argsy::options_description            command_line_options;
+   argsy::options_description            hidden_command_line_options;
+   argsy::positional_options_description positional_options;
+   argsy::variables_map                  results;
 };
 
 void get_env_options()
@@ -645,7 +645,7 @@ that all result in the C++ boolean value of true:
 Since run-gui is an option that was set with the bool_switch type, which
 forces its use on the command line without a parameter (i.e. --run-gui instead
 of --run-gui=true) it can't be given a "false" option, bool_switch values can
-only be turned true. If instead we had a value ("my-switch", po::value<bool>())
+only be turned true. If instead we had a value ("my-switch", argsy::value<bool>())
 that could be set at the command line --my-switch=true or --my-switch=false, or
 any of the other types of boolean keywords true: true, on, 1, yes;
 false: false, off, 0, no. In a config file this could look like:

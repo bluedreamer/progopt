@@ -26,10 +26,9 @@
 
 namespace argsy
 {
-using namespace std;
 using namespace argsy::command_line_style;
 
-auto invalid_syntax::get_template(kind_t kind) -> string
+auto invalid_syntax::get_template(kind_t kind) -> std::string
 {
    // Initially, store the message in 'const char*' variable,
    // to avoid conversion to string in all cases.
@@ -68,23 +67,18 @@ auto invalid_syntax::get_template(kind_t kind) -> string
 
 namespace argsy::detail
 {
-// vc6 needs this, but borland chokes when this is added.
-#if BOOST_WORKAROUND(_MSC_VER, < 1300)
-using namespace std;
-using namespace argsy;
-#endif
 
-cmdline::cmdline(const vector<string> &args)
+cmdline::cmdline(const std::vector<std::string> &args)
 {
    init(args);
 }
 
 cmdline::cmdline(int argc, const char *const *argv)
 {
-   init(vector<string>(argv + 1, argv + argc + !argc));
+   init(std::vector<std::string>(argv + 1, argv + argc + !argc));
 }
 
-void cmdline::init(const vector<string> &args)
+void cmdline::init(const std::vector<std::string> &args)
 {
    this->m_args         = args;
    m_style              = command_line_style::default_style;
@@ -189,7 +183,7 @@ auto cmdline::get_canonical_option_prefix() -> int
    return 0;
 }
 
-auto cmdline::run() -> vector<option>
+auto cmdline::run() -> std::vector<option>
 {
    // The parsing is done by having a set of 'style parsers'
    // and trying then in order. Each parser is passed a vector
@@ -205,7 +199,7 @@ auto cmdline::run() -> vector<option>
    // So, after vector is returned, we validate them.
    assert(m_desc);
 
-   vector<style_parser> style_parsers;
+   std::vector<style_parser> style_parsers;
 
    if(m_style_parser)
    {
@@ -239,21 +233,21 @@ auto cmdline::run() -> vector<option>
 
    style_parsers.emplace_back(std::bind(&cmdline::parse_terminator, this, std::placeholders::_1));
 
-   vector<option>  result;
-   vector<string> &args = m_args;
+   std::vector<option>  result;
+   std::vector<std::string> &args = m_args;
    while(!args.empty())
    {
       bool ok = false;
       for(unsigned i = 0; i < style_parsers.size(); ++i)
       {
          auto           current_size = static_cast<unsigned>(args.size());
-         vector<option> next         = style_parsers[i](args);
+         std::vector<option> next         = style_parsers[i](args);
 
          // Check that option names
          // are valid, and that all values are in place.
          if(!next.empty())
          {
-            vector<string> e;
+            std::vector<std::string> e;
             for(unsigned k = 0; k < next.size() - 1; ++k)
             {
                finish_option(next[k], e, style_parsers);
@@ -288,7 +282,7 @@ auto cmdline::run() -> vector<option>
    /* If an key option is followed by a positional option,
       can can consume more tokens (e.g. it's multitoken option),
       give those tokens to it.  */
-   vector<option> result2;
+   std::vector<option> result2;
    for(unsigned i = 0; i < result.size(); ++i)
    {
       result2.push_back(result[i]);
@@ -401,7 +395,7 @@ auto cmdline::run() -> vector<option>
    return result;
 }
 
-void cmdline::finish_option(option &opt, vector<string> &other_tokens, const vector<style_parser> &style_parsers)
+void cmdline::finish_option(option &opt, std::vector<std::string> &other_tokens, const std::vector<style_parser> &style_parsers)
 {
    if(opt.string_key.empty())
    {
@@ -474,8 +468,8 @@ void cmdline::finish_option(option &opt, vector<string> &other_tokens, const vec
             // check if extra parameter looks like a known option
             // we use style parsers to check if it is syntactically an option,
             // additionally we check if an option_description exists
-            vector<option> followed_option;
-            vector<string> next_token(1, other_tokens[0]);
+            std::vector<option> followed_option;
+            std::vector<std::string> next_token(1, other_tokens[0]);
             for(unsigned i = 0; followed_option.empty() && i < style_parsers.size(); ++i)
             {
                followed_option = style_parsers[i](next_token);
@@ -511,15 +505,15 @@ void cmdline::finish_option(option &opt, vector<string> &other_tokens, const vec
    }
 }
 
-auto cmdline::parse_long_option(vector<string> &args) -> vector<option>
+auto cmdline::parse_long_option(std::vector<std::string> &args) -> std::vector<option>
 {
-   vector<option> result;
-   const string & tok = args[0];
+   std::vector<option> result;
+   const std::string & tok = args[0];
    if(tok.size() >= 3 && tok[0] == '-' && tok[1] == '-')
    {
-      string name, adjacent;
+      std::string name, adjacent;
 
-      string::size_type p = tok.find('=');
+      std::string::size_type p = tok.find('=');
       if(p != tok.npos)
       {
          name     = tok.substr(2, p - 2);
@@ -547,15 +541,15 @@ auto cmdline::parse_long_option(vector<string> &args) -> vector<option>
    return result;
 }
 
-auto cmdline::parse_short_option(vector<string> &args) -> vector<option>
+auto cmdline::parse_short_option(std::vector<std::string> &args) -> std::vector<option>
 {
-   const string &tok = args[0];
+   const std::string &tok = args[0];
    if(tok.size() >= 2 && tok[0] == '-' && tok[1] != '-')
    {
-      vector<option> result;
+      std::vector<option> result;
 
-      string name     = tok.substr(0, 2);
-      string adjacent = tok.substr(2);
+      std::string name     = tok.substr(0, 2);
+      std::string adjacent = tok.substr(2);
 
       // Short options can be 'grouped', so that
       // "-d -a" becomes "-da". Loop, processing one
@@ -591,7 +585,7 @@ auto cmdline::parse_short_option(vector<string> &args) -> vector<option>
                break;
             }
 
-            name = string("-") + adjacent[0];
+            name = std::string("-") + adjacent[0];
             adjacent.erase(adjacent.begin());
          }
          else
@@ -610,17 +604,17 @@ auto cmdline::parse_short_option(vector<string> &args) -> vector<option>
       }
       return result;
    }
-   return vector<option>();
+   return std::vector<option>();
 }
 
-auto cmdline::parse_dos_option(vector<string> &args) -> vector<option>
+auto cmdline::parse_dos_option(std::vector<std::string> &args) -> std::vector<option>
 {
-   vector<option> result;
-   const string & tok = args[0];
+   std::vector<option> result;
+   const std::string & tok = args[0];
    if(tok.size() >= 2 && tok[0] == '/')
    {
-      string name     = "-" + tok.substr(1, 1);
-      string adjacent = tok.substr(2);
+      std::string name     = "-" + tok.substr(1, 1);
+      std::string adjacent = tok.substr(2);
 
       option opt;
       opt.string_key = name;
@@ -635,9 +629,9 @@ auto cmdline::parse_dos_option(vector<string> &args) -> vector<option>
    return result;
 }
 
-auto cmdline::parse_disguised_long_option(vector<string> &args) -> vector<option>
+auto cmdline::parse_disguised_long_option(std::vector<std::string> &args) -> std::vector<option>
 {
-   const string &tok = args[0];
+   const std::string &tok = args[0];
    if(tok.size() >= 2 && ((tok[0] == '-' && tok[1] != '-') || ((m_style & allow_slash_for_short) && tok[0] == '/')))
    {
       try
@@ -660,13 +654,13 @@ auto cmdline::parse_disguised_long_option(vector<string> &args) -> vector<option
          throw;
       }
    }
-   return vector<option>();
+   return std::vector<option>();
 }
 
-auto cmdline::parse_terminator(vector<string> &args) -> vector<option>
+auto cmdline::parse_terminator(std::vector<std::string> &args) -> std::vector<option>
 {
-   vector<option> result;
-   const string & tok = args[0];
+   std::vector<option> result;
+   const std::string & tok = args[0];
    if(tok == "--")
    {
       for(unsigned i = 1; i < args.size(); ++i)
@@ -682,10 +676,10 @@ auto cmdline::parse_terminator(vector<string> &args) -> vector<option>
    return result;
 }
 
-auto cmdline::handle_additional_parser(vector<string> &args) -> vector<option>
+auto cmdline::handle_additional_parser(std::vector<std::string> &args) -> std::vector<option>
 {
-   vector<option>       result;
-   pair<string, string> r = m_additional_parser(args[0]);
+   std::vector<option>       result;
+   std::pair<std::string, std::string> r = m_additional_parser(args[0]);
    if(!r.first.empty())
    {
       option next;

@@ -5,8 +5,6 @@
 #include "argsy/parsers.hpp"
 #include <cctype>
 
-using std::size_t;
-
 #ifdef _WIN32
 namespace boost
 {

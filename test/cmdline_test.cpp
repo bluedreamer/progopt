@@ -6,14 +6,11 @@
 #include "argsy/cmdline.hpp"
 #include "argsy/detail/cmdline.hpp"
 #include "argsy/options_description.hpp"
-using namespace argsy;
-using argsy::detail::cmdline;
 
 #include <cassert>
 #include <iostream>
 #include <sstream>
 #include <vector>
-using namespace std;
 
 #include "minitest.hpp"
 
@@ -32,14 +29,14 @@ const int s_missing_parameter          = 7;
 const int s_extra_parameter            = 8;
 const int s_unrecognized_line          = 9;
 
-auto translate_syntax_error_kind(invalid_command_line_syntax::kind_t k) -> int
+auto translate_syntax_error_kind(argsy::invalid_command_line_syntax::kind_t k) -> int
 {
-   invalid_command_line_syntax::kind_t table[] = {
-      invalid_command_line_syntax::long_not_allowed,           invalid_command_line_syntax::long_adjacent_not_allowed,
-      invalid_command_line_syntax::short_adjacent_not_allowed, invalid_command_line_syntax::empty_adjacent_parameter,
-      invalid_command_line_syntax::missing_parameter,          invalid_command_line_syntax::extra_parameter,
-      invalid_command_line_syntax::unrecognized_line};
-   invalid_command_line_syntax::kind_t *b, *e, *i;
+   argsy::invalid_command_line_syntax::kind_t table[] = {
+      argsy::invalid_command_line_syntax::long_not_allowed,           argsy::invalid_command_line_syntax::long_adjacent_not_allowed,
+      argsy::invalid_command_line_syntax::short_adjacent_not_allowed, argsy::invalid_command_line_syntax::empty_adjacent_parameter,
+      argsy::invalid_command_line_syntax::missing_parameter,          argsy::invalid_command_line_syntax::extra_parameter,
+      argsy::invalid_command_line_syntax::unrecognized_line};
+   argsy::invalid_command_line_syntax::kind_t *b, *e, *i;
    b = table;
    e = table + sizeof(table) / sizeof(table[0]);
    i = std::find(b, e, k);
@@ -59,33 +56,33 @@ struct test_case
    The "boost::argsy" in parameter type is needed because CW9
    has std::detail and it causes an ambiguity.
 */
-void apply_syntax(options_description &desc, const char *syntax)
+void apply_syntax(argsy::options_description &desc, const char *syntax)
 {
-   string       s;
-   stringstream ss;
+   std::string       s;
+   std::stringstream ss;
    ss << syntax;
    while(ss >> s)
    {
-      value_semantic *v = nullptr;
+      argsy::value_semantic *v = nullptr;
 
       if(*(s.end() - 1) == '=')
       {
-         v = value<string>();
+         v = argsy::value<std::string>();
          s.resize(s.size() - 1);
       }
       else if(*(s.end() - 1) == '?')
       {
-         v = value<string>()->implicit_value("default");
+         v = argsy::value<std::string>()->implicit_value("default");
          s.resize(s.size() - 1);
       }
       else if(*(s.end() - 1) == '*')
       {
-         v = value<vector<string>>()->multitoken();
+         v = argsy::value<std::vector<std::string>>()->multitoken();
          s.resize(s.size() - 1);
       }
       else if(*(s.end() - 1) == '+')
       {
-         v = value<vector<string>>()->multitoken();
+         v = argsy::value<std::vector<std::string>>()->multitoken();
          s.resize(s.size() - 1);
       }
       if(v)
@@ -99,34 +96,34 @@ void apply_syntax(options_description &desc, const char *syntax)
    }
 }
 
-void test_cmdline(const char *syntax, command_line_style::style_t style, const test_case *cases)
+void test_cmdline(const char *syntax, argsy::command_line_style::style_t style, const test_case *cases)
 {
    for(int i = 0; cases[i].input; ++i)
    {
       // Parse input
-      vector<string> xinput;
+      std::vector<std::string> xinput;
       {
-         string       s;
-         stringstream ss;
+         std::string       s;
+         std::stringstream ss;
          ss << cases[i].input;
          while(ss >> s)
          {
             xinput.push_back(s);
          }
       }
-      options_description desc;
+      argsy::options_description desc;
       apply_syntax(desc, syntax);
 
-      cmdline cmd(xinput);
+      argsy::detail::cmdline cmd(xinput);
       cmd.style(style);
       cmd.set_options_description(desc);
 
-      string result;
+      std::string result;
       int    status = 0;
 
       try
       {
-         vector<option> options = cmd.run();
+         std::vector<argsy::option> options = cmd.run();
 
          for(auto opt : options)
          {
@@ -156,15 +153,15 @@ void test_cmdline(const char *syntax, command_line_style::style_t style, const t
             }
          }
       }
-      catch(unknown_option &)
+      catch(argsy::unknown_option &)
       {
          status = s_unknown_option;
       }
-      catch(ambiguous_option &)
+      catch(argsy::ambiguous_option &)
       {
          status = s_ambiguous_option;
       }
-      catch(invalid_command_line_syntax &e)
+      catch(argsy::invalid_command_line_syntax &e)
       {
          status = translate_syntax_error_kind(e.kind());
       }
@@ -175,8 +172,7 @@ void test_cmdline(const char *syntax, command_line_style::style_t style, const t
 
 void test_long_options()
 {
-   using namespace command_line_style;
-   auto style = cmdline::style_t(allow_long | long_allow_adjacent);
+   auto style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_long | argsy::command_line_style::long_allow_adjacent);
 
    test_case test_cases1[] = {// Test that long options are recognized and everything else
                               // is treated like arguments
@@ -199,7 +195,7 @@ void test_long_options()
                               {nullptr, 0, nullptr}};
    test_cmdline("foo bar=", style, test_cases1);
 
-   style = cmdline::style_t(allow_long | long_allow_next);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_long | argsy::command_line_style::long_allow_next);
 
    test_case test_cases2[] = {{"--bar 10", s_success, "bar:10"},
                               {"--bar", s_missing_parameter, ""},
@@ -209,12 +205,12 @@ void test_long_options()
                               {"--bar --foo", s_success, "bar:--foo"},
                               {nullptr, 0, nullptr}};
    test_cmdline("foo bar=", style, test_cases2);
-   style = cmdline::style_t(allow_long | long_allow_adjacent | long_allow_next);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_long | argsy::command_line_style::long_allow_adjacent | argsy::command_line_style::long_allow_next);
 
    test_case test_cases3[] = {{"--bar=10", s_success, "bar:10"}, {"--bar 11", s_success, "bar:11"}, {nullptr, 0, nullptr}};
    test_cmdline("foo bar=", style, test_cases3);
 
-   style = cmdline::style_t(allow_long | long_allow_adjacent | long_allow_next | case_insensitive);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_long | argsy::command_line_style::long_allow_adjacent | argsy::command_line_style::long_allow_next | argsy::command_line_style::case_insensitive);
 
    // Test case insensitive style.
    // Note that option names are normalized to lower case.
@@ -225,10 +221,9 @@ void test_long_options()
 
 void test_short_options()
 {
-   using namespace command_line_style;
-   cmdline::style_t style;
+   argsy::detail::cmdline::style_t style;
 
-   style = cmdline::style_t(allow_short | allow_dash_for_short | short_allow_adjacent);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_adjacent);
 
    test_case test_cases1[] = {{"-d d /bar", s_success, "-d: d /bar"},
                               // This is treated as error when long options are disabled
@@ -240,19 +235,19 @@ void test_short_options()
                               {nullptr, 0, nullptr}};
    test_cmdline(",d ,f= ,g", style, test_cases1);
 
-   style = cmdline::style_t(allow_short | allow_dash_for_short | short_allow_next);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_next);
 
    test_case test_cases2[] = {{"-f 13", s_success, "-f:13"},     {"-f -13", s_success, "-f:-13"},    {"-f", s_missing_parameter, ""},
                               {"-f /foo", s_success, "-f:/foo"}, {"-f -d", s_missing_parameter, ""}, {nullptr, 0, nullptr}};
    test_cmdline(",d ,f=", style, test_cases2);
 
-   style = cmdline::style_t(allow_short | short_allow_next | allow_dash_for_short | short_allow_adjacent);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_next | argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_adjacent);
 
    test_case test_cases3[] = {
       {"-f10", s_success, "-f:10"}, {"-f 10", s_success, "-f:10"}, {"-f -d", s_missing_parameter, ""}, {nullptr, 0, nullptr}};
    test_cmdline(",d ,f=", style, test_cases3);
 
-   style = cmdline::style_t(allow_short | short_allow_next | allow_dash_for_short | short_allow_adjacent | allow_sticky);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_next | argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::allow_sticky);
 
    test_case test_cases4[] = {{"-de", s_success, "-d: -e:"},
                               {"-df10", s_success, "-d: -f:10"},
@@ -266,16 +261,15 @@ void test_short_options()
 
 void test_dos_options()
 {
-   using namespace command_line_style;
-   cmdline::style_t style;
+   argsy::detail::cmdline::style_t style;
 
-   style = cmdline::style_t(allow_short | allow_slash_for_short | short_allow_adjacent);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_slash_for_short | argsy::command_line_style::short_allow_adjacent);
 
    test_case test_cases1[] = {{"/d d -bar", s_success, "-d: d -bar"}, {"--foo", s_success, "--foo"},   {"/d13", s_extra_parameter, ""},
                               {"/f14", s_success, "-f:14"},           {"/f", s_missing_parameter, ""}, {nullptr, 0, nullptr}};
    test_cmdline(",d ,f=", style, test_cases1);
 
-   style = cmdline::style_t(allow_short | allow_slash_for_short | short_allow_next | short_allow_adjacent | allow_sticky);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_slash_for_short | argsy::command_line_style::short_allow_next | argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::allow_sticky);
 
    test_case test_cases2[] = {{"/de", s_extra_parameter, ""}, {"/fe", s_success, "-f:e"}, {nullptr, 0, nullptr}};
    test_cmdline(",d ,f= ,e", style, test_cases2);
@@ -283,11 +277,10 @@ void test_dos_options()
 
 void test_disguised_long()
 {
-   using namespace command_line_style;
-   cmdline::style_t style;
+   argsy::detail::cmdline::style_t style;
 
-   style = cmdline::style_t(allow_short | short_allow_adjacent | allow_dash_for_short | short_allow_next | allow_long_disguise |
-                            long_allow_adjacent);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_next | argsy::command_line_style::allow_long_disguise |
+                               argsy::command_line_style::long_allow_adjacent);
 
    test_case test_cases1[] = {{"-foo -f", s_success, "foo: foo:"},
                               {"-goo=x -gy", s_success, "goo:x goo:y"},
@@ -295,18 +288,18 @@ void test_disguised_long()
                               {nullptr, 0, nullptr}};
    test_cmdline("foo,f goo,g= bee,b?", style, test_cases1);
 
-   style                   = cmdline::style_t(style | allow_slash_for_short);
+   style                   = argsy::detail::cmdline::style_t(style | argsy::command_line_style::allow_slash_for_short);
    test_case test_cases2[] = {{"/foo -f", s_success, "foo: foo:"}, {"/goo=x", s_success, "goo:x"}, {nullptr, 0, nullptr}};
    test_cmdline("foo,f goo,g= bee,b?", style, test_cases2);
 }
 
 void test_guessing()
 {
-   using namespace command_line_style;
-   cmdline::style_t style;
+   argsy::detail::cmdline::style_t style;
 
-   style = cmdline::style_t(allow_short | short_allow_adjacent | allow_dash_for_short | allow_long | long_allow_adjacent | allow_guessing |
-                            allow_long_disguise);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_adjacent |
+      argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::allow_long | argsy::command_line_style::long_allow_adjacent | argsy::command_line_style::allow_guessing |
+                               argsy::command_line_style::allow_long_disguise);
 
    test_case test_cases1[] = {{"--opt1", s_success, "opt123:"},
                               {"--opt", s_ambiguous_option, ""},
@@ -325,10 +318,10 @@ void test_guessing()
 
 void test_arguments()
 {
-   using namespace command_line_style;
-   cmdline::style_t style;
+   argsy::detail::cmdline::style_t style;
 
-   style = cmdline::style_t(allow_short | allow_long | allow_dash_for_short | short_allow_adjacent | long_allow_adjacent);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_long |
+      argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::long_allow_adjacent);
 
    test_case test_cases1[] = {
       {"-f file -gx file2", s_success, "-f: file -g:x file2"}, {"-f - -gx - -- -e", s_success, "-f: - -g:x - -e"}, {nullptr, 0, nullptr}};
@@ -337,7 +330,8 @@ void test_arguments()
    // "--" should stop options regardless of whether long options are
    // allowed or not.
 
-   style = cmdline::style_t(allow_short | short_allow_adjacent | allow_dash_for_short);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::short_allow_adjacent |
+      argsy::command_line_style::allow_dash_for_short);
 
    test_case test_cases2[] = {{"-f - -gx - -- -e", s_success, "-f: - -g:x - -e"}, {nullptr, 0, nullptr}};
    test_cmdline(",f ,g= ,e", style, test_cases2);
@@ -345,55 +339,54 @@ void test_arguments()
 
 void test_prefix()
 {
-   using namespace command_line_style;
-   cmdline::style_t style;
+   argsy::detail::cmdline::style_t style;
 
-   style = cmdline::style_t(allow_short | allow_long | allow_dash_for_short | short_allow_adjacent | long_allow_adjacent);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_short | argsy::command_line_style::allow_long | argsy::command_line_style::allow_dash_for_short | argsy::command_line_style::short_allow_adjacent | argsy::command_line_style::long_allow_adjacent);
 
    test_case test_cases1[] = {{"--foo.bar=12", s_success, "foo.bar:12"}, {nullptr, 0, nullptr}};
 
    test_cmdline("foo*=", style, test_cases1);
 }
 
-auto at_option_parser(string const &s) -> pair<string, string>
+auto at_option_parser(std::string const &s) -> std::pair<std::string, std::string>
 {
    if('@' == s[0])
    {
-      return std::make_pair(string("response-file"), s.substr(1));
+      return std::make_pair(std::string("response-file"), s.substr(1));
    }
    else
    {
-      return pair<string, string>();
+      return std::pair<std::string, std::string>();
    }
 }
 
-auto at_option_parser_broken(string const &s) -> pair<string, string>
+auto at_option_parser_broken(std::string const &s) -> std::pair<std::string, std::string>
 {
    if('@' == s[0])
    {
-      return std::make_pair(string("some garbage"), s.substr(1));
+      return std::make_pair(std::string("some garbage"), s.substr(1));
    }
    else
    {
-      return pair<string, string>();
+      return std::pair<std::string, std::string>();
    }
 }
 
 void test_additional_parser()
 {
-   options_description desc;
-   desc.add_options()("response-file", value<string>(), "response file")("foo", value<int>(), "foo")("bar,baz", value<int>(), "bar");
+   argsy::options_description desc;
+   desc.add_options()("response-file", argsy::value<std::string>(), "response file")("foo", argsy::value<int>(), "foo")("bar,baz", argsy::value<int>(), "bar");
 
-   vector<string> input;
+   std::vector<std::string> input;
    input.emplace_back("@config");
    input.emplace_back("--foo=1");
    input.emplace_back("--baz=11");
 
-   cmdline cmd(input);
+   argsy::detail::cmdline cmd(input);
    cmd.set_options_description(desc);
    cmd.set_additional_parser(at_option_parser);
 
-   vector<option> result = cmd.run();
+   std::vector<argsy::option> result = cmd.run();
 
    BOOST_REQUIRE(result.size() == 3);
    BOOST_CHECK_EQUAL(result[0].string_key, "response-file");
@@ -405,21 +398,21 @@ void test_additional_parser()
 
    // Test that invalid options returned by additional style
    // parser are detected.
-   cmdline cmd2(input);
+   argsy::detail::cmdline cmd2(input);
    cmd2.set_options_description(desc);
    cmd2.set_additional_parser(at_option_parser_broken);
 
-   BOOST_CHECK_THROW(cmd2.run(), unknown_option);
+   BOOST_CHECK_THROW(cmd2.run(), argsy::unknown_option);
 }
 
-auto at_option_parser2(vector<string> &args) -> vector<option>
+auto at_option_parser2(std::vector<std::string> &args) -> std::vector<argsy::option>
 {
-   vector<option> result;
+   std::vector<argsy::option> result;
    if('@' == args[0][0])
    {
       // Simulate reading the response file.
-      result.emplace_back("foo", vector<string>(1, "1"));
-      result.emplace_back("bar", vector<string>(1, "1"));
+      result.emplace_back("foo", std::vector<std::string>(1, "1"));
+      result.emplace_back("bar", std::vector<std::string>(1, "1"));
       args.erase(args.begin());
    }
    return result;
@@ -427,17 +420,17 @@ auto at_option_parser2(vector<string> &args) -> vector<option>
 
 void test_style_parser()
 {
-   options_description desc;
-   desc.add_options()("foo", value<int>(), "foo")("bar", value<int>(), "bar");
+   argsy::options_description desc;
+   desc.add_options()("foo", argsy::value<int>(), "foo")("bar", argsy::value<int>(), "bar");
 
-   vector<string> input;
+   std::vector<std::string> input;
    input.emplace_back("@config");
 
-   cmdline cmd(input);
+   argsy::detail::cmdline cmd(input);
    cmd.set_options_description(desc);
    cmd.extra_style_parser(at_option_parser2);
 
-   vector<option> result = cmd.run();
+   std::vector<argsy::option> result = cmd.run();
 
    BOOST_REQUIRE(result.size() == 2);
    BOOST_CHECK_EQUAL(result[0].string_key, "foo");
@@ -449,20 +442,20 @@ void test_style_parser()
 void test_unregistered()
 {
    // Check unregisted option when no options are registed at all.
-   options_description desc;
+   argsy::options_description desc;
 
-   vector<string> input;
+   std::vector<std::string> input;
    input.emplace_back("--foo=1");
    input.emplace_back("--bar");
    input.emplace_back("1");
    input.emplace_back("-b");
    input.emplace_back("-biz");
 
-   cmdline cmd(input);
+   argsy::detail::cmdline cmd(input);
    cmd.set_options_description(desc);
    cmd.allow_unregistered();
 
-   vector<option> result = cmd.run();
+   std::vector<argsy::option> result = cmd.run();
    BOOST_REQUIRE(result.size() == 5);
    // --foo=1
    BOOST_CHECK_EQUAL(result[0].string_key, "foo");
@@ -489,13 +482,13 @@ void test_unregistered()
 
    // Check sticky short options together with unregisted options.
 
-   desc.add_options()("help,h", "")("magic,m", value<string>(), "");
+   desc.add_options()("help,h", "")("magic,m", argsy::value<std::string>(), "");
 
    input.clear();
    input.emplace_back("-hc");
    input.emplace_back("-mc");
 
-   cmdline cmd2(input);
+   argsy::detail::cmdline cmd2(input);
    cmd2.set_options_description(desc);
    cmd2.allow_unregistered();
 
@@ -522,10 +515,9 @@ void test_unregistered()
 
 void test_implicit_value()
 {
-   using namespace command_line_style;
-   cmdline::style_t style;
+   argsy::detail::cmdline::style_t style;
 
-   style = cmdline::style_t(allow_long | long_allow_adjacent);
+   style = argsy::detail::cmdline::style_t(argsy::command_line_style::allow_long | argsy::command_line_style::long_allow_adjacent);
 
    test_case test_cases1[] = {// 'bar' does not even look like option, so is consumed
                               {"--foo bar", s_success, "foo:bar"},

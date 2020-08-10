@@ -7,14 +7,11 @@
 #include "argsy/detail/cmdline.hpp"
 #include "argsy/options_description.hpp"
 #include "argsy/parsers.hpp"
-using namespace argsy;
-using argsy::detail::cmdline;
 
 #include <cassert>
 #include <iostream>
 #include <sstream>
 #include <vector>
-using namespace std;
 
 #include "minitest.hpp"
 
@@ -25,17 +22,17 @@ using namespace std;
 
 void test_unrecognize_cmdline()
 {
-   options_description desc;
+   argsy::options_description desc;
 
-   string         content = "prg --input input.txt --optimization 4 --opt option";
-   vector<string> tokens  = split_unix(content);
+   std::string         content = "prg --input input.txt --optimization 4 --opt option";
+   std::vector<std::string> tokens  = argsy::split_unix(content);
 
-   cmdline cmd(tokens);
+   argsy::detail::cmdline cmd(tokens);
    cmd.set_options_description(desc);
    cmd.allow_unregistered();
 
-   vector<option> opts   = cmd.run();
-   vector<string> result = collect_unrecognized(opts, include_positional);
+   std::vector<argsy::option> opts   = cmd.run();
+   std::vector<std::string> result = collect_unrecognized(opts, argsy::include_positional);
 
    BOOST_CHECK_EQUAL(result.size(), 7);
    BOOST_CHECK_EQUAL(result[0], "prg");
@@ -49,15 +46,15 @@ void test_unrecognize_cmdline()
 
 void test_unrecognize_config()
 {
-   options_description desc;
+   argsy::options_description desc;
 
-   string content = " input = input.txt\n"
+   std::string content = " input = input.txt\n"
                     " optimization = 4\n"
                     " opt = option\n";
 
-   stringstream   ss(content);
-   vector<option> opts   = parse_config_file(ss, desc, true).options;
-   vector<string> result = collect_unrecognized(opts, include_positional);
+   std::stringstream   ss(content);
+   std::vector<argsy::option> opts   = parse_config_file(ss, desc, true).options;
+   std::vector<std::string> result = collect_unrecognized(opts, argsy::include_positional);
 
    BOOST_CHECK_EQUAL(result.size(), 6);
    BOOST_CHECK_EQUAL(result[0], "input");

@@ -6,20 +6,14 @@
 #include "argsy/options_description.hpp"
 #include "argsy/parsers.hpp"
 #include "argsy/positional_options.hpp"
-using namespace argsy;
-// We'll use po::value everywhere to workaround vc6 bug.
-namespace po = argsy;
-
-#include <boost/limits.hpp>
 
 #include "minitest.hpp"
 
 #include <vector>
-using namespace std;
 
 void test_positional_options()
 {
-   positional_options_description p;
+   argsy::positional_options_description p;
    p.add("first", 1);
 
    BOOST_CHECK_EQUAL(p.max_total_count(), 1u);
@@ -44,14 +38,14 @@ void test_positional_options()
 
 void test_parsing()
 {
-   options_description desc;
-   desc.add_options()("first", po::value<int>())("second", po::value<int>())("input-file", po::value<vector<string>>())(
-      "some-other", po::value<string>());
+   argsy::options_description desc;
+   desc.add_options()("first", argsy::value<int>())("second", argsy::value<int>())("input-file", argsy::value<std::vector<std::string>>())(
+      "some-other", argsy::value<std::string>());
 
-   positional_options_description p;
+   argsy::positional_options_description p;
    p.add("input-file", 2).add("some-other", 1);
 
-   vector<string> args;
+   std::vector<std::string> args;
    args.emplace_back("--first=10");
    args.emplace_back("file1");
    args.emplace_back("--second=10");
@@ -59,7 +53,7 @@ void test_parsing()
    args.emplace_back("file3");
 
    // Check that positional options are handled.
-   parsed_options parsed = command_line_parser(args).options(desc).positional(p).run();
+   argsy::parsed_options parsed = argsy::command_line_parser(args).options(desc).positional(p).run();
 
    BOOST_REQUIRE(parsed.options.size() == 5);
    BOOST_CHECK_EQUAL(parsed.options[1].string_key, "input-file");
@@ -71,7 +65,7 @@ void test_parsing()
    args.emplace_back("file4");
 
    // Check that excessive number of positional options is detected.
-   BOOST_CHECK_THROW(command_line_parser(args).options(desc).positional(p).run(), too_many_positional_options_error);
+   BOOST_CHECK_THROW(argsy::command_line_parser(args).options(desc).positional(p).run(), argsy::too_many_positional_options_error);
 }
 
 auto main(int, char *[]) -> int

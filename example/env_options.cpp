@@ -26,12 +26,12 @@ auto mapper(std::string env_var) -> std::string
 
 void get_env_options()
 {
-   po::options_description config("Configuration");
-   config.add_options()("path", "the execution path")("verbosity", po::value<std::string>()->default_value("INFO"),
+   argsy::options_description config("Configuration");
+   config.add_options()("path", "the execution path")("verbosity", argsy::value<std::string>()->default_value("INFO"),
                                                       "set verbosity: DEBUG, INFO, WARN, ERROR, FATAL");
 
-   po::variables_map vm;
-   store(po::parse_environment(config, std::function<std::string(std::string)>(mapper)), vm);
+   argsy::variables_map vm;
+   store(argsy::parse_environment(config, std::function<std::string(std::string)>(mapper)), vm);
    notify(vm);
 
    if(vm.count("path"))

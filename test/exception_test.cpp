@@ -7,30 +7,28 @@
 #include "argsy/options_description.hpp"
 #include "argsy/parsers.hpp"
 #include "argsy/variables_map.hpp"
-using namespace argsy;
 
 #include <cassert>
 #include <iostream>
 #include <sstream>
 #include <vector>
-using namespace std;
 
 #include "minitest.hpp"
 
 void test_ambiguous()
 {
-   options_description desc;
-   desc.add_options()("cfgfile,c", value<string>()->multitoken(),
-                      "the config file")("output,c", value<string>(), "the output file")("output,o", value<string>(), "the output file");
+   argsy::options_description desc;
+   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(),
+                      "the config file")("output,c", argsy::value<std::string>(), "the output file")("output,o", argsy::value<std::string>(), "the output file");
 
    const char *cmdline[] = {"program", "-c", "file", "-o", "anotherfile"};
 
-   variables_map vm;
+   argsy::variables_map vm;
    try
    {
       store(parse_command_line(sizeof(cmdline) / sizeof(const char *), const_cast<char **>(cmdline), desc), vm);
    }
-   catch(ambiguous_option &e)
+   catch(argsy::ambiguous_option &e)
    {
       BOOST_CHECK_EQUAL(e.alternatives().size(), 2);
       BOOST_CHECK_EQUAL(e.get_option_name(), "-c");
@@ -41,18 +39,18 @@ void test_ambiguous()
 
 void test_ambiguous_long()
 {
-   options_description desc;
-   desc.add_options()("cfgfile,c", value<string>()->multitoken(),
-                      "the config file")("output,c", value<string>(), "the output file")("output,o", value<string>(), "the output file");
+   argsy::options_description desc;
+   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(),
+                      "the config file")("output,c", argsy::value<std::string>(), "the output file")("output,o", argsy::value<std::string>(), "the output file");
 
    const char *cmdline[] = {"program", "--cfgfile", "file", "--output", "anotherfile"};
 
-   variables_map vm;
+   argsy::variables_map vm;
    try
    {
       store(parse_command_line(sizeof(cmdline) / sizeof(const char *), const_cast<char **>(cmdline), desc), vm);
    }
-   catch(ambiguous_option &e)
+   catch(argsy::ambiguous_option &e)
    {
       BOOST_CHECK_EQUAL(e.alternatives().size(), 2);
       BOOST_CHECK_EQUAL(e.get_option_name(), "--output");
@@ -63,18 +61,18 @@ void test_ambiguous_long()
 
 void test_ambiguous_multiple_long_names()
 {
-   options_description desc;
-   desc.add_options()("cfgfile,foo,c", value<string>()->multitoken(), "the config file")("output,foo,o", value<string>(),
+   argsy::options_description desc;
+   desc.add_options()("cfgfile,foo,c", argsy::value<std::string>()->multitoken(), "the config file")("output,foo,o", argsy::value<std::string>(),
                                                                                          "the output file");
 
    const char *cmdline[] = {"program", "--foo", "file"};
 
-   variables_map vm;
+   argsy::variables_map vm;
    try
    {
       store(parse_command_line(sizeof(cmdline) / sizeof(const char *), const_cast<char **>(cmdline), desc), vm);
    }
-   catch(ambiguous_option &e)
+   catch(argsy::ambiguous_option &e)
    {
       BOOST_CHECK_EQUAL(e.alternatives().size(), 2);
       BOOST_CHECK_EQUAL(e.get_option_name(), "--foo");
@@ -85,37 +83,37 @@ void test_ambiguous_multiple_long_names()
 
 void test_unknown_option()
 {
-   options_description desc;
-   desc.add_options()("cfgfile,c", value<string>(), "the configfile");
+   argsy::options_description desc;
+   desc.add_options()("cfgfile,c", argsy::value<std::string>(), "the configfile");
 
    const char *cmdline[] = {"program", "-c", "file", "-f", "anotherfile"};
 
-   variables_map vm;
+   argsy::variables_map vm;
    try
    {
       store(parse_command_line(sizeof(cmdline) / sizeof(const char *), const_cast<char **>(cmdline), desc), vm);
    }
-   catch(unknown_option &e)
+   catch(argsy::unknown_option &e)
    {
       BOOST_CHECK_EQUAL(e.get_option_name(), "-f");
-      BOOST_CHECK_EQUAL(string(e.what()), "unrecognised option '-f'");
+      BOOST_CHECK_EQUAL(std::string(e.what()), "unrecognised option '-f'");
    }
 }
 
 void test_multiple_values()
 {
-   options_description desc;
-   desc.add_options()("cfgfile,c", value<string>()->multitoken(), "the config file")("output,o", value<string>(), "the output file");
+   argsy::options_description desc;
+   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(), "the config file")("output,o", argsy::value<std::string>(), "the output file");
 
    const char *cmdline[] = {"program", "-o", "fritz", "hugo", "--cfgfile", "file", "c", "-o", "text.out"};
 
-   variables_map vm;
+   argsy::variables_map vm;
    try
    {
       store(parse_command_line(sizeof(cmdline) / sizeof(const char *), const_cast<char **>(cmdline), desc), vm);
       notify(vm);
    }
-   catch(validation_error &e)
+   catch(argsy::validation_error &e)
    {
       // TODO: this is currently validation_error, shouldn't it be multiple_values ???
       //
@@ -125,88 +123,88 @@ void test_multiple_values()
       //   validation and parsing
       //
       BOOST_CHECK_EQUAL(e.get_option_name(), "--cfgfile");
-      BOOST_CHECK_EQUAL(string(e.what()), "option '--cfgfile' only takes a single argument");
+      BOOST_CHECK_EQUAL(std::string(e.what()), "option '--cfgfile' only takes a single argument");
    }
 }
 
 void test_multiple_occurrences()
 {
-   options_description desc;
-   desc.add_options()("cfgfile,c", value<string>(), "the configfile");
+   argsy::options_description desc;
+   desc.add_options()("cfgfile,c", argsy::value<std::string>(), "the configfile");
 
    const char *cmdline[] = {"program", "--cfgfile", "file", "-c", "anotherfile"};
 
-   variables_map vm;
+   argsy::variables_map vm;
    try
    {
       store(parse_command_line(sizeof(cmdline) / sizeof(const char *), const_cast<char **>(cmdline), desc), vm);
       notify(vm);
    }
-   catch(multiple_occurrences &e)
+   catch(argsy::multiple_occurrences &e)
    {
       BOOST_CHECK_EQUAL(e.get_option_name(), "--cfgfile");
-      BOOST_CHECK_EQUAL(string(e.what()), "option '--cfgfile' cannot be specified more than once");
+      BOOST_CHECK_EQUAL(std::string(e.what()), "option '--cfgfile' cannot be specified more than once");
    }
 }
 
 void test_multiple_occurrences_with_different_names()
 {
-   options_description desc;
-   desc.add_options()("cfgfile,config-file,c", value<string>(), "the configfile");
+   argsy::options_description desc;
+   desc.add_options()("cfgfile,config-file,c", argsy::value<std::string>(), "the configfile");
 
    const char *cmdline[] = {"program", "--config-file", "file", "--cfgfile", "anotherfile"};
 
-   variables_map vm;
+   argsy::variables_map vm;
    try
    {
       store(parse_command_line(sizeof(cmdline) / sizeof(const char *), const_cast<char **>(cmdline), desc), vm);
       notify(vm);
    }
-   catch(multiple_occurrences &e)
+   catch(argsy::multiple_occurrences &e)
    {
       BOOST_CHECK((e.get_option_name() == "--cfgfile") || (e.get_option_name() == "--config-file"));
-      BOOST_CHECK((string(e.what()) == "option '--cfgfile' cannot be specified more than once") ||
-                  (string(e.what()) == "option '--config-file' cannot be specified more than once"));
+      BOOST_CHECK((std::string(e.what()) == "option '--cfgfile' cannot be specified more than once") ||
+                  (std::string(e.what()) == "option '--config-file' cannot be specified more than once"));
    }
 }
 
 void test_multiple_occurrences_with_non_key_names()
 {
-   options_description desc;
-   desc.add_options()("cfgfile,config-file,c", value<string>(), "the configfile");
+   argsy::options_description desc;
+   desc.add_options()("cfgfile,config-file,c", argsy::value<std::string>(), "the configfile");
 
    const char *cmdline[] = {"program", "--config-file", "file", "-c", "anotherfile"};
 
-   variables_map vm;
+   argsy::variables_map vm;
    try
    {
       store(parse_command_line(sizeof(cmdline) / sizeof(const char *), const_cast<char **>(cmdline), desc), vm);
       notify(vm);
    }
-   catch(multiple_occurrences &e)
+   catch(argsy::multiple_occurrences &e)
    {
       BOOST_CHECK_EQUAL(e.get_option_name(), "--cfgfile");
-      BOOST_CHECK_EQUAL(string(e.what()), "option '--cfgfile' cannot be specified more than once");
+      BOOST_CHECK_EQUAL(std::string(e.what()), "option '--cfgfile' cannot be specified more than once");
    }
 }
 
 void test_missing_value()
 {
-   options_description desc;
-   desc.add_options()("cfgfile,c", value<string>()->multitoken(), "the config file")("output,o", value<string>(), "the output file");
+   argsy::options_description desc;
+   desc.add_options()("cfgfile,c", argsy::value<std::string>()->multitoken(), "the config file")("output,o", argsy::value<std::string>(), "the output file");
    // missing value for option '-c'
    const char *cmdline[] = {"program", "-c", "-c", "output.txt"};
 
-   variables_map vm;
+   argsy::variables_map vm;
 
    try
    {
       store(parse_command_line(sizeof(cmdline) / sizeof(const char *), const_cast<char **>(cmdline), desc), vm);
       notify(vm);
    }
-   catch(invalid_command_line_syntax &e)
+   catch(argsy::invalid_command_line_syntax &e)
    {
-      BOOST_CHECK_EQUAL(e.kind(), invalid_syntax::missing_parameter);
+      BOOST_CHECK_EQUAL(e.kind(), argsy::invalid_syntax::missing_parameter);
       BOOST_CHECK_EQUAL(e.tokens(), "--cfgfile");
    }
 }

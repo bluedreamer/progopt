@@ -16,8 +16,6 @@
 
 namespace argsy::detail
 {
-using namespace std;
-
 common_config_file_iterator::common_config_file_iterator(const std::set<std::string> &allowed_options, bool allow_unregistered)
    : allowed_options(allowed_options)
    , m_allow_unregistered(allow_unregistered)
@@ -30,7 +28,7 @@ common_config_file_iterator::common_config_file_iterator(const std::set<std::str
 
 void common_config_file_iterator::add_option(const char *name)
 {
-   string s(name);
+   std::string s(name);
    assert(!s.empty());
    if(*s.rbegin() == '*')
    {
@@ -58,7 +56,7 @@ void common_config_file_iterator::add_option(const char *name)
       }
       if(bad_prefixes)
       {
-         boost::throw_exception(error("options '" + string(name) + "' and '" + *i +
+         boost::throw_exception(error("options '" + std::string(name) + "' and '" + *i +
                                       "*' will both match the same "
                                       "arguments from the configuration file"));
       }
@@ -68,13 +66,13 @@ void common_config_file_iterator::add_option(const char *name)
 
 namespace
 {
-auto trim_ws(const string &s) -> string
+auto trim_ws(const std::string &s) -> std::string
 {
-   string::size_type n, n2;
+   std::string::size_type n, n2;
    n = s.find_first_not_of(" \t\r\n");
-   if(n == string::npos)
+   if(n == std::string::npos)
    {
-      return string();
+      return std::string();
    }
    else
    {
@@ -86,14 +84,14 @@ auto trim_ws(const string &s) -> string
 
 void common_config_file_iterator::get()
 {
-   string            s;
-   string::size_type n;
+   std::string            s;
+   std::string::size_type n;
    bool              found = false;
 
    while(this->getline(s))
    {
       // strip '#' comments and whitespace
-      if((n = s.find('#')) != string::npos)
+      if((n = s.find('#')) != std::string::npos)
       {
          s = s.substr(0, n);
       }
@@ -110,10 +108,10 @@ void common_config_file_iterator::get()
                m_prefix += '.';
             }
          }
-         else if((n = s.find('=')) != string::npos)
+         else if((n = s.find('=')) != std::string::npos)
          {
-            string name  = m_prefix + trim_ws(s.substr(0, n));
-            string value = trim_ws(s.substr(n + 1));
+            std::string name  = m_prefix + trim_ws(s.substr(0, n));
+            std::string value = trim_ws(s.substr(n + 1));
 
             bool registered = allowed_option(name);
             if(!registered && !m_allow_unregistered)
@@ -184,35 +182,3 @@ bool basic_config_file_iterator<wchar_t>::getline(std::string &s)
 #endif
 
 } // namespace argsy::detail
-
-#if 0
-using boost::argsy::config_file;
-
-   #include <cassert>
-   #include <sstream>
-
-int main()
-{
-    try {
-        stringstream s(
-            "a = 1\n"
-            "b = 2\n");
-
-        config_file cf(s);
-        cf.add_option("a");
-        cf.add_option("b");
-
-        assert(++cf);
-        assert(cf.name() == "a");
-        assert(cf.value() == "1");
-        assert(++cf);
-        assert(cf.name() == "b");
-        assert(cf.value() == "2");
-        assert(!++cf);
-    }
-    catch(exception& e)
-    {
-        cout << e.what() << "\n";
-    }
-}
-#endif

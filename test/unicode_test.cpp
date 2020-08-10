@@ -7,15 +7,9 @@
 #include "argsy/options_description.hpp"
 #include "argsy/parsers.hpp"
 #include "argsy/variables_map.hpp"
-using namespace boost::argsy;
-// We'll use po::value everywhere to workaround vc6 bug.
-namespace po = boost::argsy;
 
 #include <functional>
-using namespace boost;
-
 #include <sstream>
-using namespace std;
 
 #include "minitest.hpp"
 
@@ -25,7 +19,7 @@ void test_unicode_to_unicode()
 {
    options_description desc;
 
-   desc.add_options()("foo", po::wvalue<wstring>(), "unicode option");
+   desc.add_options()("foo", argsy::wvalue<wstring>(), "unicode option");
 
    vector<wstring> args;
    args.emplace_back(L"--foo=\x044F");
@@ -49,7 +43,7 @@ void test_unicode_to_native()
 
    options_description desc;
 
-   desc.add_options()("foo", po::value<string>(), "unicode option");
+   desc.add_options()("foo", argsy::value<string>(), "unicode option");
 
    vector<wstring> args;
    args.emplace_back(L"--foo=\x044F");
@@ -67,7 +61,7 @@ void test_native_to_unicode()
 
    options_description desc;
 
-   desc.add_options()("foo", po::wvalue<wstring>(), "unicode option");
+   desc.add_options()("foo", argsy::wvalue<wstring>(), "unicode option");
 
    vector<string> args;
    args.emplace_back("--foo=\xD1\x8F");
@@ -100,7 +94,7 @@ void test_command_line()
    options_description desc;
    desc.add_options()("foo,f", new untyped_value(), "")
       // Explicit qualification is a workaround for vc6
-      ("bar,b", po::value<std::string>(), "")("baz", new untyped_value())("qux,plug*", new untyped_value());
+      ("bar,b", argsy::value<std::string>(), "")("baz", new untyped_value())("qux,plug*", new untyped_value());
 
    const wchar_t * cmdline4_[] = {L"--foo=1\u0FF52", L"-f4", L"--bar=11", L"-b4", L"--plug3=10"};
    vector<wstring> cmdline4    = sv(cmdline4_, sizeof(cmdline4_) / sizeof(cmdline4_[0]));
@@ -124,7 +118,7 @@ void test_config_file()
 
    options_description desc;
 
-   desc.add_options()("foo", po::value<string>(), "unicode option");
+   desc.add_options()("foo", argsy::value<string>(), "unicode option");
 
    std::wstringstream stream(L"foo = \x044F");
 

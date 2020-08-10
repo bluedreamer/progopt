@@ -12,7 +12,6 @@
 
 namespace argsy
 {
-using namespace std;
 void value_semantic_codecvt_helper<char>::parse(std::any &value_store, const std::vector<std::string> &new_tokens, bool utf8) const
 {
    if(utf8)
@@ -90,10 +89,10 @@ auto bool_switch(bool *v) -> typed_value<bool> *
     Case is ignored. The 'xs' vector can either be empty, in which
     case the value is 'true', or can contain explicit value.
 */
-void validate(std::any &v, const vector<string> &xs, bool * /*unused*/, int /*unused*/)
+void validate(std::any &v, const std::vector<std::string> &xs, bool * /*unused*/, int /*unused*/)
 {
-   check_first_occurrence(v);
-   string s(get_single_string(xs, true));
+   argsy::validators::check_first_occurrence(v);
+   std::string s(argsy::validators::get_single_string(xs, true));
 
    for(char &i : s)
    {
@@ -114,10 +113,10 @@ void validate(std::any &v, const vector<string> &xs, bool * /*unused*/, int /*un
    }
 }
 
-void validate(std::any &v, const vector<string> &xs, std::string * /*unused*/, int /*unused*/)
+void validate(std::any &v, const std::vector<std::string> &xs, std::string * /*unused*/, int /*unused*/)
 {
-   check_first_occurrence(v);
-   v = std::any(get_single_string(xs));
+   argsy::validators::check_first_occurrence(v);
+   v = std::any(argsy::validators::get_single_string(xs));
 }
 
 namespace validators
@@ -166,7 +165,7 @@ auto error_with_option_name::what() const noexcept -> const char *
    return m_message.c_str();
 }
 
-void error_with_option_name::replace_token(const string &from, const string &to) const
+void error_with_option_name::replace_token(const std::string &from, const std::string &to) const
 {
    for(;;)
    {
@@ -180,7 +179,7 @@ void error_with_option_name::replace_token(const string &from, const string &to)
    }
 }
 
-auto error_with_option_name::get_canonical_option_prefix() const -> string
+auto error_with_option_name::get_canonical_option_prefix() const -> std::string
 {
    switch(m_option_style)
    {
@@ -200,15 +199,15 @@ auto error_with_option_name::get_canonical_option_prefix() const -> string
                           "allow_long_disguise or allow_long]");
 }
 
-auto error_with_option_name::get_canonical_option_name() const -> string
+auto error_with_option_name::get_canonical_option_name() const -> std::string
 {
    if(!m_substitutions.find("option")->second.length())
    {
       return m_substitutions.find("original_token")->second;
    }
 
-   string original_token = strip_prefixes(m_substitutions.find("original_token")->second);
-   string option_name    = strip_prefixes(m_substitutions.find("option")->second);
+   std::string original_token = strip_prefixes(m_substitutions.find("original_token")->second);
+   std::string option_name    = strip_prefixes(m_substitutions.find("option")->second);
 
    //  For long options, use option name
    if(m_option_style == command_line_style::allow_long || m_option_style == command_line_style::allow_long_disguise)
@@ -226,7 +225,7 @@ auto error_with_option_name::get_canonical_option_name() const -> string
    return option_name;
 }
 
-void error_with_option_name::substitute_placeholders(const string &error_template) const
+void error_with_option_name::substitute_placeholders(const std::string &error_template) const
 {
    m_message = error_template;
    std::map<std::string, std::string> substitutions(m_substitutions);
@@ -255,7 +254,7 @@ void error_with_option_name::substitute_placeholders(const string &error_templat
    }
 }
 
-void ambiguous_option::substitute_placeholders(const string &original_error_template) const
+void ambiguous_option::substitute_placeholders(const std::string &original_error_template) const
 {
    // For short forms, all alternatives must be identical, by
    //      definition, to the specified option, so we don't need to
@@ -266,7 +265,7 @@ void ambiguous_option::substitute_placeholders(const string &original_error_temp
       return;
    }
 
-   string error_template = original_error_template;
+   std::string error_template = original_error_template;
    // remove duplicates using std::set
    std::set<std::string>    alternatives_set(m_alternatives.begin(), m_alternatives.end());
    std::vector<std::string> alternatives_vec(alternatives_set.begin(), alternatives_set.end());
@@ -294,7 +293,7 @@ void ambiguous_option::substitute_placeholders(const string &original_error_temp
    error_with_option_name::substitute_placeholders(error_template);
 }
 
-auto validation_error::get_template(kind_t kind) -> string
+auto validation_error::get_template(kind_t kind) -> std::string
 {
    // Initially, store the message in 'const char*' variable,
    // to avoid conversion to std::string in all cases.

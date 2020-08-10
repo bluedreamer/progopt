@@ -15,16 +15,16 @@ namespace po = argsy;
 
 auto main(int argc, char const *argv[]) -> int
 {
-   po::options_description desc("Allowed options");
+   argsy::options_description desc("Allowed options");
 
-   desc.add_options()("path,p", po::value<std::string>(), "set initial path");
+   desc.add_options()("path,p", argsy::value<std::string>(), "set initial path");
 
-   po::variables_map vm;
+   argsy::variables_map vm;
 
    try
    {
-      po::store(po::parse_command_line(argc, argv, desc), vm);
-      po::notify(vm);
+      argsy::store(argsy::parse_command_line(argc, argv, desc), vm);
+      argsy::notify(vm);
    }
    catch(std::exception const &x)
    {

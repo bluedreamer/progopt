@@ -52,8 +52,6 @@ extern char **environ;
    #endif
 #endif
 
-using namespace std;
-
 namespace argsy
 {
 #ifndef BOOST_NO_STD_WSTRING
@@ -94,9 +92,9 @@ template<class charT>
 auto parse_config_file(std::basic_istream<charT> &is, const options_description &desc, bool allow_unregistered)
    -> basic_parsed_options<charT>
 {
-   set<string> allowed_options;
+   std::set<std::string> allowed_options;
 
-   const vector<std::shared_ptr<option_description>> &options = desc.options();
+   const std::vector<std::shared_ptr<option_description>> &options = desc.options();
    for(const auto &option : options)
    {
       const option_description &d = *option;
@@ -172,7 +170,7 @@ auto parse_environment(const options_description &desc, const std::function<std:
 
    for(boost::environment_iterator i(environ), e; i != e; ++i)
    {
-      string option_name = name_mapper(i->first);
+      std::string option_name = name_mapper(i->first);
 
       if(!option_name.empty())
       {
@@ -198,10 +196,10 @@ public:
 
    auto operator()(const std::string &s) -> std::string
    {
-      string result;
+      std::string result;
       if(s.find(prefix) == 0)
       {
-         for(string::size_type n = prefix.size(); n < s.size(); ++n)
+         for(std::string::size_type n = prefix.size(); n < s.size(); ++n)
          {
             // Intel-Win-7.1 does not understand
             // push_back on string.
@@ -223,7 +221,7 @@ auto parse_environment(const options_description &desc, const std::string &prefi
 
 auto parse_environment(const options_description &desc, const char *prefix) -> parsed_options
 {
-   return parse_environment(desc, string(prefix));
+   return parse_environment(desc, std::string(prefix));
 }
 
 } // namespace argsy

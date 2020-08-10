@@ -18,8 +18,6 @@
 
 #include "minitest.hpp"
 
-using namespace std;
-
 auto file_content(const string &filename) -> string
 {
    ifstream ifs(filename.c_str());

@@ -13,8 +13,6 @@
 
 namespace argsy
 {
-using namespace std;
-
 // First, performs semantic actions for 'oa'.
 // Then, stores in 'm' all options that are defined in 'desc'.
 void store(const parsed_options &options, variables_map &xm, bool utf8)
@@ -35,8 +33,8 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
    unsigned i;
 
    // Declared here so can be used to provide context for exceptions
-   string option_name;
-   string original_token;
+   std::string option_name;
+   std::string original_token;
 
 #ifndef BOOST_NO_EXCEPTIONS
    try
@@ -104,11 +102,11 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
    xm.m_final.insert(new_final.begin(), new_final.end());
 
    // Second, apply default values and store required options.
-   const vector<std::shared_ptr<option_description>> &all = desc.options();
+   const std::vector<std::shared_ptr<option_description>> &all = desc.options();
    for(i = 0; i < all.size(); ++i)
    {
       const option_description &d   = *all[i];
-      string                    key = d.key("");
+      std::string                    key = d.key("");
       // FIXME: this logic relies on knowledge of option_description
       // internals.
       // The 'key' is empty if options description contains '*'.
@@ -135,7 +133,7 @@ void store(const parsed_options &options, variables_map &xm, bool utf8)
          // config file etc, the following precedence rules apply:
          //  "--"  >  ("-" or "/")  >  ""
          //  Precedence is set conveniently by a single call to length()
-         string canonical_name = d.canonical_display_name(options.m_options_prefix);
+         std::string canonical_name = d.canonical_display_name(options.m_options_prefix);
          if(canonical_name.length() > xm.m_required[key].length())
          {
             xm.m_required[key] = canonical_name;
@@ -227,8 +225,8 @@ void variables_map::notify()
    // This checks if all required options occur
    for(auto r = m_required.begin(); r != m_required.end(); ++r)
    {
-      const string &opt         = r->first;
-      const string &display_opt = r->second;
+      const std::string &opt         = r->first;
+      const std::string &display_opt = r->second;
       auto          iter        = find(opt);
       if(iter == end() || iter->second.empty())
       {

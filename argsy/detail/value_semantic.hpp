@@ -73,8 +73,6 @@ const std::basic_string<charT> &get_single_string(const std::vector<std::basic_s
 void check_first_occurrence(const std::any &value);
 } // namespace validators
 
-using namespace validators;
-
 /** Validates 's' and updates 'v'.
     @pre 'v' is either empty or in the state assigned by the previous
     invocation of 'validate'.
@@ -99,9 +97,7 @@ void validate(std::any &v, const std::vector<std::basic_string<charT>> &xs, T *,
 
 void validate(std::any &v, const std::vector<std::string> &xs, bool *, int);
 
-#if !defined(BOOST_NO_STD_WSTRING)
 void validate(std::any &v, const std::vector<std::wstring> &xs, bool *, int);
-#endif
 // For some reason, this declaration, which is require by the standard,
 // cause msvc 7.1 to not generate code to specialization defined in
 // value_semantic.cpp

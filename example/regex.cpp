@@ -20,14 +20,9 @@
 // and the second invocation should issue an error message.
 
 #include "program_options.hpp"
-//#include <boost/regex.hpp>
+
 #include <regex>
-
-using namespace boost;
-using namespace argsy;
-
 #include <iostream>
-using namespace std;
 
 /* Define a completely non-sensical class. */
 struct magic_number
@@ -50,24 +45,22 @@ void validate(std::any &v, const std::vector<std::string> &values, magic_number 
 {
    static std::regex r(R"(\d\d\d-(\d\d\d))");
 
-   using namespace argsy;
-
    // Make sure no previous assignment to 'a' was made.
-   validators::check_first_occurrence(v);
+   argsy::validators::check_first_occurrence(v);
    // Extract the first string from 'values'. If there is more than
    // one string, it's an error, and exception will be thrown.
-   const string &s = validators::get_single_string(values);
+   const std::string &s = argsy::validators::get_single_string(values);
 
    // Do regex match and convert the interesting part to
    // int.
-   smatch match;
+   std::smatch match;
    if(regex_match(s, match, r))
    {
-      v = any(magic_number(lexical_cast<int>(match[1])));
+      v = std::any(magic_number(boost::lexical_cast<int>(match[1])));
    }
    else
    {
-      throw validation_error(validation_error::invalid_option_value);
+      throw argsy::validation_error(argsy::validation_error::invalid_option_value);
    }
 }
 
@@ -75,31 +68,31 @@ auto main(int ac, char *av[]) -> int
 {
    try
    {
-      options_description desc("Allowed options");
-      desc.add_options()("help", "produce a help screen")("version,v", "print the version number")("magic,m", value<magic_number>(),
+      argsy::options_description desc("Allowed options");
+      desc.add_options()("help", "produce a help screen")("version,v", "print the version number")("magic,m", argsy::value<magic_number>(),
                                                                                                    "magic value (in NNN-NNN format)");
 
-      variables_map vm;
+      argsy::variables_map vm;
       store(parse_command_line(ac, av, desc), vm);
 
       if(vm.count("help"))
       {
-         cout << "Usage: regex [options]\n";
-         cout << desc;
+         std::cout << "Usage: regex [options]\n";
+         std::cout << desc;
          return 0;
       }
       if(vm.count("version"))
       {
-         cout << "Version 1.\n";
+         std::cout << "Version 1.\n";
          return 0;
       }
       if(vm.count("magic"))
       {
-         cout << "The magic is \"" << vm["magic"].as<magic_number>().n << "\"\n";
+         std::cout << "The magic is \"" << vm["magic"].as<magic_number>().n << "\"\n";
       }
    }
    catch(std::exception &e)
    {
-      cout << e.what() << "\n";
+      std::cout << e.what() << "\n";
    }
 }

@@ -4,47 +4,43 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "argsy/options_description.hpp"
-using namespace argsy;
 
 #include <functional>
-using namespace boost;
-
 #include <sstream>
 #include <string>
 #include <utility>
-using namespace std;
 
 #include "minitest.hpp"
 
 void test_type()
 {
-   options_description desc;
-   desc.add_options()("foo", value<int>(), "")("bar", value<string>(), "");
+   argsy::options_description desc;
+   desc.add_options()("foo", argsy::value<int>(), "")("bar", argsy::value<std::string>(), "");
 
 #ifndef BOOST_NO_RTTI
-   const typed_value_base *b = dynamic_cast<const typed_value_base *>(desc.find("foo", false).semantic().get());
+   const argsy::typed_value_base *b = dynamic_cast<const argsy::typed_value_base *>(desc.find("foo", false).semantic().get());
    BOOST_CHECK(b);
    BOOST_CHECK(b->value_type() == typeid(int));
 
-   const typed_value_base *b2 = dynamic_cast<const typed_value_base *>(desc.find("bar", false).semantic().get());
+   const argsy::typed_value_base *b2 = dynamic_cast<const argsy::typed_value_base *>(desc.find("bar", false).semantic().get());
    BOOST_CHECK(b2);
-   BOOST_CHECK(b2->value_type() == typeid(string));
+   BOOST_CHECK(b2->value_type() == typeid(std::string));
 #endif
 }
 
 void test_approximation()
 {
-   options_description desc;
-   desc.add_options()("foo", new untyped_value())("fee", new untyped_value())("baz", new untyped_value())(
-      "all-chroots", new untyped_value())("all-sessions", new untyped_value())("all", new untyped_value());
+   argsy::options_description desc;
+   desc.add_options()("foo", new argsy::untyped_value())("fee", new argsy::untyped_value())("baz", new argsy::untyped_value())(
+      "all-chroots", new argsy::untyped_value())("all-sessions", new argsy::untyped_value())("all", new argsy::untyped_value());
 
    BOOST_CHECK_EQUAL(desc.find("fo", true).long_name(), "foo");
 
    BOOST_CHECK_EQUAL(desc.find("all", true).long_name(), "all");
    BOOST_CHECK_EQUAL(desc.find("all-ch", true).long_name(), "all-chroots");
 
-   options_description desc2;
-   desc2.add_options()("help", "display this message")("config", value<string>(), "config file name")("config-value", value<string>(),
+   argsy::options_description desc2;
+   desc2.add_options()("help", "display this message")("config", argsy::value<std::string>(), "config file name")("config-value", argsy::value<std::string>(),
                                                                                                       "single config value");
 
    BOOST_CHECK_EQUAL(desc2.find("config", true).long_name(), "config");
@@ -59,10 +55,10 @@ void test_approximation()
 
 void test_approximation_with_multiname_options()
 {
-   options_description desc;
-   desc.add_options()("foo", new untyped_value())("fee", new untyped_value())("fe,baz", new untyped_value())("chroots,all-chroots",
-                                                                                                             new untyped_value())(
-      "sessions,all-sessions", new untyped_value())("everything,all", new untyped_value())("qux,fo", new untyped_value());
+   argsy::options_description desc;
+   desc.add_options()("foo", new argsy::untyped_value())("fee", new argsy::untyped_value())("fe,baz", new argsy::untyped_value())("chroots,all-chroots",
+                                                                                                             new argsy::untyped_value())(
+      "sessions,all-sessions", new argsy::untyped_value())("everything,all", new argsy::untyped_value())("qux,fo", new argsy::untyped_value());
 
    BOOST_CHECK_EQUAL(desc.find("fo", true).long_name(), "qux");
 
@@ -83,9 +79,9 @@ void test_approximation_with_multiname_options()
 
 void test_long_names_for_option_description()
 {
-   options_description desc;
-   desc.add_options()("foo", new untyped_value())("fe,baz", new untyped_value())("chroots,all-chroots", new untyped_value())(
-      "sessions,all-sessions", new untyped_value())("everything,all", new untyped_value())("qux,fo,q", new untyped_value());
+   argsy::options_description desc;
+   desc.add_options()("foo", new argsy::untyped_value())("fe,baz", new argsy::untyped_value())("chroots,all-chroots", new argsy::untyped_value())(
+      "sessions,all-sessions", new argsy::untyped_value())("everything,all", new argsy::untyped_value())("qux,fo,q", new argsy::untyped_value());
 
    BOOST_CHECK_EQUAL(desc.find("foo", false, false, false).long_names().second, 1u);
    BOOST_CHECK_EQUAL(desc.find("foo", false, false, false).long_names().first[0], "foo");
@@ -102,17 +98,17 @@ void test_long_names_for_option_description()
 void test_formatting()
 {
    // Long option descriptions used to crash on MSVC-8.0.
-   options_description desc;
-   desc.add_options()("test", new untyped_value(),
+   argsy::options_description desc;
+   desc.add_options()("test", new argsy::untyped_value(),
                       "foo foo foo foo foo foo foo foo foo foo foo foo foo foo"
                       "foo foo foo foo foo foo foo foo foo foo foo foo foo foo"
                       "foo foo foo foo foo foo foo foo foo foo foo foo foo foo"
                       "foo foo foo foo foo foo foo foo foo foo foo foo foo foo")(
-      "list", new untyped_value(),
+      "list", new argsy::untyped_value(),
       "a list:\n      \t"
       "item1, item2, item3, item4, item5, item6, item7, item8, item9, "
       "item10, item11, item12, item13, item14, item15, item16, item17, item18")(
-      "well_formated", new untyped_value(),
+      "well_formated", new argsy::untyped_value(),
       "As you can see this is a very well formatted option description.\n"
       "You can do this for example:\n\n"
       "Values:\n"
@@ -120,7 +116,7 @@ void test_formatting()
       "  Value2: \tdoes something else, bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla\n\n"
       "    This paragraph has a first line indent only, bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla");
 
-   stringstream ss;
+   std::stringstream ss;
    ss << desc;
    BOOST_CHECK_EQUAL(ss.str(), "  --test arg            foo foo foo foo foo foo foo foo foo foo foo foo foo \n"
                                "                        foofoo foo foo foo foo foo foo foo foo foo foo foo foo \n"
@@ -147,10 +143,10 @@ void test_formatting()
 
 void test_multiname_option_formatting()
 {
-   options_description desc;
-   desc.add_options()("foo,bar", new untyped_value(), "a multiple-name option");
+   argsy::options_description desc;
+   desc.add_options()("foo,bar", new argsy::untyped_value(), "a multiple-name option");
 
-   stringstream ss;
+   std::stringstream ss;
    ss << desc;
    BOOST_CHECK_EQUAL(ss.str(), "  --foo arg             a multiple-name option\n");
 }
@@ -158,15 +154,15 @@ void test_multiname_option_formatting()
 void test_formatting_description_length()
 {
    {
-      options_description desc("", options_description::m_default_line_length, options_description::m_default_line_length / 2U);
-      desc.add_options()("an-option-that-sets-the-max", new untyped_value(), // > 40 available for desc
+      argsy::options_description desc("", argsy::options_description::m_default_line_length, argsy::options_description::m_default_line_length / 2U);
+      desc.add_options()("an-option-that-sets-the-max", new argsy::untyped_value(), // > 40 available for desc
                          "this description sits on the same line, but wrapping should still work correctly")(
-         "a-long-option-that-would-leave-very-little-space-for-description", new untyped_value(),
+         "a-long-option-that-would-leave-very-little-space-for-description", new argsy::untyped_value(),
          "the description of the long opt, but placed on the next line\n"
          "    \talso ensure that the tabulation works correctly when a"
          " description size has been set");
 
-      stringstream ss;
+      std::stringstream ss;
       ss << desc;
       BOOST_CHECK_EQUAL(ss.str(), "  --an-option-that-sets-the-max arg     this description sits on the same line,\n"
                                   "                                        but wrapping should still work \n"
@@ -182,12 +178,12 @@ void test_formatting_description_length()
       // the default behaviour reserves 23 (+1 space) characters for the
       // option column; this shows that the min_description_length does not
       // breach that.
-      options_description desc("", options_description::m_default_line_length,
-                               options_description::m_default_line_length - 10U); // leaves < 23 (default option space)
-      desc.add_options()("an-option-that-encroaches-description", new untyped_value(),
+      argsy::options_description desc("", argsy::options_description::m_default_line_length,
+                               argsy::options_description::m_default_line_length - 10U); // leaves < 23 (default option space)
+      desc.add_options()("an-option-that-encroaches-description", new argsy::untyped_value(),
                          "this description should always be placed on the next line, and wrapping should continue as normal");
 
-      stringstream ss;
+      std::stringstream ss;
       ss << desc;
       BOOST_CHECK_EQUAL(ss.str(), "  --an-option-that-encroaches-description arg\n"
                                   // 123456789_123456789_
@@ -198,11 +194,11 @@ void test_formatting_description_length()
 
 void test_long_default_value()
 {
-   options_description desc;
-   desc.add_options()("cfgfile,c", value<string>()->default_value("/usr/local/etc/myprogramXXXXXXXXX/configuration.conf"),
+   argsy::options_description desc;
+   desc.add_options()("cfgfile,c", argsy::value<std::string>()->default_value("/usr/local/etc/myprogramXXXXXXXXX/configuration.conf"),
                       "the configfile");
 
-   stringstream ss;
+   std::stringstream ss;
    ss << desc;
    BOOST_CHECK_EQUAL(ss.str(), "  -c [ --cfgfile ] arg (=/usr/local/etc/myprogramXXXXXXXXX/configuration.conf)\n"
                                "                                        the configfile\n");
@@ -210,13 +206,13 @@ void test_long_default_value()
 
 void test_word_wrapping()
 {
-   options_description desc("Supported options");
+   argsy::options_description desc("Supported options");
    desc.add_options()("help", "this is a sufficiently long text to require word-wrapping")(
-      "prefix", value<string>()->default_value("/h/proj/tmp/dispatch"),
+      "prefix", argsy::value<std::string>()->default_value("/h/proj/tmp/dispatch"),
       "root path of the dispatch installation")("opt1", "this_is_a_sufficiently_long_text_to_require_word-wrapping_but_cannot_be_wrapped")(
       "opt2", "this_is_a_sufficiently long_text_to_require_word-wrapping")(
       "opt3", "this_is_a sufficiently_long_text_to_require_word-wrapping_but_will_not_be_wrapped");
-   stringstream ss;
+   std::stringstream ss;
    ss << desc;
    BOOST_CHECK_EQUAL(ss.str(), "Supported options:\n"
                                "  --help                               this is a sufficiently long text to \n"
@@ -233,9 +229,9 @@ void test_word_wrapping()
 
 void test_default_values()
 {
-   options_description desc("Supported options");
-   desc.add_options()("maxlength", value<double>()->default_value(.1, "0.1"), "Maximum edge length to keep.");
-   stringstream ss;
+   argsy::options_description desc("Supported options");
+   desc.add_options()("maxlength", argsy::value<double>()->default_value(.1, "0.1"), "Maximum edge length to keep.");
+   std::stringstream ss;
    ss << desc;
    BOOST_CHECK_EQUAL(ss.str(), "Supported options:\n"
                                "  --maxlength arg (=0.1) Maximum edge length to keep.\n");
@@ -243,10 +239,10 @@ void test_default_values()
 
 void test_value_name()
 {
-   options_description desc("Supported options");
-   desc.add_options()("include", value<string>()->value_name("directory"), "Search for headers in 'directory'.");
+   argsy::options_description desc("Supported options");
+   desc.add_options()("include", argsy::value<std::string>()->value_name("directory"), "Search for headers in 'directory'.");
 
-   stringstream ss;
+   std::stringstream ss;
    ss << desc;
    BOOST_CHECK_EQUAL(ss.str(), "Supported options:\n"
                                "  --include directory   Search for headers in 'directory'.\n");
