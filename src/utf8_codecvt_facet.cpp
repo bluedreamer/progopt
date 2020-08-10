@@ -4,7 +4,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_PROGRAM_OPTIONS_SOURCE
-#include "argsy/config.hpp"
+#include "argsy/config.h"
 
 #define BOOST_UTF8_BEGIN_NAMESPACE                                                                                                         \
    namespace argsy                                                                                                                         \

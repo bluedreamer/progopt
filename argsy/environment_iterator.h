@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "eof_iterator.hpp"
+#include "eof_iterator.h"
 
 #include <cassert>
 #include <string>

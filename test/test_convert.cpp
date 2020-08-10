@@ -10,8 +10,8 @@
 #include <sstream>
 #include <string>
 
-#include "argsy/detail/convert.hpp"
-#include "argsy/detail/utf8_codecvt_facet.hpp"
+#include "argsy/detail/convert.h"
+#include "argsy/detail/utf8_codecvt_facet.h"
 
 #include "minitest.hpp"
 

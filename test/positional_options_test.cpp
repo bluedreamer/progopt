@@ -3,9 +3,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "argsy/options_description.hpp"
-#include "argsy/parsers.hpp"
-#include "argsy/positional_options.hpp"
+#include "argsy/options_description.h"
+#include "argsy/parsers.h"
+#include "argsy/positional_options.h"
 
 #include "minitest.hpp"
 

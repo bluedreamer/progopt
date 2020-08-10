@@ -5,9 +5,9 @@
 
 #pragma once
 
-#include "argsy/config.hpp"
-#include "argsy/detail/cmdline.hpp"
-#include "argsy/option.hpp"
+#include "argsy/config.h"
+#include "argsy/detail/cmdline.h"
+#include "argsy/option.h"
 
 #include <iosfwd>
 #include <utility>
@@ -256,4 +256,4 @@ std::vector<std::wstring> split_winmain(const std::wstring &cmdline);
 } // namespace argsy
 
 #undef DECL
-#include "argsy/detail/parsers.hpp"
+#include "argsy/detail/parsers.h"

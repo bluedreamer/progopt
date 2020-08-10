@@ -4,12 +4,12 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
-#include "argsy/cmdline.hpp"
-#include "argsy/config.hpp"
-#include "argsy/errors.hpp"
-#include "argsy/option.hpp"
-#include "argsy/options_description.hpp"
-#include "argsy/positional_options.hpp"
+#include "argsy/cmdline.h"
+#include "argsy/config.h"
+#include "argsy/errors.h"
+#include "argsy/option.h"
+#include "argsy/options_description.h"
+#include "argsy/positional_options.h"
 
 #include <functional>
 #include <string>

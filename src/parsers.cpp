@@ -2,14 +2,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-#include "argsy/config.hpp"
-#include "argsy/detail/cmdline.hpp"
-#include "argsy/detail/config_file.hpp"
-#include "argsy/detail/convert.hpp"
-#include "argsy/environment_iterator.hpp"
-#include "argsy/options_description.hpp"
-#include "argsy/parsers.hpp"
-#include "argsy/positional_options.hpp"
+#include "argsy/config.h"
+#include "argsy/detail/cmdline.h"
+#include "argsy/detail/config_file.h"
+#include "argsy/detail/convert.h"
+#include "argsy/environment_iterator.h"
+#include "argsy/options_description.h"
+#include "argsy/parsers.h"
+#include "argsy/positional_options.h"
 
 #include <cctype>
 #include <fstream>

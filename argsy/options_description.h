@@ -5,9 +5,9 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
-#include "argsy/config.hpp"
-#include "argsy/errors.hpp"
-#include "argsy/value_semantic.hpp"
+#include "argsy/config.h"
+#include "argsy/errors.h"
+#include "argsy/value_semantic.h"
 
 #include <any>
 #include <functional>

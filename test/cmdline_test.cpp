@@ -3,9 +3,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "argsy/cmdline.hpp"
-#include "argsy/detail/cmdline.hpp"
-#include "argsy/options_description.hpp"
+#include "argsy/cmdline.h"
+#include "argsy/detail/cmdline.h"
+#include "argsy/options_description.h"
 
 #include <cassert>
 #include <iostream>

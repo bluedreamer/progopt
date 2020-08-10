@@ -19,24 +19,24 @@ add_library(${LIBRARY_NAME} src/cmdline.cpp
         src/variables_map.cpp
         src/winmain.cpp
         argsy.h
-        argsy/cmdline.hpp
-        argsy/config.hpp
-        argsy/environment_iterator.hpp
-        argsy/eof_iterator.hpp
-        argsy/errors.hpp
-        argsy/option.hpp
-        argsy/options_description.hpp
-        argsy/parsers.hpp
-        argsy/positional_options.hpp
-        argsy/value_semantic.hpp
-        argsy/variables_map.hpp
-        argsy/version.hpp
-        argsy/detail/cmdline.hpp
-        argsy/detail/config_file.hpp
-        argsy/detail/convert.hpp
-        argsy/detail/parsers.hpp
-        argsy/detail/utf8_codecvt_facet.hpp
-        argsy/detail/value_semantic.hpp
+        argsy/cmdline.h
+        argsy/config.h
+        argsy/environment_iterator.h
+        argsy/eof_iterator.h
+        argsy/errors.h
+        argsy/option.h
+        argsy/options_description.h
+        argsy/parsers.h
+        argsy/positional_options.h
+        argsy/value_semantic.h
+        argsy/variables_map.h
+        argsy/version.h
+        argsy/detail/cmdline.h
+        argsy/detail/config_file.h
+        argsy/detail/convert.h
+        argsy/detail/parsers.h
+        argsy/detail/utf8_codecvt_facet.h
+        argsy/detail/value_semantic.h
         )
 
 add_executable(progopt main.cpp)

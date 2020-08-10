@@ -6,7 +6,7 @@
 // for any purpose.
 #pragma once
 
-#include "argsy/config.hpp"
+#include "argsy/config.h"
 
 #define BOOST_UTF8_BEGIN_NAMESPACE                                                                                                         \
    namespace argsy                                                                                                                         \

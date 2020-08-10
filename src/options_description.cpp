@@ -4,11 +4,11 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "argsy/options_description.hpp"
-#include "argsy/config.hpp"
+#include "argsy/options_description.h"
+#include "argsy/config.h"
 // FIXME: this is only to get multiple_occurrences class
 // should move that to a separate headers.
-#include "argsy/parsers.hpp"
+#include "argsy/parsers.h"
 
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>

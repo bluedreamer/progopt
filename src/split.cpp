@@ -2,7 +2,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-#include "argsy/parsers.hpp"
+#include "argsy/parsers.h"
 #include <boost/tokenizer.hpp>
 
 #include <string>
@@ -43,12 +43,10 @@ auto split_unix(const std::string &cmdline, const std::string &seperator, const 
    return detail::split_unix<char>(cmdline, seperator, quote, escape);
 }
 
-#ifndef BOOST_NO_STD_WSTRING
 auto split_unix(const std::wstring &cmdline, const std::wstring &seperator, const std::wstring &quote, const std::wstring &escape)
    -> std::vector<std::wstring>
 {
    return detail::split_unix<wchar_t>(cmdline, seperator, quote, escape);
 }
-#endif
 
 } // namespace argsy

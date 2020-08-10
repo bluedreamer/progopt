@@ -4,8 +4,8 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
-#include "argsy/config.hpp"
-#include "argsy/errors.hpp"
+#include "argsy/config.h"
+#include "argsy/errors.h"
 
 #include <any>
 #include <boost/lexical_cast.hpp>
@@ -409,4 +409,4 @@ auto bool_switch(bool *v) -> typed_value<bool> *;
 
 } // namespace argsy
 
-#include "argsy/detail/value_semantic.hpp"
+#include "argsy/detail/value_semantic.h"

@@ -18,9 +18,9 @@
 
 */
 
-#include "argsy/options_description.hpp"
-#include "argsy/parsers.hpp"
-#include "argsy/variables_map.hpp"
+#include "argsy/options_description.h"
+#include "argsy/parsers.h"
+#include "argsy/variables_map.h"
 #include <boost/token_functions.hpp>
 #include <boost/tokenizer.hpp>
 

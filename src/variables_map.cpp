@@ -3,11 +3,11 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "argsy/variables_map.hpp"
-#include "argsy/config.hpp"
-#include "argsy/options_description.hpp"
-#include "argsy/parsers.hpp"
-#include "argsy/value_semantic.hpp"
+#include "argsy/variables_map.h"
+#include "argsy/config.h"
+#include "argsy/options_description.h"
+#include "argsy/parsers.h"
+#include "argsy/value_semantic.h"
 
 #include <cassert>
 

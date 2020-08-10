@@ -3,10 +3,10 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "argsy/config.hpp"
-#include "argsy/detail/config_file.hpp"
-#include "argsy/detail/convert.hpp"
-#include "argsy/errors.hpp"
+#include "argsy/config.h"
+#include "argsy/detail/config_file.h"
+#include "argsy/detail/convert.h"
+#include "argsy/errors.h"
 
 #include <cassert>
 #include <fstream>
