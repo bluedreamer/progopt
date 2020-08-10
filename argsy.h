@@ -14,4 +14,3 @@
 #include "argsy/errors.h"
 #include "argsy/option.h"
 #include "argsy/value_semantic.h"
-#include "argsy/version.h"

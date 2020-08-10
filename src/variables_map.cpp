@@ -4,7 +4,6 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "argsy/variables_map.h"
-#include "argsy/config.h"
 #include "argsy/options_description.h"
 #include "argsy/parsers.h"
 #include "argsy/value_semantic.h"

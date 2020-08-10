@@ -5,7 +5,6 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
-#include "argsy/config.h"
 #include "argsy/errors.h"
 #include "argsy/value_semantic.h"
 
@@ -148,7 +147,7 @@ class options_description;
 class options_description_easy_init
 {
 public:
-   options_description_easy_init(options_description *owner);
+   explicit options_description_easy_init(options_description *owner);
 
    auto operator()(const char *name, const char *description) -> options_description_easy_init &;
 
@@ -173,7 +172,7 @@ public:
    static const unsigned m_default_line_length;
 
    /** Creates the instance. */
-   options_description(unsigned line_length = m_default_line_length, unsigned min_description_length = m_default_line_length / 2);
+   explicit options_description(unsigned line_length = m_default_line_length, unsigned min_description_length = m_default_line_length / 2);
    /** Creates the instance. The 'caption' parameter gives the name of
        this 'options_description' instance. Primarily useful for output.
        The 'description_length' specifies the number of columns that
@@ -181,7 +180,7 @@ public:
        encroaches into this, then the description will start on the next
        line.
    */
-   options_description(std::string caption, unsigned line_length = m_default_line_length,
+   explicit options_description(std::string caption, unsigned line_length = m_default_line_length,
                        unsigned min_description_length = m_default_line_length / 2);
    /** Adds new variable description. Throws duplicate_variable_error if
        either short or long name matches that of already present one.
@@ -226,11 +225,6 @@ public:
    void print(std::ostream &os, unsigned width = 0) const;
 
 private:
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1800))
-   // prevent warning C4512: assignment operator could not be generated
-   options_description &operator=(const options_description &);
-#endif
-
    typedef std::map<std::string, int>::const_iterator          name2index_iterator;
    typedef std::pair<name2index_iterator, name2index_iterator> approximation_range;
 
@@ -246,14 +240,7 @@ private:
    std::vector<std::shared_ptr<option_description>> m_options;
 
    // Whether the option comes from one of declared groups.
-#if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, BOOST_TESTED_AT(313))
-   // vector<bool> is buggy there, see
-   // http://support.microsoft.com/default.aspx?scid=kb;en-us;837698
-   std::vector<char> belong_to_group;
-#else
    std::vector<bool> belong_to_group;
-#endif
-
    std::vector<std::shared_ptr<options_description>> groups;
 };
 
@@ -261,7 +248,7 @@ private:
 class duplicate_option_error : public error
 {
 public:
-   duplicate_option_error(const std::string &xwhat)
+   explicit duplicate_option_error(const std::string &xwhat)
       : error(xwhat)
    {
    }

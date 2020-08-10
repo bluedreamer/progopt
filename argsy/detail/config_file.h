@@ -9,11 +9,8 @@
 #include <set>
 #include <string>
 
-#include "argsy/config.h"
 #include "argsy/eof_iterator.h"
 #include "argsy/option.h"
-
-#include "argsy/detail/convert.h"
 
 namespace argsy::detail
 {

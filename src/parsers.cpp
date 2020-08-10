@@ -2,54 +2,19 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-#include "argsy/config.h"
 #include "argsy/detail/cmdline.h"
 #include "argsy/detail/config_file.h"
-#include "argsy/detail/convert.h"
 #include "argsy/environment_iterator.h"
-#include "argsy/options_description.h"
 #include "argsy/parsers.h"
-#include "argsy/positional_options.h"
 
 #include <cctype>
 #include <fstream>
 #include <istream>
-#include <utility>
 
-#include <unistd.h>
-
-// The 'environ' should be declared in some cases. E.g. Linux man page says:
-// (This variable must be declared in the user program, but is declared in
-// the header file unistd.h in case the header files came from libc4 or libc5,
-// and in case they came from glibc and _GNU_SOURCE was defined.)
-// To be safe, declare it here.
-
-// It appears that on Mac OS X the 'environ' variable is not
-// available to dynamically linked libraries.
-// See: http://article.gmane.org/gmane.comp.lib.boost.devel/103843
-// See: http://lists.gnu.org/archive/html/bug-guile/2004-01/msg00013.html
-#if defined(__APPLE__) && defined(__DYNAMIC__)
-// The proper include for this is crt_externs.h, however it's not
-// available on iOS. The right replacement is not known. See
-// https://svn.boost.org/trac/boost/ticket/5053
-extern "C"
-{
-   extern char ***_NSGetEnviron(void);
-}
-   #define environ (*_NSGetEnviron())
-#else
-   #if defined(__MWERKS__)
-      #include <crtl.h>
-   #else
-      #if !defined(_WIN32) || defined(__COMO_VERSION__)
 extern char **environ;
-      #endif
-   #endif
-#endif
 
 namespace argsy
 {
-#ifndef BOOST_NO_STD_WSTRING
 namespace
 {
 auto woption_from_option(const option &opt) -> woption
@@ -81,7 +46,6 @@ basic_parsed_options<wchar_t>::basic_parsed_options(const parsed_options &po)
       options.push_back(woption_from_option(option));
    }
 }
-#endif
 
 template<class charT>
 auto parse_config_file(std::basic_istream<charT> &is, const options_description &desc, bool allow_unregistered)
@@ -113,10 +77,8 @@ auto parse_config_file(std::basic_istream<charT> &is, const options_description 
 template basic_parsed_options<char> parse_config_file(std::basic_istream<char> &is, const options_description &desc,
                                                       bool allow_unregistered);
 
-#ifndef BOOST_NO_STD_WSTRING
 template basic_parsed_options<wchar_t> parse_config_file(std::basic_istream<wchar_t> &is, const options_description &desc,
                                                          bool allow_unregistered);
-#endif
 
 template<class charT>
 auto parse_config_file(const char *filename, const options_description &desc, bool allow_unregistered) -> basic_parsed_options<charT>
@@ -139,25 +101,7 @@ auto parse_config_file(const char *filename, const options_description &desc, bo
 }
 
 template basic_parsed_options<char> parse_config_file(const char *filename, const options_description &desc, bool allow_unregistered);
-
-#ifndef BOOST_NO_STD_WSTRING
 template basic_parsed_options<wchar_t> parse_config_file(const char *filename, const options_description &desc, bool allow_unregistered);
-#endif
-
-// This versio, which accepts any options without validation, is disabled,
-// in the hope that nobody will need it and we cant drop it altogether.
-// Besides, probably the right way to handle all options is the '*' name.
-#if 0
-    parsed_options
-    parse_config_file(std::istream& is)
-    {
-        detail::config_file_iterator cf(is, false);
-        parsed_options result(0);
-        copy(cf, detail::config_file_iterator(), 
-             back_inserter(result.options));
-        return result;
-    }
-#endif
 
 auto parse_environment(const options_description &desc, const std::function<std::string(std::string)> &name_mapper) -> parsed_options
 {

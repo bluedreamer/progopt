@@ -94,18 +94,9 @@ void validate(std::any &v, const std::vector<std::basic_string<charT>> &xs, T *,
 }
 
 void validate(std::any &v, const std::vector<std::string> &xs, bool *, int);
-
 void validate(std::any &v, const std::vector<std::wstring> &xs, bool *, int);
-// For some reason, this declaration, which is require by the standard,
-// cause msvc 7.1 to not generate code to specialization defined in
-// value_semantic.cpp
-#if !(BOOST_WORKAROUND(BOOST_MSVC, == 1310))
 void validate(std::any &v, const std::vector<std::string> &xs, std::string *, int);
-
-   #if !defined(BOOST_NO_STD_WSTRING)
 void validate(std::any &v, const std::vector<std::wstring> &xs, std::string *, int);
-   #endif
-#endif
 
 /** Validates sequences. Allows multiple values per option occurrence
    and multiple occurrences. */

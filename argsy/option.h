@@ -4,8 +4,6 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
-#include "argsy/config.h"
-
 #include <string>
 #include <utility>
 #include <vector>
@@ -23,7 +21,7 @@ template<class charT>
 class basic_option
 {
 public:
-   basic_option() {}
+   basic_option() = default;
    basic_option(std::string xstring_key, const std::vector<std::string> &xvalue)
       : string_key(std::move(xstring_key))
       , position_key(-1)

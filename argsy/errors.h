@@ -4,8 +4,6 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
-#include "argsy/config.h"
-
 #include <map>
 #include <stdexcept>
 #include <string>
@@ -32,7 +30,7 @@ inline auto strip_prefixes(const std::string &text) -> std::string
 class error : public std::logic_error
 {
 public:
-   error(const std::string &xwhat)
+   explicit error(const std::string &xwhat)
       : std::logic_error(xwhat)
    {
    }
@@ -54,7 +52,7 @@ public:
 class invalid_command_line_style : public error
 {
 public:
-   invalid_command_line_style(const std::string &msg)
+   explicit invalid_command_line_style(const std::string &msg)
       : error(msg)
    {
    }
@@ -64,7 +62,7 @@ public:
 class reading_file : public error
 {
 public:
-   reading_file(const char *filename)
+   explicit reading_file(const char *filename)
       : error(std::string("can not read options configuration file '").append(filename).append("'"))
    {
    }
@@ -114,7 +112,7 @@ public:
    /** template with placeholders */
    std::string m_error_template;
 
-   error_with_option_name(const std::string &template_, const std::string &option_name = "", const std::string &original_token = "",
+   explicit error_with_option_name(const std::string &template_, const std::string &option_name = "", const std::string &original_token = "",
                           int option_style = 0);
 
    /** gcc says that throw specification on dtor is loosened
@@ -220,7 +218,7 @@ class required_option : public error_with_option_name
 {
 public:
    // option name is constructed by the option_descriptor and never on the fly
-   required_option(const std::string &option_name)
+   explicit required_option(const std::string &option_name)
       : error_with_option_name("the option '%canonical_option%' is required but missing", "", option_name)
    {
    }
@@ -242,7 +240,7 @@ public:
 class error_with_no_option_name : public error_with_option_name
 {
 public:
-   error_with_no_option_name(const std::string &template_, const std::string &original_token = "")
+   explicit error_with_no_option_name(const std::string &template_, const std::string &original_token = "")
       : error_with_option_name(template_, "", original_token)
    {
    }
@@ -365,7 +363,7 @@ public:
    };
 
 public:
-   validation_error(kind_t kind, const std::string &option_name = "", const std::string &original_token = "", int option_style = 0)
+   explicit validation_error(kind_t kind, const std::string &option_name = "", const std::string &original_token = "", int option_style = 0)
       : error_with_option_name(get_template(kind), option_name, original_token, option_style)
       , m_kind(kind)
    {
@@ -385,17 +383,15 @@ protected:
 class invalid_option_value : public validation_error
 {
 public:
-   invalid_option_value(const std::string &value);
-#ifndef BOOST_NO_STD_WSTRING
-   invalid_option_value(const std::wstring &value);
-#endif
+   explicit invalid_option_value(const std::string &value);
+   explicit invalid_option_value(const std::wstring &value);
 };
 
 /** Class thrown if there is an invalid bool value given */
 class invalid_bool_value : public validation_error
 {
 public:
-   invalid_bool_value(const std::string &value);
+   explicit invalid_bool_value(const std::string &value);
 };
 
 } // namespace argsy

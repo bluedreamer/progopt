@@ -2,23 +2,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#include "argsy/config.h"
-
 #include "argsy/detail/cmdline.h"
-#include "argsy/errors.h"
-#include "argsy/options_description.h"
-#include "argsy/positional_options.h"
-#include "argsy/value_semantic.h"
 
 #include <cassert>
-#include <cctype>
 #include <climits>
-#include <cstdio>
-#include <cstring>
-#include <iostream>
 #include <string>
-#include <utility>
 #include <vector>
 
 namespace argsy

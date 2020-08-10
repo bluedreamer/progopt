@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include "argsy/config.h"
 #include "argsy/detail/cmdline.h"
 #include "argsy/option.h"
 
@@ -112,7 +111,7 @@ public:
    /** Creates a command line parser for the specified arguments
        list. The 'args' parameter should not include program name.
    */
-   basic_command_line_parser(const std::vector<std::basic_string<charT>> &args);
+   explicit basic_command_line_parser(const std::vector<std::basic_string<charT>> &args);
    /** Creates a command line parser for the specified arguments
        list. The parameters should be the same as passed to 'main'.
    */
@@ -148,7 +147,7 @@ public:
    auto extra_style_parser(style_parser s) -> basic_command_line_parser &;
 
 private:
-   const options_description *m_desc;
+   const options_description *m_desc{};
 };
 
 using command_line_parser  = basic_command_line_parser<char>;
@@ -232,28 +231,10 @@ auto parse_environment(const options_description &, const char *prefix) -> parse
 auto split_unix(const std::string &cmdline, const std::string &seperator = " \t", const std::string &quote = "'\"",
                 const std::string &escape = "\\") -> std::vector<std::string>;
 
-#ifndef BOOST_NO_STD_WSTRING
+
 /** @overload */
 auto split_unix(const std::wstring &cmdline, const std::wstring &seperator = L" \t", const std::wstring &quote = L"'\"",
                 const std::wstring &escape = L"\\") -> std::vector<std::wstring>;
-#endif
-
-#ifdef _WIN32
-/** Parses the char* string which is passed to WinMain function on
-    windows. This function is provided for convenience, and because it's
-    not clear how to portably access split command line string from
-    runtime library and if it always exists.
-    This function is available only on Windows.
-*/
-std::vector<std::string> split_winmain(const std::string &cmdline);
-
-   #ifndef BOOST_NO_STD_WSTRING
-/** @overload */
-std::vector<std::wstring> split_winmain(const std::wstring &cmdline);
-   #endif
-#endif
-
 } // namespace argsy
 
-#undef DECL
 #include "argsy/detail/parsers.h"

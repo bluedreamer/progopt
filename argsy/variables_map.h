@@ -3,7 +3,6 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
-#include "argsy/config.h"
 
 #include <any>
 #include <map>
@@ -44,7 +43,7 @@ void notify(variables_map &m);
 class variable_value
 {
 public:
-   variable_value() {}
+   variable_value() = default;
    variable_value(std::any xv, bool xdefaulted)
       : v(std::move(xv))
       , m_defaulted(xdefaulted)
@@ -97,7 +96,7 @@ class abstract_variables_map
 {
 public:
    abstract_variables_map();
-   abstract_variables_map(const abstract_variables_map *next);
+   explicit abstract_variables_map(const abstract_variables_map *next);
 
    virtual ~abstract_variables_map() = default;
 
@@ -138,7 +137,7 @@ class variables_map : public abstract_variables_map, public std::map<std::string
 {
 public:
    variables_map();
-   variables_map(const abstract_variables_map *next);
+   explicit variables_map(const abstract_variables_map *next);
 
    // Resolve conflict between inherited operators.
    auto operator[](const std::string &name) const -> const variable_value & { return abstract_variables_map::operator[](name); }

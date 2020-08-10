@@ -16,7 +16,7 @@ namespace boost
 class environment_iterator : public eof_iterator<environment_iterator, std::pair<std::string, std::string>>
 {
 public:
-   environment_iterator(char **environment)
+   explicit environment_iterator(char **environment)
       : m_environment(environment)
    {
       get();
@@ -43,6 +43,6 @@ public:
    }
 
 private:
-   char **m_environment;
+   char **m_environment{};
 };
 } // namespace boost

@@ -2,15 +2,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#include "argsy/config.h"
 #include "argsy/detail/config_file.h"
-#include "argsy/detail/convert.h"
 #include "argsy/errors.h"
 
 #include <cassert>
-#include <fstream>
-#include <iostream>
 
 namespace argsy::detail
 {

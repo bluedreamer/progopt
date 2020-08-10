@@ -6,19 +6,10 @@
 // for any purpose.
 #pragma once
 
-#include "argsy/config.h"
-
-#define BOOST_UTF8_BEGIN_NAMESPACE                                                                                                         \
-   namespace argsy                                                                                                                         \
-   {                                                                                                                                       \
-   namespace detail                                                                                                                        \
-   {
-#define BOOST_UTF8_END_NAMESPACE                                                                                                           \
-   }                                                                                                                                       \
-   }
+#define BOOST_UTF8_BEGIN_NAMESPACE namespace argsy::detail {
+#define BOOST_UTF8_END_NAMESPACE }
 
 #include <boost/detail/utf8_codecvt_facet.hpp>
 
 #undef BOOST_UTF8_BEGIN_NAMESPACE
 #undef BOOST_UTF8_END_NAMESPACE
-#undef BOOST_UTF8_DECL

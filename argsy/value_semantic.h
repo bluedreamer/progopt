@@ -4,12 +4,11 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
-#include "argsy/config.h"
 #include "argsy/errors.h"
 
-#include <any>
 #include <boost/lexical_cast.hpp>
 
+#include <any>
 #include <limits>
 #include <string>
 #include <typeinfo>
@@ -116,7 +115,7 @@ protected: // interface for derived classes.
 class untyped_value : public value_semantic_codecvt_helper<char>
 {
 public:
-   untyped_value(bool zero_tokens = false)
+   explicit untyped_value(bool zero_tokens = false)
       : m_zero_tokens(zero_tokens)
    {
    }

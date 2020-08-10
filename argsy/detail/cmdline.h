@@ -5,7 +5,6 @@
 #pragma once
 
 #include "argsy/cmdline.h"
-#include "argsy/config.h"
 #include "argsy/errors.h"
 #include "argsy/option.h"
 #include "argsy/options_description.h"
@@ -60,7 +59,7 @@ public:
        unregistered options. They will be assigned index 1 and are
        assumed to have optional parameter.
    */
-   cmdline(const std::vector<std::string> &args);
+   explicit cmdline(const std::vector<std::string> &args);
 
    /** @overload */
    cmdline(int argc, const char *const *argv);
@@ -106,7 +105,7 @@ public:
 
    void check_style(int style) const;
 
-   auto is_style_active(style_t style) const -> bool;
+   [[nodiscard]] auto is_style_active(style_t style) const -> bool;
 
    void init(const std::vector<std::string> &args);
 
